@@ -48,7 +48,7 @@ bool Window::isRunning(){
 void Window::update(){
     for (int x = 0; x < m_prop.width; x++)
         for(int y = 0; y < m_prop.height; y++){
-            Colour colour = Colour(x%255,y%255,255);
+            Colour colour = Colour((x+SDL_GetTicks()/10)%255,(y+SDL_GetTicks()/5)%255,255);
             m_screen->blit(m_renderer, x, y, colour);
         }
     SDL_RenderPresent(m_renderer);

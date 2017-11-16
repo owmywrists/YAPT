@@ -1,3 +1,4 @@
+#include <iostream>
 #include "../app/window/window.h"
 #include "../utility/float3.h"
 
@@ -10,6 +11,7 @@ int main(){
     while (win->isRunning()){
         win->update();
     }
+    std::cout << a << std::endl;
     printf("%f", a.dot(b));
 
 }

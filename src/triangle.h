@@ -1,4 +1,4 @@
-#include "../surface/surface.h"
+#include "surface.h"
 
 class Triangle : public Surface{
 public:

@@ -1,4 +1,4 @@
-#include "../ray/ray.h"
+#include "ray.h"
 #pragma once
 
 class Surface{

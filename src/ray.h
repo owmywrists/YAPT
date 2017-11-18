@@ -1,4 +1,4 @@
-#include "../../utility/float3.h"
+#include "float3.h"
 #pragma once
 
 class Ray{

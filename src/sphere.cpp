@@ -1,8 +1,9 @@
 #include "sphere.h"
 
-Sphere::Sphere(float3 location, float radius){
+Sphere::Sphere(float3 location, float radius, Colour colour){
     m_location = location;
     m_radius = radius;
+    m_colour = colour;
 }
 
 bool Sphere::intersection(Ray &ray, float t){

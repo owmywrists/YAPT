@@ -26,10 +26,11 @@ void Window::init(){
         printf("SDL failed to create window");
     }
 
-    m_screen = new Screen(m_prop.width, m_prop.height);
+    
 
     m_renderer = SDL_CreateRenderer(m_win, -1, SDL_RENDERER_ACCELERATED);
 
+    m_screen = new Screen(m_prop.width, m_prop.height,m_renderer);
 }
 
 bool Window::isRunning(){
@@ -46,19 +47,5 @@ bool Window::isRunning(){
 
 
 void Window::update(){
-    for (int x = 0; x < m_prop.width; x++)
-        for(int y = 0; y < m_prop.height; y++){
-            Sphere s = Sphere(float3(100,150,1),20.0);
-            Ray ray = Ray(float3(x,y,0),float3(0,0,-1));
-            float t = 0;
-            Colour colour = Colour((x+SDL_GetTicks()/10)%255,(y+SDL_GetTicks()/5)%255,255);
-            //Colour colour = Colour(255,255,255);
-            if (s.intersection(ray, t)){
-                //std::cout << "I HAVE DONE THE INTERSECT" << std::endl;
-                colour = Colour(255.0,0,0);
-            }
-            
-            m_screen->blit(m_renderer, x, y, colour);
-        }
     SDL_RenderPresent(m_renderer);
 }

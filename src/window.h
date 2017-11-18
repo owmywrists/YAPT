@@ -1,8 +1,7 @@
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "../screen/screen.h"
-#include "../../pt/colour.h"
-#include "../../pt/objects/sphere.h"
+#include "screen.h"
+#include "sphere.h"
 #include <string>
 
 struct windowProperties{
@@ -17,6 +16,7 @@ public:
     Window(std::string title, int width, int height);
     ~Window();
 
+    Screen* getScreenPtr(){return m_screen;}
     void update();
     bool isRunning();
 private:

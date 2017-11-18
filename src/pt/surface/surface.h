@@ -1,8 +1,7 @@
-
-
+#include "../ray/ray.h"
+#pragma once
 
 class Surface{
 public:
-    virtual bool intersection() = 0;
-
+    virtual bool intersection(Ray &ray, float t) = 0;
 };

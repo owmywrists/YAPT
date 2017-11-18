@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
+#include <iostream>
 #include "../screen/screen.h"
 #include "../../pt/colour.h"
+#include "../../pt/objects/sphere.h"
 #include <string>
 
 struct windowProperties{

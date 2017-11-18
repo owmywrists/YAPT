@@ -1,4 +1,7 @@
 #include <ostream>
+#include <math.h>
+#pragma once
+
 
 class float3{ 
 public:
@@ -12,10 +15,10 @@ public:
     float x() const {return entity[0];}
     float y() const {return entity[1];}
     float z() const {return entity[2];}
-    float dot(float3 &rhs){
+    float dot(float3 rhs){
         return this->x()*rhs.x() + this->y()*rhs.y() + this->z()*rhs.z();
     }
-    float3 cross(float3 &rhs){
+    float3 cross(float3 rhs){
         return float3(this->y()*rhs.z() - this->z()*rhs.y(),
                       this->z()*rhs.x() - this->x()*rhs.z(),
                       this->x()*rhs.y() - this->y()*rhs.x());
@@ -59,7 +62,7 @@ inline float3 operator-(const float3 &lhs, const float3 &rhs){
     return float3(lhs.x() - rhs.x(), lhs.y() - rhs.y(), lhs.z() - rhs.z());
 }
 
-std::ostream& operator<<(std::ostream &os, float3 &rhs){
+inline std::ostream& operator<<(std::ostream &os, float3 &rhs){
     os << rhs.x() << " " << rhs.y() << " " << rhs.z();
     return os;
 }

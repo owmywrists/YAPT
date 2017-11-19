@@ -1,10 +1,10 @@
 #include "camera.h"
 
 
-Ray Camera::getRay(int x, int y){
+Ray Camera::getRay(float x, float y){
     
-    float u = float(x)/float(m_width);
-    float v = float(y)/float(m_height);
+    float u = x/float(m_width);
+    float v = y/float(m_height);
 
     float theta = (float(m_fov)* M_PI) /float(180.0);
     float half_height = tan(theta/2.0);

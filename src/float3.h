@@ -23,6 +23,14 @@ public:
                       this->z()*rhs.x() - this->x()*rhs.z(),
                       this->x()*rhs.y() - this->y()*rhs.x());
     }
+    float length(){
+        return sqrt(this->dot(*this));
+    }
+    float sqrtLength(){
+        return this->dot(*this);
+    }
+
+    inline float3 unit(float3 v);
     void setX(float num){ entity[0] = num;}
     void setY(float num){ entity[1] = num;}
     void setZ(float num){ entity[2] = num;}
@@ -70,4 +78,8 @@ inline float3 operator*(const float3 &lhs, const float3 &rhs){
 inline std::ostream& operator<<(std::ostream &os, float3 &rhs){
     os << rhs.x() << " " << rhs.y() << " " << rhs.z();
     return os;
+}
+
+inline float3 unit(float3 v){
+    return v/v.length();
 }

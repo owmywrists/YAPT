@@ -1,20 +1,61 @@
 #include "renderer.h"
 
+Camera cam = Camera(500, 500, 90.0);
+float3 trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth);
 
 void render(Hitlist scene, Screen *screen){
     HitInfo hit;
+    int samples = 5;
     for (int x = 0; x < screen->getWidth(); x++){
         for(int y = 0; y < screen->getHeight(); y++){
-            Camera cam = Camera(500, 500,90.0);
-            Ray r = Ray(float3(x,y,0), float3(0,0,-1));
-            Ray ray = cam.getRay(x,y);
+
+            //Camera cam = Camera(500, 500,90.0);
+            Ray ortho = Ray(float3(x,y,0), float3(0,0,-1));
+            
             //float t = 0;
-            Colour colour = Colour(0,0,0);
-            if (scene.isClosestIntsersection(ray, hit)){
-                colour = hit.sphere.getColour();
+            float3 colour = float3(0.0,0.0,0.0);
+            for (int s = 0; s< samples; s++){
+            float u = float(x + drand48());
+            float v = float(y + drand48());
+            Ray persp = cam.getRay(u,v);
+            colour = colour+ trace(persp,scene,hit,0);
+            
             }
-            screen->blit(x, y, colour);
+            colour = colour / float(samples);
+            Colour test = Colour(colour.x(),colour.y(),colour.z());
+            screen->setPixel(x, y, colour);
         }
         
 }
+screen->blit();
+
+}
+
+
+float3 randomInUnitHemisphere(){
+    float3 p;
+    do {
+        p = float3(drand48(),drand48(),drand48())*2.0 - float3(1.0,1.0,1.0);
+
+    }while (p.sqrtLength() >= 1.0);
+    return p;
+}
+
+
+float3 trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth){
+    //loat3 colour = float3(0.0,0.0,0.0);
+    float3 normal = (ray.getHit(hit.t) - hit.sphere.getLocation());
+    normal = unit(normal);
+    float3 target = ray.getHit(hit.t) + normal + randomInUnitHemisphere();
+
+    if (scene.isClosestIntsersection(ray, hit)){
+        Ray new_ray = Ray(ray.getHit(hit.t),target-ray.getHit(hit.t));
+        return trace(new_ray, scene,hit,depth+1)*0.5;
+    }else{
+        float3 u_d = unit(ray.getDirection());
+        float t = (u_d.y() + 1.0)*0.5;
+        //return float3(1.0,1.0,1.0)*(1.0-t) + float3(0.5,0.7,1.0)*t;
+        return float3(100, 100, 100);
+    }
+
 }

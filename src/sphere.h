@@ -12,6 +12,7 @@ public:
                                                           m_colour(colour){};
     bool intersection(Ray &ray, float &t);
     Colour getColour(){return m_colour;}
+    float3 getLocation(){return m_location;}
 private:
     float3 m_location;
     float m_radius;

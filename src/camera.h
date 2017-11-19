@@ -7,7 +7,7 @@ public:
     m_width(width), m_height(height), m_fov(fov){};
 
 
-    Ray getRay(int x, int y);
+    Ray getRay(float x, float y);
 private:
     int m_width;
     int m_height;

@@ -1,5 +1,6 @@
 #include "screen.h"
-#include "scene.h"
+#include "hitlist.h"
 #include <SDL2/SDL.h>
+#include "camera.h"
 
-void render(Screen *screen);
+void render(Hitlist scene, Screen *screen);

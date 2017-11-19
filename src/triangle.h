@@ -4,7 +4,7 @@ class Triangle : public Surface{
 public:
     Triangle();
     ~Triangle();
-    bool intersection(Ray &ray, float t);
+    bool intersection(Ray &ray, float &t);
 private:
 
 };

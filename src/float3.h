@@ -7,7 +7,7 @@ class float3{
 public:
 
     float3(){entity[0] = 0.0; entity[1] = 0.0; entity[2] = 0.0;}
-    float3(int x, int y, int z){
+    float3(float x, float y, float z){
         entity[0] = x;
         entity[1] = y;
         entity[2] = z;
@@ -61,6 +61,11 @@ inline float3 operator+(const float3 &lhs, const float3 &rhs){
 inline float3 operator-(const float3 &lhs, const float3 &rhs){
     return float3(lhs.x() - rhs.x(), lhs.y() - rhs.y(), lhs.z() - rhs.z());
 }
+
+inline float3 operator*(const float3 &lhs, const float3 &rhs){
+    return float3(lhs.x() * rhs.x(), lhs.y() * rhs.y(), lhs.z() * rhs.z());
+}
+
 
 inline std::ostream& operator<<(std::ostream &os, float3 &rhs){
     os << rhs.x() << " " << rhs.y() << " " << rhs.z();

@@ -2,15 +2,16 @@
 #include "window.h"
 #include "float3.h"
 #include "renderer.h"
-#include "scene.h"
+#include "hitlist.h"
 
 int main(){
-    printf("Hello");
+    std::vector<Sphere> scene;
+    scene.push_back(Sphere(float3(1.0, 0.0, -2.0), 0.5, Colour(0,255,0)));
+    scene.push_back(Sphere(float3(-1.0, 0.0, -1.0),0.6, Colour(255,0,0)));
     Window *win = new Window("YAPT", 500, 500);
-
     while (win->isRunning()){
         win->update();
-        render(win->getScreenPtr());
+        render(scene, win->getScreenPtr());
     }
 
 }

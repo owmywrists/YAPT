@@ -5,9 +5,9 @@ GREEN='\033[0;32m'
 
 
 output="../YAPT"
-if [ -f "$output" ]
+if [ -f ../YAPT ]
 then
-	rm output
+	rm ../YAPT
 fi
 
 echo -e "${RED}BUILDING CMAKE FILES"

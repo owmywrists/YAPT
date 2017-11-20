@@ -3,4 +3,4 @@
 Yet Another PathTracer
 
 example render:
-![alt text](https://github.com/owmywrists/YAPT/tree/master/example.gif)
+![Alt text](example.gif?raw=true "Example")

@@ -1,35 +1,35 @@
 #include "renderer.h"
 
 Camera cam = Camera(500, 500, 90.0);
-float3 trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth);
+
+
 
 void render(Hitlist scene, Screen *screen){
     HitInfo hit;
-    int samples = 5;
     for (int x = 0; x < screen->getWidth(); x++){
         for(int y = 0; y < screen->getHeight(); y++){
-
-            //Camera cam = Camera(500, 500,90.0);
             Ray ortho = Ray(float3(x,y,0), float3(0,0,-1));
             
-            //float t = 0;
             float3 colour = float3(0.0,0.0,0.0);
-            for (int s = 0; s< samples; s++){
+
             float u = float(x + drand48());
             float v = float(y + drand48());
             Ray persp = cam.getRay(u,v);
             colour = colour+ trace(persp,scene,hit,0);
-            
-            }
-            colour = colour / float(samples);
-            Colour test = Colour(colour.x(),colour.y(),colour.z());
+
+            colour = colour;
+
             screen->setPixel(x, y, colour);
+
         }
         
 }
-screen->blit();
 
-}
+screen->blit();
+    }
+
+
+
 
 
 float3 randomInUnitHemisphere(){
@@ -54,8 +54,8 @@ float3 trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth){
     }else{
         float3 u_d = unit(ray.getDirection());
         float t = (u_d.y() + 1.0)*0.5;
-        //return float3(1.0,1.0,1.0)*(1.0-t) + float3(0.5,0.7,1.0)*t;
-        return float3(100, 100, 100);
+        return float3(1.0,1.0,1.0)*(1.0-t) + float3(0.5,0.7,1.0)*t;
+        //return float3(0.5, 0.5, 0.5);
     }
 
 }

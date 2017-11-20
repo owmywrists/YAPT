@@ -14,8 +14,10 @@ public:
     unsigned int getWidth(){return m_width;}
     unsigned int getHeight(){return m_height;}
 private:
+    float3 avg(float3 current_avg, float3 new_colour);
     std::vector<float3> m_pixelBuffer;
     int m_width;
     int m_height;
+    int sample;
     SDL_Renderer *m_renderer;
 };

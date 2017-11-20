@@ -7,7 +7,7 @@ Screen::Screen(int width, int height, SDL_Renderer *renderer){
     m_height = height;
     sample = 1;
     m_pixelBuffer.reserve(width*height);
-    //std::fill(m_pixelBuffer.begin(), m_pixelBuffer.end(), float3(0.0,0.0,0.0));
+    std::fill(m_pixelBuffer.begin(), m_pixelBuffer.end(), float3(0.0,0.0,0.0));
 }
 
 Screen::~Screen(){
@@ -16,6 +16,7 @@ Screen::~Screen(){
 
 void Screen::blit(){
     sample++;
+    printf("SAMPLE: %d\n", sample);
     for (int x = 0; x < m_width; x++){
         for (int y = 0; y < m_height; y++){
             float3 col = m_pixelBuffer[y + m_height*x];
@@ -33,4 +34,5 @@ float3 Screen::avg(float3 current_avg, float3 new_colour){
 
 void Screen::setPixel(int x, int y, float3 colour){
     m_pixelBuffer[y + m_height*x] = avg(m_pixelBuffer[y + m_height*x], colour);
+    //m_pixelBuffer[y + m_height*x] = colour;
 }

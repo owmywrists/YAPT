@@ -6,21 +6,23 @@ Camera cam = Camera(500, 500, 90.0);
 
 void render(Hitlist scene, Screen *screen){
     HitInfo hit;
-    for (int x = 0; x < screen->getWidth(); x++){
-        for(int y = 0; y < screen->getHeight(); y++){
+    omp_set_num_threads(24);
+    
+    
+    #pragma omp parallel for schedule(dynamic, 1) private(hit)
+    for (int x = 0; x < screen->getWidth(); ++x){
+        //#pragma omp parallel for
+        srand(time(0));
+        for(int y = 0; y < screen->getHeight(); ++y){
             Ray ortho = Ray(float3(x,y,0), float3(0,0,-1));
-            
-            float3 colour = float3(0.0,0.0,0.0);
-
+            //srand(x);
+            //colour = float3(0.0,0.0,0.0);
+            float3 colour= float3(0.0, 0.0,0.0);
             float u = float(x + drand48());
             float v = float(y + drand48());
             Ray persp = cam.getRay(u,v);
             colour = colour+ trace(persp,scene,hit,0);
-
-            colour = colour;
-
             screen->setPixel(x, y, colour);
-
         }
         
 }

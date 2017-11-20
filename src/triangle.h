@@ -1,3 +1,4 @@
+#pragma once
 #include "surface.h"
 
 class Triangle : public Surface{

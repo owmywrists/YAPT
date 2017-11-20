@@ -1,6 +1,7 @@
+#pragma once
 #include <ostream>
 #include <math.h>
-#pragma once
+
 
 
 class float3{ 

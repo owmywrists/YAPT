@@ -1,7 +1,6 @@
+#pragma once
 #include <SDL2/SDL.h>
 #include <vector>
-#pragma once
-#include "colour.h"
 #include "float3.h"
 
 class Screen{

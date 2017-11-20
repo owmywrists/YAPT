@@ -1,12 +1,9 @@
+#pragma once
 #include <vector>
 #include "sphere.h"
 #include "float3.h"
-#pragma once
 
-struct HitInfo{
-    Sphere sphere;
-    float t;
-};
+
 
 class Hitlist{
 public:

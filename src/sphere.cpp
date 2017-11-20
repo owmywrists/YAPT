@@ -12,12 +12,12 @@ bool Sphere::intersection(Ray &ray, float &t){
         return false;
     else{
         float temp = (-b - sqrt(disc))/a;
-        if (temp < 1e5 && temp > 1e-5){
+        if (temp < 1e5 && temp > 1e-3){
             t = temp;
             return true;
         }
         temp = (-b + sqrt(disc))/a;
-        if (temp < 1e5 && temp > 1e-5){
+        if (temp < 1e5 && temp > 1e-3){
             t = temp;
             return true;
         }

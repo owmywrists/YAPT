@@ -19,9 +19,10 @@ void Screen::blit(){
     printf("SAMPLE: %d\n", sample);
     for (int x = 0; x < m_width; x++){
         for (int y = 0; y < m_height; y++){
+        //for (int y = m_height; y > 0; y--){
             float3 col = m_pixelBuffer[y + m_height*x];
-            SDL_SetRenderDrawColor(m_renderer, sqrtf(col.x())*255, sqrtf(col.y())*255, sqrtf(col.z())*255, 255);
-            SDL_RenderDrawPoint(m_renderer, x,y);
+            SDL_SetRenderDrawColor(m_renderer, std::min(sqrtf(col.x())*255.0, 255.0),std::min(sqrtf(col.y())*255.0, 255.0),std::min(sqrtf(col.z())*255.0, 255.0), 255);
+            SDL_RenderDrawPoint(m_renderer, x,(m_height - y));
         }
     }
 

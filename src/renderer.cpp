@@ -1,6 +1,6 @@
 #include "renderer.h"
 
-Camera cam = Camera(500, 500, 90.0);
+Camera cam = Camera(640, 480, 90.0);
 
 
 

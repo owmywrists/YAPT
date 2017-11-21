@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "sphere.h"
+#include "surface.h"
 #include "float3.h"
 
 

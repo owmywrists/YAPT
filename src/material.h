@@ -39,7 +39,7 @@ public:
     bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray)const;
 };
 
-class MaterialFactory{
+class MaterialFactory{ //material factory allows me to change materials at runtime
 public:
     enum MaterialType{
         Light,

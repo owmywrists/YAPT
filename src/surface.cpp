@@ -1,6 +1,4 @@
-#include "sphere.h"
-
-
+#include "surface.h"
 
 bool Sphere::intersection(Ray &ray, HitInfo &hit){
     float3 oc = ray.getOrigin() - m_location;

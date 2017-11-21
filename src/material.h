@@ -39,13 +39,15 @@ public:
     bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray)const;
 };
 
-class MaterialFactory{ //material factory allows me to change materials at runtime
+class MaterialFactory{ 
+//material factory allows me to change materials at runtime
 public:
     enum MaterialType{
         Light,
         Diffuse,
         Metal
     };
+//I used different names than the subclasses as I may mix and match materials
 
     static std::unique_ptr<Material> createMaterial(MaterialType type, float3 albedo){
         switch (type){

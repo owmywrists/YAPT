@@ -2,11 +2,12 @@
 
 bool Hitlist::isClosestIntsersection(Ray &ray, HitInfo &hitInfo){
     float min_hit = 1e5;
-    for (Sphere &s:m_data){
-        if (s.intersection(ray,hitInfo)){
+    for (auto &s:m_data){
+        if (s->intersection(ray,hitInfo)){
             if (hitInfo.t < min_hit ){
-                hitInfo.normal = unit(ray.getHit(hitInfo.t) - s.getLocation());
-                hitInfo.mat = s.getMatPtr();
+                //hitInfo.normal = unit(ray.getHit(hitInfo.t) - s->getLocation());
+                hitInfo.normal = s->getNormal(ray.getHit(hitInfo.t));
+                hitInfo.mat = s->getMatPtr();
                 min_hit = hitInfo.t;
             }   
         }

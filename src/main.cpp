@@ -6,12 +6,17 @@
 #include "hitlist.h"
 
 int main(){
-    std::vector<Sphere> scene;
-        scene.push_back(Sphere(float3(0.0, 4.99, -7.0), 3,
-        MaterialFactory::Light, float3(1.9,1.9,1.9)
+    std::vector<Surface*> scene;
+    /*
+        scene.push_back(new Sphere(float3(0.0, 4.99, -7.0), 3,
+        MaterialFactory::Diffuse, float3(1.9,1.9,1.9)
     ));
-        scene.push_back(Sphere(float3(0.0, -1007, -1.0),1000,
+    */
+        scene.push_back(new Sphere(float3(0.0, -1000, -1.0),1000,
     MaterialFactory::Diffuse, float3(1.0,1.0,1.0)
+    ));
+            scene.push_back(new Triangle(float3(-2.0, 1.0, -5.0),float3(-5.0, 0.0, -5.0),
+            float3(2.0, 3.0, -3.0), MaterialFactory::Light, float3(1.9, 1.9, 1.9)
     ));
       /*  scene.push_back(Sphere(float3(0.0, 1013, -1.0),1000,
     new Lambertian(float3(1.0,1.0,1.0)

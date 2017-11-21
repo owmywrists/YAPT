@@ -46,14 +46,14 @@ float3 trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth){
                 return col*trace(new_ray, scene,hit,depth+1);
             }    
         else{
-            return col;
+            return col; //emissive
         }
         
     }else{
         //float3 u_d = unit(ray.getDirection());
         //float t = (u_d.y() + 1.0)*0.5;
         //return float3(1.0,1.0,1.0)*(1.0-t) + float3(0.5,0.7,1.0)*t;
-        return float3(0.01,0.01,0.01);
+        return float3(0.00,0.00,0.00);
             }
 
 }

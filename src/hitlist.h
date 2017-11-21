@@ -7,9 +7,9 @@
 
 class Hitlist{
 public:
-    Hitlist(std::vector<Sphere> &spheres): m_data(spheres){};
+    Hitlist(std::vector<Surface*> &surfaces): m_data(surfaces){};
     bool isClosestIntsersection(Ray &ray, HitInfo &hitInfo);
 
 private:
-    std::vector<Sphere> m_data;
+    std::vector<Surface*> m_data;
 };

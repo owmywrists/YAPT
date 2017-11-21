@@ -6,18 +6,17 @@
 class Sphere : public Surface{
 public:
     Sphere(){};
-    Sphere(float3 location, float radius, float3 colour, Material *mat): m_location(location),
-                                                          m_radius(radius),
-                                                          m_colour(colour),
-                                                          m_mat(mat){};
+    Sphere(float3 location, float radius,MaterialFactory::MaterialType mat_type, float3 albedo): 
+        m_location(location),
+        m_radius(radius){
+            m_mat = MaterialFactory::createMaterial(mat_type, albedo);
+        }
     bool intersection(Ray &ray, HitInfo &hit);
-    float3 getColour(){return m_colour;}
     float3 getLocation(){return m_location;}
-    Material* getMatPtr(){return m_mat;}
+    std::shared_ptr<Material>getMatPtr(){return m_mat;}
 private:
     float3 m_location;
     float m_radius;
-    float3 m_colour;
-    Material *m_mat;
+    std::shared_ptr<Material> m_mat;
 
 };

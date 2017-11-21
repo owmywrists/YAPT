@@ -1,6 +1,6 @@
 #include "renderer.h"
 
-Camera cam = Camera(500, 500, 90.0);
+Camera cam = Camera(640, 480, 90.0);
 float3 cosineSampleHemisphere(float u1, float u2);
 
 
@@ -43,14 +43,10 @@ float3 trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth){
         Ray new_ray;
         float3 col(1.0,1.0,1.0);
         if (depth < 5 && hit.mat->scatter(ray, hit,col, new_ray)){
-            if (dynamic_cast<Emissive*>(hit.mat)){
-                return col;
-            }else{
                 return col*trace(new_ray, scene,hit,depth+1);
-            }
-            
-        }else{
-            return float3(0.0,0.0,0.0);
+            }    
+        else{
+            return col;
         }
         
     }else{
@@ -60,13 +56,4 @@ float3 trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth){
         return float3(0.01,0.01,0.01);
             }
 
-}
-
-float3 cosineSampleHemisphere(float u1, float u2){
-    const float r = sqrtf(u1);
-    const float theta = 2.0 * M_PI* u2;
-    const float x = r* cos(theta);
-    const float y = r * sin(theta);
-
-    return float3(x,y, sqrtf(std::max(0.0f,1 - u1)));
 }

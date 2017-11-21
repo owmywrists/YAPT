@@ -1,6 +1,6 @@
 #include "material.h"
 
-float3 cosine(float u1, float u2){
+float3 cosineSample(float u1, float u2){
     const float r = sqrtf(u1);
     const float theta = 2.0 * M_PI* u2;
     const float x = r* cos(theta);
@@ -11,14 +11,14 @@ float3 cosine(float u1, float u2){
 
 bool Emissive::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray)const{
 
-        attenuation = float3(0.9,0.9,0.9);
-        return true;
+        attenuation = m_colour;
+        return false;
 }
 
 bool Lambertian::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray)const{
-        float3 target = ray.getHit(hit.t) + hit.normal + cosine(drand48(),drand48());
+        float3 target = ray.getHit(hit.t) + hit.normal + cosineSample(drand48(),drand48());
         new_ray = Ray(ray.getHit(hit.t), target-ray.getHit(hit.t));
-        attenuation = colour;
+        attenuation = m_colour;
         return true;
 }
 

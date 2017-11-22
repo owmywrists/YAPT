@@ -32,16 +32,18 @@ bool Triangle::intersection(Ray &ray, HitInfo &hit){
     float3 h = ray.getDirection().cross(edge2);
     float a = edge1.dot(h);
 
-    if (a > -1e-5 && a > 1e-5)
-        return false;
+    //if (a > -1e-6 && a > 1e-6)
+    //    return false;
     
     float f = 1.0/a;
     float3 s = ray.getOrigin() - m_v0;
-    float u = s.dot(h) * f;
+    float u = f*(s.dot(h));
+
     if (u <0.0 || u > 1.0)
         return false;
+    
     float3 q = s.cross(edge1);
-    float v = ray.getDirection().dot(q);
+    float v = f*ray.getDirection().dot(q);
     if (v < 0.0 || u + v >1.0)
         return false;
     float t = edge2.dot(q) * f;

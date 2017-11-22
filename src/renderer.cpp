@@ -38,8 +38,6 @@ float3 trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth){
     
 
     if (scene.isClosestIntsersection(ray, hit)){
-        //float3 target = ray.getHit(hit.t) + hit.normal + cosineSampleHemisphere(drand48(),drand48());
-        //Ray new_ray = Ray(ray.getHit(hit.t),target-ray.getHit(hit.t));
         Ray new_ray;
         float3 col(1.0,1.0,1.0);
         if (depth < 5 && hit.mat->scatter(ray, hit,col, new_ray)){
@@ -50,10 +48,10 @@ float3 trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth){
         }
         
     }else{
-        //float3 u_d = unit(ray.getDirection());
-        //float t = (u_d.y() + 1.0)*0.5;
-        //return float3(1.0,1.0,1.0)*(1.0-t) + float3(0.5,0.7,1.0)*t;
-        return float3(0.00,0.00,0.00);
+        float3 u_d = unit(ray.getDirection());
+        float t = (u_d.y() + 1.0)*0.5;
+        return float3(1.0,1.0,1.0)*(1.0-t) + float3(0.5,0.7,1.0)*t;
+        //return float3(0.00,0.00,0.00);
             }
 
 }

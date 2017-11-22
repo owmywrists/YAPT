@@ -1,5 +1,6 @@
 #pragma once
-#include <ostream>
+#include <iostream>
+#include <stdlib.h>
 #include <math.h>
 
 
@@ -40,11 +41,12 @@ public:
         setY(y);
         setZ(z);
     }
+    inline float operator[](int i)const { return entity[i];}
 
     friend std::ostream& operator<<(std::ostream& os, float3 &rhs);
+    friend std::istream& operator>>(std::istream& is, float3 &rhs);
 
     float entity[3];
-private:
 
 };
 
@@ -79,6 +81,12 @@ inline float3 operator*(const float3 &lhs, const float3 &rhs){
 inline std::ostream& operator<<(std::ostream &os, float3 &rhs){
     os << rhs.x() << " " << rhs.y() << " " << rhs.z();
     return os;
+}
+
+inline std::istream& operator>>(std::istream &is, float3 &rhs){
+    is >> rhs.entity[0] >> rhs.entity[1] >> rhs.entity[2];
+    return is;
+    
 }
 
 inline float3 unit(float3 v){

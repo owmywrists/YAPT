@@ -5,7 +5,6 @@ bool Hitlist::isClosestIntsersection(Ray &ray, HitInfo &hitInfo){
     for (auto &s:m_data){
         if (s->intersection(ray,hitInfo)){
             if (hitInfo.t < min_hit ){
-                //hitInfo.normal = unit(ray.getHit(hitInfo.t) - s->getLocation());
                 hitInfo.normal = s->getNormal(ray.getHit(hitInfo.t));
                 hitInfo.mat = s->getMatPtr();
                 min_hit = hitInfo.t;

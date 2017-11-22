@@ -11,13 +11,11 @@ bool Sphere::intersection(Ray &ray, HitInfo &hit){
     else{
         float temp = (-b - sqrt(disc))/a;
         if (temp < 1e5 && temp > 1e-5){
-            //hit.mat = m_mat;
             hit.t = temp;
             return true;
         }
         temp = (-b + sqrt(disc))/a;
         if (temp < 1e5 && temp > 1e-5){
-            //hit.mat = m_mat;
             hit.t = temp;
             return true;
         }
@@ -31,9 +29,6 @@ bool Triangle::intersection(Ray &ray, HitInfo &hit){
     float3 edge2 = m_v2 - m_v0;
     float3 h = ray.getDirection().cross(edge2);
     float a = edge1.dot(h);
-
-    //if (a > -1e-6 && a > 1e-6)
-    //    return false;
     
     float f = 1.0/a;
     float3 s = ray.getOrigin() - m_v0;

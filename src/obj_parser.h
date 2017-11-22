@@ -19,6 +19,8 @@ public:
 private:
 	vector<float3> m_faces;
 	vector<float3> m_vertices;
+	vector<float3> m_normals;
+	vector<float> m_normalIndices;
 	string m_filename;
 	std::ifstream m_obj;
 private:

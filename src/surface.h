@@ -31,8 +31,9 @@ private:
 
 class Triangle : public Surface{
 public:
-    Triangle(float3 v0, float3 v1, float3 v2, MaterialFactory::MaterialType mat_type, float3 albedo):
-    m_v0(v0),m_v1(v1),m_v2(v2){
+    Triangle(float3 v0, float3 v1, float3 v2, MaterialFactory::MaterialType mat_type, float3 albedo,
+    float3 normal=float3()):
+    m_v0(v0),m_v1(v1),m_v2(v2),m_normal(normal){
         m_mat = MaterialFactory::createMaterial(mat_type, albedo);
     };
     ~Triangle();
@@ -40,8 +41,8 @@ public:
     float3 getNormal(float3 hit){
         float3 edge1 = m_v1 - m_v0;
         float3 edge2 = m_v2 - m_v0;
-
         return  unit(edge1.cross(edge2));
+    
      }
     float3 v0()const{return m_v0;}
     float3 v1()const{return m_v1;}
@@ -50,5 +51,6 @@ public:
 private:
     float3 m_v0,m_v1,m_v2;
     std::shared_ptr<Material> m_mat;
+    float3 m_normal;
 
 };

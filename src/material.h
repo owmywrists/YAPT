@@ -15,12 +15,14 @@ struct HitInfo{
 class Material{
 public:
     virtual bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray)const = 0;
+    virtual float3 emitted()const{return float3(0.0,0.0,0.0);}
 };
 
 class Emissive : public Material{
 public:
     Emissive(float3 c): m_colour(c){};
     bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray)const;
+    float3 emitted()const{return m_colour;}
 private:
     float3 m_colour;
 };

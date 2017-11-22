@@ -1,12 +1,27 @@
 #include "material.h"
 
-float3 cosineSample(float u1, float u2){
-    const float r = sqrtf(u1);
-    const float theta = 2.0 * M_PI* u2;
-    const float x = r* cos(theta);
-    const float y = r * sin(theta);
+float3 cosineSampleHemi(float u1, float u2){
+    float z = std::pow(1.0 - u1, 1.0/1.0);
+    float phi = 2.0 * M_PI * u2;
+    float theda = sqrt(std::max(0.0, 1.0 - z*z));
 
-    return float3(x,y, sqrtf(std::max(0.0f,1 - u1)));
+    float r = sqrt(u1);
+    float theta = 2 * M_PI * u2;
+    float x = theda * cos(phi);
+    float y = theda * sin(phi);
+
+    return float3(x,y,z);
+}
+
+float3 WorldSpaceHemi(float u1, float u2, float3 normal){
+    float3 p = cosineSampleHemi(u1,u2);
+    float3 v = float3(0.00023, 1.0, 0.000021).cross(normal);
+    v = unit(v);
+    float3 u = v.cross(normal);
+
+    float3 sample = unit((u * p.x()) + (v * p.y()) + (normal * p.z()));
+
+    return sample;
 }
 
 bool Emissive::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray)const{
@@ -16,7 +31,7 @@ bool Emissive::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray
 }
 
 bool Lambertian::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray)const{
-        float3 target = ray.getHit(hit.t) + hit.normal + cosineSample(drand48(),drand48());
+        float3 target = ray.getHit(hit.t)  + WorldSpaceHemi(drand48(),drand48(), hit.normal);
         new_ray = Ray(ray.getHit(hit.t), target-ray.getHit(hit.t));
         attenuation = m_colour;
         return true;

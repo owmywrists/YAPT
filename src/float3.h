@@ -77,6 +77,10 @@ inline float3 operator*(const float3 &lhs, const float3 &rhs){
     return float3(lhs.x() * rhs.x(), lhs.y() * rhs.y(), lhs.z() * rhs.z());
 }
 
+inline bool operator==(const float3 &lhs, const float3 &rhs){
+    return (lhs.x() == rhs.x() && lhs.y() == rhs.y() && lhs.z() == rhs.z());
+}
+
 
 inline std::ostream& operator<<(std::ostream &os, float3 &rhs){
     os << rhs.x() << " " << rhs.y() << " " << rhs.z();

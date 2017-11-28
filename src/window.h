@@ -1,9 +1,10 @@
 #pragma once
-#include <SDL2/SDL.h>
+#include "../imgui/imgui.h"
+#include "../imgui-sfml/imgui-SFML.h"
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include "screen.h"
 #include <string>
-
 struct windowProperties{
     int width;
     int height;
@@ -17,13 +18,14 @@ public:
     ~Window();
 
     Screen* getScreenPtr(){return m_screen;}
+    sf::RenderWindow* getWindowPtr(){return m_win;}
     void update();
-    bool isRunning();
+    void pollEvents();
 private:
     windowProperties m_prop;
-    SDL_Window *m_win;
-    Screen *m_screen;
-    SDL_Renderer *m_renderer;
+    sf::RenderWindow *m_win;
+    Screen *m_screen; 
+    sf::Clock m_delta_clock;
 private:
     void init();
 

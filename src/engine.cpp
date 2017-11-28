@@ -1,11 +1,17 @@
-#include "renderer.h"
+#include "engine.h"
 
-Camera cam = Camera(640, 480, 90.0);
-float3 cosineSampleHemisphere(float u1, float u2);
+void Engine::loadObjAsScene(std::string filename){
+    Obj m(filename);
+    auto temp = m.getScene();
+    temp.push_back(new Sphere(float3(0.0, 0.5, -1.0),0.3,
+    MaterialFactory::Light, float3(1.9,1.9,1.9)
+    ));
+    m_data = Hitlist(temp);
+}
 
-
-void render(Hitlist scene, Screen *screen){
+void Engine::render(Screen *screen){
     HitInfo hit;
+    m_rendering_state = true;
     #pragma omp parallel for schedule(dynamic, 1) private(hit)
     for (int x = 0; x < screen->getWidth(); ++x){
         for(int y = 0; y < screen->getHeight(); ++y){
@@ -13,27 +19,16 @@ void render(Hitlist scene, Screen *screen){
             float3 colour= float3(0.0, 0.0,0.0);
             float u = float(x + drand48());
             float v = float(y + drand48());
-            Ray persp = cam.getRay(u,v);
-            colour = colour + trace(persp,scene,hit,0);
+            Ray persp = m_cam.getRay(u,v);
+            colour = colour + trace(persp,m_data,hit,0);
             screen->setPixel(x, y, colour);
         }
-        
+    }
+    m_rendering_state = false;
+    //screen->blit();
 }
 
-screen->blit();
-}
-
-float3 randomInUnitHemisphere(){
-    float3 p;
-    do {
-        p = float3(drand48(),drand48(),drand48())*2.0 - float3(1.0,1.0,1.0);
-
-    }while (p.sqrtLength() >= 1.0);
-    return p;
-}
-
-
-float3 trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth){
+float3 Engine::trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth){
     
 
     if (scene.isClosestIntsersection(ray, hit)){

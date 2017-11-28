@@ -17,7 +17,6 @@ void Obj::parse_faces() {
 			std::istringstream ss(line.substr(2));
 				float3 f;
 				ss >> f;
-				std::cout << f << "\n";
 				m_faces.push_back(f);
 	}
 

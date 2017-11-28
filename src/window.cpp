@@ -15,37 +15,30 @@ Window::~Window(){
 }
 
 void Window::init(){
+    m_win = new sf::RenderWindow(sf::VideoMode(m_prop.width, m_prop.height), m_prop.title);
+    ImGui::SFML::Init(*m_win);
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0){
-        printf("SDL failed to initialise");
-    }
-
-    m_win = SDL_CreateWindow(m_prop.title.c_str(), SDL_WINDOWPOS_UNDEFINED,SDL_WINDOWPOS_UNDEFINED,m_prop.width, m_prop.height, 0);
-
-    if (m_win == NULL){
-        printf("SDL failed to create window");
-    }
-
-    
-
-    m_renderer = SDL_CreateRenderer(m_win, -1, SDL_RENDERER_ACCELERATED);
-
-    m_screen = new Screen(m_prop.width, m_prop.height,m_renderer);
+    m_screen = new Screen(m_prop.width, m_prop.height);
+    m_delta_clock.restart();
 }
 
-bool Window::isRunning(){
-    SDL_Event event;
+void Window::pollEvents(){
+    sf::Event event;
 
-    while (SDL_PollEvent(&event)){
-        if (event.type == SDL_QUIT)
-            return false;
+    while(m_win->pollEvent(event)){
+        ImGui::SFML::ProcessEvent(event);
+        if (event.type == sf::Event::Closed){
+            m_win->close();
+        }
     }
-
-    return true;
 
 }
 
 
 void Window::update(){
-    SDL_RenderPresent(m_renderer);
+    ImGui::SFML::Update(*m_win, m_delta_clock.restart());
+    m_screen->drawUI();
+    m_win->clear();
+    ImGui::SFML::Render(*m_win);
+    m_win->display();
 }

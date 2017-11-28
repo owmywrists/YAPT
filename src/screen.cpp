@@ -1,8 +1,7 @@
 #include "screen.h"
 
 
-Screen::Screen(int width, int height, SDL_Renderer *renderer){
-    m_renderer = renderer;
+Screen::Screen(int width, int height){
     m_width = width;
     m_height = height;
     sample = 1;
@@ -13,6 +12,11 @@ Screen::Screen(int width, int height, SDL_Renderer *renderer){
 Screen::~Screen(){
 
 }
+void Screen::drawUI(){
+    ImGui::Begin("HELLO");
+    ImGui::Button("lel");
+    ImGui::End();
+}
 
 void Screen::blit(){
     sample++;
@@ -20,8 +24,8 @@ void Screen::blit(){
     for (int x = 0; x < m_width; x++){
         for (int y = 0; y < m_height; y++){
             float3 col = m_pixelBuffer[y + m_height*x];
-            SDL_SetRenderDrawColor(m_renderer, std::min(sqrtf(col.x())*255.0, 255.0),std::min(sqrtf(col.y())*255.0, 255.0),std::min(sqrtf(col.z())*255.0, 255.0), 255);
-            SDL_RenderDrawPoint(m_renderer, x,(m_height - y));
+            //SDL_SetRenderDrawColor(m_renderer, std::min(sqrtf(col.x())*255.0, 255.0),std::min(sqrtf(col.y())*255.0, 255.0),std::min(sqrtf(col.z())*255.0, 255.0), 255);
+            //SDL_RenderDrawPoint(m_renderer, x,(m_height - y));
         }
     }
 

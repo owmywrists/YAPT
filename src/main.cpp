@@ -12,7 +12,11 @@
 void render_thread(Engine *engine, Window *win){
     while(win->getWindowPtr()->isOpen()){
         engine->render(win->getScreenPtr());
-        std::cout <<"IM RENDERING" << std::endl;
+        if(win->shouldReset()){
+            engine->restart();
+            win->getScreenPtr()->reset();
+            win->setState(false);
+        }
     }
 }
 
@@ -22,13 +26,15 @@ int main(){
     engine.loadObjAsScene("../src/monkey.obj");
     std::thread t(render_thread, &engine, win);
 
-
     while (win->getWindowPtr()->isOpen()){
         win->update();
         win->pollEvents();
-
+                                       
     }
     t.join();
+    
+
+    return 0;
 }
 
 

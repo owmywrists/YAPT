@@ -44,7 +44,7 @@ vector<Surface*> Obj::getScene(){
 			float3 v1 = m_vertices[f.y()-1];
 			float3 v2 = m_vertices[f.z()-1];
 			m_scene.push_back(new Triangle(v0, v1, v2,
-			MaterialFactory::Diffuse, float3(1.0,1.0,1.0),
+			MaterialFactory::Diffuse, float3(0.5,0.5,0.5),
 			float3()));
 	}
 	return m_scene;

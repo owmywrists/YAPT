@@ -15,9 +15,10 @@ public:
         std::lock_guard<std::mutex> lk(m_mtx);
         return m_rendering_state;
         }
+    void restart();
 
 private:
-    Hitlist m_data;
+    std::vector<Surface*> m_data;
     Camera m_cam;
     static float3 trace(Ray &ray, Hitlist scene, HitInfo &hit, int depth);
     bool m_rendering_state;

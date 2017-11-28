@@ -6,6 +6,7 @@ public:
     virtual bool intersection(Ray &ray, HitInfo &hit) = 0;
     virtual std::shared_ptr<Material> getMatPtr() = 0;
     virtual float3 getNormal(float3 hit) = 0;
+    virtual void setMaterial(MaterialFactory::MaterialType mat_type, float3 albedo)=0;
 };
 
 
@@ -22,6 +23,9 @@ public:
         return unit(hit - m_location);
     }
     std::shared_ptr<Material> getMatPtr(){return m_mat;}
+    void setMaterial(MaterialFactory::MaterialType mat_type, float3 albedo){
+        m_mat = MaterialFactory::createMaterial(mat_type, albedo);
+    }
 private:
     float3 m_location;
     float m_radius;
@@ -48,6 +52,9 @@ public:
     float3 v1()const{return m_v1;}
     float3 v2()const{return m_v2;}
     std::shared_ptr<Material> getMatPtr(){return m_mat;}
+    void setMaterial(MaterialFactory::MaterialType mat_type, float3 albedo){
+        m_mat = MaterialFactory::createMaterial(mat_type, albedo);
+    }
 private:
     float3 m_v0,m_v1,m_v2;
     std::shared_ptr<Material> m_mat;

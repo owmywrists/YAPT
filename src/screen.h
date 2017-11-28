@@ -19,6 +19,7 @@ public:
     unsigned int getHeight(){return m_height;}
     sf::Sprite getDrawableView();
     void drawUI();
+    void reset();
 private:
     float3 avg(float3 current_avg, float3 new_colour);
     sf::Color transform(float3 pixel);

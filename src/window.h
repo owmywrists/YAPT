@@ -19,6 +19,8 @@ public:
 
     Screen* getScreenPtr(){return m_screen;}
     sf::RenderWindow* getWindowPtr(){return m_win;}
+    bool shouldReset(){return m_should_reset;}
+    bool setState(bool state){m_should_reset=state;}
     void update();
     void pollEvents();
 private:
@@ -26,6 +28,7 @@ private:
     sf::RenderWindow *m_win;
     Screen *m_screen; 
     sf::Clock m_delta_clock;
+    bool m_should_reset;
 private:
     void init();
 

@@ -15,9 +15,16 @@ Screen::~Screen(){
 }
 void Screen::drawUI(){
     ImGui::Begin("HELLO");
-    ImGui::Button("lel");
+    float color[3] = {255.0f, 255.0f, 255.0f};
+    ImGui::ColorPicker4("Test", color);
     ImGui::End();
 }
+
+void Screen::reset(){
+    std::fill(m_pixelBuffer.begin(), m_pixelBuffer.end(), float3(0.0,0.0,0.0));
+    sample = 1;
+}
+
 sf::Sprite Screen::getDrawableView(){
     m_tex.loadFromImage(m_img);
     sf::Sprite sprite;
@@ -26,6 +33,7 @@ sf::Sprite Screen::getDrawableView(){
 }
 void Screen::blit(){
     sample++;
+    std::cout << sample << std::endl;
 }
 
 float3 Screen::avg(float3 current_avg, float3 new_colour){
@@ -40,6 +48,8 @@ sf::Color Screen::transform(float3 pixel){
 }
 
 void Screen::setPixel(int x, int y, float3 colour){
+    std::lock_guard<std::mutex> lk(m_mtx);
+    
     m_pixelBuffer[y + m_height*x] = avg(m_pixelBuffer[y + m_height*x], colour);
     float3 avg_col = m_pixelBuffer[y + m_height*x];
     m_img.setPixel(x,y,transform(avg_col));

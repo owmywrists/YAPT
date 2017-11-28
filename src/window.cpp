@@ -5,7 +5,7 @@ Window::Window(std::string title, int width, int height){
     m_prop.title = title;
     m_prop.width = width;
     m_prop.height = height;
-
+    m_should_reset = false;
     init();
 
 }
@@ -30,6 +30,12 @@ void Window::pollEvents(){
         if (event.type == sf::Event::Closed){
             m_win->close();
         }
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left){
+            std::cout << "YOU PRESSED ME" << std::endl;
+            std::cout << event.mouseButton.x << std::endl;
+            m_should_reset = true;
+        }
+            
     }
 
 }

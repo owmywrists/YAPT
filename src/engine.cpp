@@ -21,11 +21,11 @@ void Engine::render(Screen *screen){
             float v = float(y + drand48());
             Ray persp = m_cam.getRay(u,v);
             colour = colour + trace(persp,m_data,hit,0);
-            screen->setPixel(x, y, colour);
+            screen->setPixel(x, (screen->getHeight()-y), colour);
         }
     }
     m_rendering_state = false;
-    //screen->blit();
+    screen->blit();
 }
 
 float3 Engine::trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth){

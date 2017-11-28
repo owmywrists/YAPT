@@ -39,6 +39,7 @@ void Window::update(){
     ImGui::SFML::Update(*m_win, m_delta_clock.restart());
     m_screen->drawUI();
     m_win->clear();
+    m_win->draw(m_screen->getDrawableView());
     ImGui::SFML::Render(*m_win);
     m_win->display();
 }

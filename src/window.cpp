@@ -11,7 +11,8 @@ Window::Window(std::string title, int width, int height){
 }
 
 Window::~Window(){
-
+    m_win->~RenderWindow();
+    m_screen->~Screen();
 }
 
 void Window::init(){

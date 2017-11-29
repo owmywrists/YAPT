@@ -11,7 +11,7 @@
 
 void render_thread(Engine *engine, Window *win){
     while(win->getWindowPtr()->isOpen()){
-        engine->render(win->getScreenPtr());
+        engine->render();
         if(win->shouldReset()){
             engine->restart();
             win->getScreenPtr()->reset();
@@ -22,7 +22,7 @@ void render_thread(Engine *engine, Window *win){
 
 int main(){
     Window *win = new Window("YAPT", 640, 480);
-    Engine engine(Camera(640, 480, 90.0));
+    Engine engine(Camera(640, 480, 90.0), win->getScreenPtr());
     engine.loadObjAsScene("../src/monkey.obj");
     std::thread t(render_thread, &engine, win);
 
@@ -32,7 +32,6 @@ int main(){
                                        
     }
     t.join();
-    
 
     return 0;
 }

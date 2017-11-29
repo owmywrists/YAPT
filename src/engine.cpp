@@ -10,28 +10,31 @@ void Engine::loadObjAsScene(std::string filename){
 }
 
 void Engine::restart(){
-    float rand_num = drand48();
+    float * temp_col = m_screen->getColour();
+    float3 rand_num = float3(temp_col[0],temp_col[1], temp_col[2]);
+    std::cout << rand_num << std::endl;
     for(int face = 0; face < 12; face++)
-        m_data[face]->setMaterial(MaterialFactory::Diffuse, float3(drand48(),drand48(),drand48()));
+        m_data[face]->setMaterial(MaterialFactory::Diffuse, float3(rand_num));
+    m_screen->reset();
 }
 
-void Engine::render(Screen *screen){
+void Engine::render(){
     HitInfo hit;
     m_rendering_state = true;
     #pragma omp parallel for schedule(dynamic, 1) private(hit)
-    for (int x = 0; x < screen->getWidth(); x++){
-        for(int y = 0; y < screen->getHeight(); y++){
+    for (int x = 0; x < m_screen->getWidth(); x++){
+        for(int y = 0; y < m_screen->getHeight(); y++){
             Ray ortho = Ray(float3(x,y,0), float3(0,0,-1));
             float3 colour= float3(0.0, 0.0,0.0);
             float u = float(x + drand48());
             float v = float(y + drand48());
             Ray persp = m_cam.getRay(u,v);
             colour = colour + trace(persp,m_data,hit,0);
-            screen->setPixel(x, (screen->getHeight()-y), colour);
+            m_screen->setPixel(x, (m_screen->getHeight()-y), colour);
         }
     }
     m_rendering_state = false;
-    screen->blit();
+    m_screen->blit();
 }
 
 float3 Engine::trace(Ray &ray, Hitlist scene,HitInfo &hit, int depth){

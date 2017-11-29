@@ -1,22 +1,15 @@
 #include "screen.h"
 
-
-Screen::Screen(int width, int height){
-    m_width = width;
-    m_height = height;
-    sample = 1;
-    m_pixelBuffer.resize(width*height);
-    m_img.create(width, height, sf::Color::Black);
-        m_tex.loadFromImage(m_img);
-}
-
 Screen::~Screen(){
-
+    m_img.~Image();
+    m_tex.~Texture();
+    m_mtx.~mutex();
+    m_pixelBuffer.~vector();
 }
 void Screen::drawUI(){
+    ImGui::StyleColorsDark();
     ImGui::Begin("HELLO");
-    float color[3] = {255.0f, 255.0f, 255.0f};
-    ImGui::ColorPicker4("Test", color);
+    ImGui::ColorPicker3("Test", m_color);
     ImGui::End();
 }
 
@@ -49,7 +42,6 @@ sf::Color Screen::transform(float3 pixel){
 
 void Screen::setPixel(int x, int y, float3 colour){
     std::lock_guard<std::mutex> lk(m_mtx);
-    
     m_pixelBuffer[y + m_height*x] = avg(m_pixelBuffer[y + m_height*x], colour);
     float3 avg_col = m_pixelBuffer[y + m_height*x];
     m_img.setPixel(x,y,transform(avg_col));

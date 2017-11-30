@@ -5,7 +5,6 @@ Window::Window(std::string title, int width, int height){
     m_prop.title = title;
     m_prop.width = width;
     m_prop.height = height;
-    m_should_reset = false;
     init();
 
 }
@@ -31,11 +30,6 @@ void Window::pollEvents(){
         if (event.type == sf::Event::Closed){
             m_win->close();
         }
-        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left){
-            std::cout << "YOU PRESSED ME" << std::endl;
-            std::cout << event.mouseButton.x << std::endl;
-            m_should_reset = true;
-        }
             
     }
 
@@ -46,7 +40,8 @@ void Window::update(){
     ImGui::SFML::Update(*m_win, m_delta_clock.restart());
     m_screen->drawUI();
     m_win->clear();
-    m_win->draw(m_screen->getDrawableView());
+    m_drawableView = m_screen->getDrawableView();
+    m_win->draw(m_drawableView);
     ImGui::SFML::Render(*m_win);
     m_win->display();
 }

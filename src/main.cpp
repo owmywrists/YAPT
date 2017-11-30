@@ -12,17 +12,12 @@
 void render_thread(Engine *engine, Window *win){
     while(win->getWindowPtr()->isOpen()){
         engine->render();
-        if(win->shouldReset()){
-            engine->restart();
-            win->getScreenPtr()->reset();
-            win->setState(false);
-        }
     }
 }
 
 int main(){
-    Window *win = new Window("YAPT", 640, 480);
-    Engine engine(Camera(640, 480, 90.0), win->getScreenPtr());
+    Window *win = new Window("YAPT", 1280, 720);
+    Engine engine(Camera(1280, 720, 90.0), win->getScreenPtr());
     engine.loadObjAsScene("../src/monkey.obj");
     std::thread t(render_thread, &engine, win);
 
@@ -32,7 +27,7 @@ int main(){
                                        
     }
     t.join();
-
+    ImGui::SFML::Shutdown();
     return 0;
 }
 

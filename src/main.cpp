@@ -8,27 +8,27 @@
 #include <thread>
 #include <atomic>
 
-
-void render_thread(Engine *engine, Window *win){
-    while(win->getWindowPtr()->isOpen()){
+void render_thread(Engine *engine, Window *win)
+{
+    while (win->getWindowPtr()->isOpen())
+    {
         engine->render();
     }
 }
 
-int main(){
+int main()
+{
     Window *win = new Window("YAPT", 1280, 720);
     Engine engine(Camera(1280, 720, 90.0), win->getScreenPtr());
     engine.loadObjAsScene("../src/monkey.obj");
     std::thread t(render_thread, &engine, win);
 
-    while (win->getWindowPtr()->isOpen()){
+    while (win->getWindowPtr()->isOpen())
+    {
         win->update();
         win->pollEvents();
-                                       
     }
     t.join();
     ImGui::SFML::Shutdown();
     return 0;
 }
-
-

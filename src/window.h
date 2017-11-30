@@ -5,28 +5,30 @@
 #include <iostream>
 #include "screen.h"
 #include <string>
-struct windowProperties{
+struct windowProperties
+{
     int width;
     int height;
     std::string title;
 };
 
-
-class Window {
-public:
+class Window
+{
+  public:
     Window(std::string title, int width, int height);
     ~Window();
-    Screen* getScreenPtr(){return m_screen;}
-    sf::RenderWindow* getWindowPtr(){return m_win;}
+    Screen *getScreenPtr() { return m_screen; }
+    sf::RenderWindow *getWindowPtr() { return m_win; }
     void update();
     void pollEvents();
-private:
+
+  private:
     windowProperties m_prop;
     sf::RenderWindow *m_win;
-    Screen *m_screen; 
+    Screen *m_screen;
     sf::Sprite m_drawableView;
     sf::Clock m_delta_clock;
-private:
-    void init();
 
+  private:
+    void init();
 };

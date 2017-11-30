@@ -9,11 +9,13 @@
 #include <mutex>
 #include <exception>
 
-class Screen{
-public:
-    Screen(int width, int height):m_width(width), m_height(height),
-    sample(1){
-        m_pixelBuffer.resize(width*height);
+class Screen
+{
+  public:
+    Screen(int width, int height) : m_width(width), m_height(height),
+                                    sample(1)
+    {
+        m_pixelBuffer.resize(width * height);
         m_img.create(width, height, sf::Color::Black);
         m_tex.loadFromImage(m_img);
         should_reset = false;
@@ -22,18 +24,20 @@ public:
     ~Screen();
     void blit();
     void setPixel(int x, int y, float3 colour);
-    unsigned int getWidth(){return m_width;}
-    unsigned int getHeight(){return m_height;}
-    float* getColour(){return m_color;}
-    bool getState(){return should_reset;}
+    unsigned int getWidth() { return m_width; }
+    unsigned int getHeight() { return m_height; }
+    float *getColour() { return m_color; }
+    bool getState() { return should_reset; }
     sf::Sprite getDrawableView();
     void drawUI();
     void loadImage(std::vector<float3> img);
     void reset();
-private:
+
+  private:
     float3 avg(float3 current_avg, float3 new_colour);
     sf::Color transform(float3 pixel);
-    struct Window_states{
+    struct Window_states
+    {
         bool save;
     };
     std::vector<float3> m_pixelBuffer;

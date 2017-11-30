@@ -10,20 +10,21 @@
 using std::string;
 using std::vector;
 
-
-
-class Obj {
-public:
+class Obj
+{
+  public:
 	Obj(string filename);
-	vector<Surface*> getScene();
-private:
+	vector<Surface *> getScene();
+
+  private:
 	vector<float3> m_faces;
 	vector<float3> m_vertices;
 	vector<float3> m_normals;
 	vector<float> m_normalIndices;
 	string m_filename;
 	std::ifstream m_obj;
-private:
+
+  private:
 	void parse_faces();
 	float3 face(int i);
 };

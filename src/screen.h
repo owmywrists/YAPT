@@ -28,6 +28,7 @@ public:
     bool getState(){return should_reset;}
     sf::Sprite getDrawableView();
     void drawUI();
+    void loadImage(std::vector<float3> img);
     void reset();
 private:
     float3 avg(float3 current_avg, float3 new_colour);

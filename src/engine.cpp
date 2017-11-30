@@ -17,10 +17,19 @@ void Engine::restart(){
         m_data[face]->setMaterial(MaterialFactory::Diffuse, float3(rand_num));
     m_screen->reset();
 }
-
+void Engine::loadBuffer(std::vector<float3> image){
+    for (int x = 0; x < m_screen->getWidth(); x++){
+        for (int y = 0; y < m_screen->getHeight(); y++){
+            float3 col = image[x + m_screen->getWidth()*y];
+            m_screen->setPixel(x,(m_screen->getHeight()-y),col);
+        }
+    }
+}
 void Engine::render(){
     HitInfo hit;
     omp_set_num_threads(24);
+    std::vector<float3> temp_img;
+    temp_img.resize(m_screen->getWidth()*m_screen->getHeight());
     #pragma omp parallel for schedule(dynamic, 1) private(hit)
     for (int x = 0; x < m_screen->getWidth(); x++){
     for(int y = 0; y < m_screen->getHeight(); y++){
@@ -30,10 +39,10 @@ void Engine::render(){
                 float v = float(y + drand48());
                 Ray persp = m_cam.getRay(u,v);
                 colour = colour + trace(persp,m_data,hit,0);
-                m_screen->setPixel(x, (m_screen->getHeight()-y), colour);
+                temp_img[x + y*m_screen->getWidth()] = colour;
                 }
     }
-
+    m_screen->loadImage(temp_img);
     m_screen->blit();
     if(m_screen->getState()) restart();
 }

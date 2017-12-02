@@ -4,9 +4,13 @@ void Engine::loadObjAsScene(std::string filename)
 {
     Obj m(filename);
     auto temp = m.getScene();
-    temp.push_back(new Sphere(float3(0.0, -22.0, -2.0), 20.0,
-                              MaterialFactory::Diffuse, float3(0.5, 0.5, 0.5)));
+    //temp.push_back(new Sphere(float3(0.0, -22.0, -2.0), 20.0,
+    //                          MaterialFactory::Diffuse, float3(0.5, 0.5, 0.5)));
+
+
     m_data = temp;
+
+    node = KDNode().build(m_data, 0);
 }
 
 void Engine::restart()
@@ -45,7 +49,7 @@ void Engine::render()
             float u = float(x + drand48());
             float v = float(y + drand48());
             Ray persp = m_cam.getRay(u, v);
-            colour = colour + trace(persp, m_data, hit, 0);
+            colour = colour + trace(persp,hit, 0);
             temp_img[x + y * m_screen->getWidth()] = colour;
         }
     }
@@ -55,9 +59,33 @@ void Engine::render()
         restart();
 }
 
-float3 Engine::trace(Ray &ray, Hitlist scene, HitInfo &hit, int depth)
+float3 Engine::trace(Ray &ray,HitInfo &hit, int depth)
 {
+    if (node->intersect(node, ray,hit))
+    {
+        //std::cout <<"bonkers" <<std::endl;
+        Ray new_ray;
+        float3 col(1.0, 1.0, 1.0);
+        float3 light = hit.mat->emitted();
+        if (depth < 10 && hit.mat->scatter(ray, hit, col, new_ray))
+        {
+            return light + col * trace(new_ray,hit, depth + 1);
+        }
+        else
+        {
+            return light;
+        }
+    }
+    else
+    {
 
+        float3 unit_direction = unit(ray.getDirection());
+        float t = 0.5 * (unit_direction.y() + 1.0);
+        return float3(1.0, 1.0, 1.0) * (1.0 - t) + float3(0.5, 0.7, 1.0) * t;
+    }
+    
+    //node->intersect(node, ray, hit);
+    /*
     if (scene.isClosestIntsersection(ray, hit))
     {
         Ray new_ray;
@@ -78,6 +106,7 @@ float3 Engine::trace(Ray &ray, Hitlist scene, HitInfo &hit, int depth)
         float3 unit_direction = unit(ray.getDirection());
         float t = 0.5 * (unit_direction.y() + 1.0);
         return float3(1.0, 1.0, 1.0) * (1.0 - t) + float3(0.5, 0.7, 1.0) * t;
-        //return float3(0.0,0.0,1.0);
     }
+    */
+    
 }

@@ -15,7 +15,10 @@ struct windowProperties
 class Window
 {
   public:
-    Window(std::string title, int width, int height);
+    Window(std::string title, int width, int height) : m_prop{width, height, title}
+    {
+        init();
+    };
     ~Window();
     Screen *getScreenPtr() { return m_screen; }
     sf::RenderWindow *getWindowPtr() { return m_win; }

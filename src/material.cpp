@@ -37,6 +37,7 @@ bool Lambertian::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_r
 {
     float3 target = ray.getHit(hit.t) + WorldSpaceHemi(drand48(), drand48(), hit.normal);
     new_ray = Ray(ray.getHit(hit.t), target - ray.getHit(hit.t));
+
     attenuation = m_colour;
     return true;
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "material.h"
+#include "aabb.h"
 
 class Surface
 {
@@ -8,6 +9,8 @@ class Surface
     virtual std::shared_ptr<Material> getMatPtr() = 0;
     virtual float3 getNormal(float3 hit) = 0;
     virtual void setMaterial(MaterialFactory::MaterialType mat_type, float3 albedo) = 0;
+    virtual AABB getBoundingBox() const = 0;
+    virtual float3 getMidpoint() const = 0;
 };
 
 class Sphere : public Surface
@@ -28,6 +31,15 @@ class Sphere : public Surface
     void setMaterial(MaterialFactory::MaterialType mat_type, float3 albedo)
     {
         m_mat = MaterialFactory::createMaterial(mat_type, albedo);
+    }
+    AABB getBoundingBox()const
+    {
+        return AABB(m_location - float3(m_radius, m_radius, m_radius), m_location +
+                                                                           float3(m_radius, m_radius, m_radius));
+    }
+    float3 getMidpoint()const
+    {
+        return m_location;
     }
 
   private:
@@ -59,6 +71,24 @@ class Triangle : public Surface
     void setMaterial(MaterialFactory::MaterialType mat_type, float3 albedo)
     {
         m_mat = MaterialFactory::createMaterial(mat_type, albedo);
+    }
+    AABB getBoundingBox()const
+    {
+
+
+     return AABB(float3(
+        std::min(std::min(v0().x(), v1().x()), v2().x() ),
+        std::min(std::min(v0().y(), v1().y()), v2().y() ),
+        std::min(std::min(v0().z(), v1().z()), v2().z() )),
+        float3(
+        std::max(std::max(v0().x(), v1().x()), v2().x() ),
+        std::max(std::max(v0().y(), v1().y()), v2().y() ),
+        std::max(std::max(v0().z(), v1().z()), v2().z() ))
+     );
+    }
+    float3 getMidpoint()const
+    {
+        return (v0() + v1() + v2()) / 3.0;
     }
 
   private:

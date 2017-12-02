@@ -4,6 +4,7 @@
 #include "hitlist.h"
 #include "camera.h"
 #include "screen.h"
+#include "kd_tree.h"
 #include <mutex>
 #include <omp.h>
 #include <condition_variable>
@@ -17,9 +18,10 @@ class Engine
     void restart();
 
   private:
-    std::vector<Surface *> m_data;
+    std::vector<Surface*> m_data;
+    KDNode *node;
     Camera m_cam;
-    static float3 trace(Ray &ray, Hitlist scene, HitInfo &hit, int depth);
+    float3 trace(Ray &ray,HitInfo &hit, int depth);
     void loadBuffer(std::vector<float3> image);
     Screen *m_screen;
 };

@@ -1,13 +1,5 @@
 #include "window.h"
 
-Window::Window(std::string title, int width, int height)
-{
-    m_prop.title = title;
-    m_prop.width = width;
-    m_prop.height = height;
-    init();
-}
-
 Window::~Window()
 {
     m_win->~RenderWindow();

@@ -14,7 +14,7 @@ class AABB
 
     bool hit(Ray &ray, float &t) const
     {
-        
+        /*
             float tmin, tmax;
             for (int a=0; a <3; a++){
                 float invD = 1.0f / ray.getDirection()[a];
@@ -26,11 +26,11 @@ class AABB
                 tmin = t0 > tmin ? t0: tmin;
                 tmax = t1 < tmax ? t1 : tmax;
                 t = tmin;
-                if (tmax <=)
             }
+            return tmax >= tmin;
 
-            
-/*
+           */ 
+
         float tx1 = (m_min.x() - ray.getOrigin().x()) / ray.getDirection().x();
         float tx2 = (m_max.x() - ray.getOrigin().x()) / ray.getDirection().x();
 
@@ -52,7 +52,7 @@ class AABB
         t = tmin;
 
         return tmax >= tmin;
-        */
+        
     }
 
     void expand(const AABB &a)

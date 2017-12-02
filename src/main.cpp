@@ -20,7 +20,7 @@ int main()
 {
     Window *win = new Window("YAPT", 1280, 720);
     Engine engine(Camera(1280, 720, 90.0), win->getScreenPtr());
-    engine.loadObjAsScene("../objs/suzanne.obj");
+    engine.loadObjAsScene("../objs/bunny.obj");
     std::thread t(render_thread, &engine, win);
 
     while (win->getWindowPtr()->isOpen())

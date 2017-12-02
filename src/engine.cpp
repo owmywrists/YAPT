@@ -4,10 +4,7 @@ void Engine::loadObjAsScene(std::string filename)
 {
     Obj m(filename);
     auto temp = m.getScene();
-    //temp.push_back(new Sphere(float3(0.0, -22.0, -2.0), 20.0,
-    //                          MaterialFactory::Diffuse, float3(0.5, 0.5, 0.5)));
-
-
+    
     m_data = temp;
 
     node = KDNode().build(m_data, 0);
@@ -18,7 +15,7 @@ void Engine::restart()
     float *temp_col = m_screen->getColour();
     float3 rand_num = float3(temp_col[0], temp_col[1], temp_col[2]);
     std::cout << rand_num << std::endl;
-    for (int face = 0; face < 12; face++)
+    for (int face = 0; face < 967; face++)
         m_data[face]->setMaterial(MaterialFactory::Diffuse, float3(rand_num));
     m_screen->reset();
 }
@@ -49,7 +46,7 @@ void Engine::render()
             float u = float(x + drand48());
             float v = float(y + drand48());
             Ray persp = m_cam.getRay(u, v);
-            colour = colour + trace(persp,hit, 0);
+            colour = colour + trace(persp, hit, 0);
             temp_img[x + y * m_screen->getWidth()] = colour;
         }
     }
@@ -59,9 +56,12 @@ void Engine::render()
         restart();
 }
 
-float3 Engine::trace(Ray &ray,HitInfo &hit, int depth)
+float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
 {
-    if (node->intersect(node, ray,hit))
+    float tmin = 1e5;
+    if (node->intersect(node, ray,tmin, hit))
+    //Hitlist scene(m_data);
+    //if (scene.isClosestIntsersection(ray, hit))
     {
         //std::cout <<"bonkers" <<std::endl;
         Ray new_ray;
@@ -69,7 +69,7 @@ float3 Engine::trace(Ray &ray,HitInfo &hit, int depth)
         float3 light = hit.mat->emitted();
         if (depth < 10 && hit.mat->scatter(ray, hit, col, new_ray))
         {
-            return light + col * trace(new_ray,hit, depth + 1);
+            return light + col * trace(new_ray, hit, depth + 1);
         }
         else
         {
@@ -83,7 +83,7 @@ float3 Engine::trace(Ray &ray,HitInfo &hit, int depth)
         float t = 0.5 * (unit_direction.y() + 1.0);
         return float3(1.0, 1.0, 1.0) * (1.0 - t) + float3(0.5, 0.7, 1.0) * t;
     }
-    
+
     //node->intersect(node, ray, hit);
     /*
     if (scene.isClosestIntsersection(ray, hit))
@@ -108,5 +108,4 @@ float3 Engine::trace(Ray &ray,HitInfo &hit, int depth)
         return float3(1.0, 1.0, 1.0) * (1.0 - t) + float3(0.5, 0.7, 1.0) * t;
     }
     */
-    
 }

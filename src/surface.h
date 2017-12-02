@@ -88,6 +88,10 @@ class Triangle : public Surface
     }
     float3 getMidpoint()const
     {
+        float3 sum = (v0() + v1() + v2());
+        std::cout <<sum << std::endl;
+        float3 avg = sum/3.0;
+        std::cout <<avg << std::endl;
         return (v0() + v1() + v2()) / 3.0;
     }
 

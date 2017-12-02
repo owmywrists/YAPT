@@ -47,7 +47,7 @@ bool Triangle::intersection(Ray &ray, HitInfo &hit)
     if (v < 0.0 || u + v > 1.0)
         return false;
     float t = edge2.dot(q) * f;
-    if (t > 1e-5)
+    if (t > 1e-9)
     {
         hit.t = t;
         return true;

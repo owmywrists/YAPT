@@ -6,13 +6,9 @@
 class AABB
 {
   public:
-    AABB() {}
-    AABB(float3 min, float3 max) : m_min(min), m_max(max) {}
+    AABB(float3 min=float3(), float3 max=float3()) : min(min), max(max) {}
 
-    float3 getMin() const { return m_min; }
-    float3 getMax() const { return m_max; }
-
-    bool hit(Ray &ray, float &t) const
+    bool hit(Ray &ray, float &t)
     {
         /*
             float tmin, tmax;
@@ -30,21 +26,22 @@ class AABB
             return tmax >= tmin;
 
            */ 
+          float3 inv_rd = ray.getDirection();
 
-        float tx1 = (m_min.x() - ray.getOrigin().x()) / ray.getDirection().x();
-        float tx2 = (m_max.x() - ray.getOrigin().x()) / ray.getDirection().x();
+        float tx1 = (min.x() - ray.getOrigin().x()) / inv_rd.x();
+        float tx2 = (max.x() - ray.getOrigin().x()) / inv_rd.x();
 
         float tmin = std::min(tx1, tx2);
         float tmax = std::max(tx1, tx2);
 
-        float ty1 = (m_min.y() - ray.getOrigin().y()) / ray.getDirection().y();
-        float ty2 = (m_max.y() - ray.getOrigin().y()) / ray.getDirection().y();
+        float ty1 = (min.y() - ray.getOrigin().y()) / inv_rd.y();
+        float ty2 = (max.y() - ray.getOrigin().y()) / inv_rd.y();
 
         tmin = std::max(tmin, std::min(ty1, ty2));
         tmax = std::min(tmax, std::max(ty1, ty2));
 
-        float tz1 = (m_min.z() - ray.getOrigin().z()) / ray.getDirection().z();
-        float tz2 = (m_max.z() - ray.getOrigin().z()) / ray.getDirection().z();
+        float tz1 = (min.z() - ray.getOrigin().z()) / inv_rd.z();
+        float tz2 = (max.z() - ray.getOrigin().z()) / inv_rd.z();
 
         tmin = std::max(tmin, std::min(tz1, tz2));
         tmax = std::min(tmax, std::max(tz1, tz2));
@@ -57,24 +54,29 @@ class AABB
 
     void expand(const AABB &a)
     {
-        if (a.getMin().x() < m_min.x())
-            m_min.setX(a.getMin().x());
-        if (a.getMin().y() < m_min.y())
-            m_min.setY(a.getMin().y());
-        if (a.getMin().z() < m_min.z())
-            m_min.setZ(a.getMin().z());
+        if (a.min.x() < min.x())
+            min.setX(a.min.x());
 
-        if (a.getMax().x() > getMax().x())
-            getMax().setX(a.getMax().x());
-        if (a.getMax().y() > getMax().y())
-            getMax().setY(a.getMax().y());
-        if (a.getMax().z() > getMax().z())
-            getMax().setZ(a.getMax().z());
+        if (a.min.y() < min.y())
+            min.setY(a.min.y());
+
+        if (a.min.z() < min.z())
+            min.setZ(a.min.z());
+
+
+        if (a.max.x() > max.x())
+            max.setX(a.max.x());
+
+        if (a.max.y() > max.y())
+            max.setY(a.max.y());
+            
+        if (a.max.z() > max.z())
+            max.setZ(a.max.z());
     }
 
     int getLongestAxis()
     {
-        float3 diff = m_max - m_min;
+        float3 diff = max - min;
         if (diff.x() > diff.y() && diff.x() > diff.z())
             return 0;
         if (diff.y() > diff.x() && diff.y() > diff.z())
@@ -83,7 +85,7 @@ class AABB
     }
 
   private:
-    float3 m_max, m_min;
+    float3 max, min;
 };
 
 #endif

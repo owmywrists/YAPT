@@ -6,7 +6,6 @@ float3 cosineSampleHemi(float u1, float u2)
     float phi = 2.0 * M_PI * u2;
     float theda = sqrt(std::max(0.0, 1.0 - z * z));
 
-    float r = sqrt(u1);
     float theta = 2 * M_PI * u2;
     float x = theda * cos(phi);
     float y = theda * sin(phi);

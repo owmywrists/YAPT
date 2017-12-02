@@ -1,6 +1,6 @@
 #include "kd_tree.h"
 
-KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth) const
+KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth)
 {
     KDNode *node = new KDNode();
     node->leaf = false;
@@ -31,10 +31,11 @@ KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth) const
 
     node->aabb = surfaces[0]->getBoundingBox();
     float3 midpoint = float3();
+    float s_rec = 1.0/float(surfaces.size());
     for (int i = 1; i < surfaces.size(); i++)
     {
         node->aabb.expand(surfaces[i]->getBoundingBox());
-        midpoint = midpoint + (surfaces[i]->getMidpoint() * (1.0 / surfaces.size()));
+        midpoint = midpoint + (surfaces[i]->getMidpoint() * s_rec);
     }
 
     std::vector<Surface *> left_surfaces;
@@ -81,49 +82,52 @@ KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth) const
     return node;
 }
 
-bool KDNode::closestIntersection(Ray &ray, HitInfo &hit, std::vector<Surface *> surfaces) const
+bool KDNode::closestIntersection(Ray &ray, HitInfo &hit,float &tmin, std::vector<Surface *> surfaces)
 {
     float min_hit = 1e5;
     for (auto &s : surfaces)
     {
         if (s->intersection(ray, hit))
         {
-            if (hit.t < min_hit)
+            //std::cout << hit.t << std::endl;
+            if (hit.t < tmin)
             {
                 hit.normal = s->getNormal(ray.getHit(hit.t));
                 hit.mat = s->getMatPtr();
-                min_hit = hit.t;
+                tmin = hit.t;
             }
         }
     }
-    if (min_hit < 1e5 && min_hit > 1e-5)
+    if (tmin < 1e5 && tmin > 1e-5)
     {
-        hit.t = min_hit;
+        hit.t = tmin;
         return true;
     }
     return false;
 }
 
-bool KDNode::intersect(KDNode *node, Ray &ray, HitInfo &hit) const
+bool KDNode::intersect(KDNode *node, Ray &ray,float &tmin, HitInfo &hit)
 {
     float dist;
     if (node->aabb.hit(ray, dist))
     {
-        
+    if (dist > tmin) return false;
 
         if (!node->leaf)
         {
-            bool hit_left = intersect(node->left, ray, hit);
+            bool hit_left = intersect(node->left, ray,tmin, hit);
 
-            bool hit_right = intersect(node->right, ray, hit);
+            bool hit_right = intersect(node->right, ray, tmin,hit);
             return hit_left || hit_right;
         }
         else
         {
-            if (closestIntersection(ray, hit, node->surface))
+            if (closestIntersection(ray, hit, tmin,node->surface))
             {
+                tmin = hit.t;
                 return true;
             }
+            
         }
     }
     return false;

@@ -1,7 +1,8 @@
 #pragma once
 #include "ray.h"
 #include "float3.h"
-
+#define _USE_MATH_DEFINES
+#include <math.h>
 class Camera
 {
   public:

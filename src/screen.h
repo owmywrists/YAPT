@@ -1,8 +1,6 @@
 #pragma once
 #include "../imgui/imgui.h"
 #include "../imgui-sfml/imgui-SFML.h"
-
-#include <SDL2/SDL.h>
 #include <vector>
 #include "float3.h"
 #include <SFML/Graphics.hpp>

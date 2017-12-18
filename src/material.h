@@ -2,6 +2,9 @@
 #include "ray.h"
 #include "float3.h"
 #include <memory>
+#include "drand.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 float3 cosine(float u1, float u2);
 
 class Material;

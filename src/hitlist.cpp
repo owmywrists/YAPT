@@ -10,7 +10,7 @@ bool Hitlist::isClosestIntsersection(Ray &ray, HitInfo &hitInfo)
             if (hitInfo.t < min_hit)
             {
                 hitInfo.normal = s->getNormal(ray.getHit(hitInfo.t));
-                hitInfo.mat = s->getMatPtr();
+                hitInfo.mat = s->getMatPtr(float3());
                 min_hit = hitInfo.t;
             }
         }

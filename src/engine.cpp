@@ -15,8 +15,12 @@ void Engine::restart()
     float *temp_col = m_screen->getColour();
     float3 rand_num = float3(temp_col[0], temp_col[1], temp_col[2]);
     std::cout << rand_num << std::endl;
-    for (int face = 0; face < 967; face++)
-        m_data[face]->setMaterial(MaterialFactory::Diffuse, float3(rand_num));
+	std::vector<std::shared_ptr<Material>> mats;
+	mats.push_back(MaterialFactory::createMaterial(MaterialFactory::Diffuse, rand_num));
+	mats.push_back(MaterialFactory::createMaterial(MaterialFactory::Diffuse, float3(1.0, 0.0, 0.0)));
+
+    for (int face = 0; face < m_data.size(); face++)
+        m_data[face]->setMaterial(mats);
     m_screen->reset();
 }
 void Engine::loadBuffer(std::vector<float3> image)
@@ -60,10 +64,7 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
 {
     float tmin = 1e5;
     if (node->intersect(node, ray,tmin, hit))
-    //Hitlist scene(m_data);
-    //if (scene.isClosestIntsersection(ray, hit))
     {
-        //std::cout <<"bonkers" <<std::endl;
         Ray new_ray;
         float3 col(1.0, 1.0, 1.0);
         float3 light = hit.mat->emitted();
@@ -83,29 +84,4 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
         float t = 0.5 * (unit_direction.y() + 1.0);
         return float3(1.0, 1.0, 1.0) * (1.0 - t) + float3(0.5, 0.7, 1.0) * t;
     }
-
-    //node->intersect(node, ray, hit);
-    /*
-    if (scene.isClosestIntsersection(ray, hit))
-    {
-        Ray new_ray;
-        float3 col(1.0, 1.0, 1.0);
-        float3 light = hit.mat->emitted();
-        if (depth < 50 && hit.mat->scatter(ray, hit, col, new_ray))
-        {
-            return light + col * trace(new_ray, scene, hit, depth + 1);
-        }
-        else
-        {
-            return light;
-        }
-    }
-    else
-    {
-
-        float3 unit_direction = unit(ray.getDirection());
-        float t = 0.5 * (unit_direction.y() + 1.0);
-        return float3(1.0, 1.0, 1.0) * (1.0 - t) + float3(0.5, 0.7, 1.0) * t;
-    }
-    */
 }

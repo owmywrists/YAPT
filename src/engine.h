@@ -6,9 +6,7 @@
 #include "screen.h"
 #include "kd_tree.h"
 #include "drand.h"
-#include <mutex>
 #include <omp.h>
-#include <condition_variable>
 
 class Engine
 {

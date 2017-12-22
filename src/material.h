@@ -51,6 +51,12 @@ class Mirror : public Material
     bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const;
 };
 
+class Uber : public Material
+{
+public:
+	Uber(float3 albedo, float refl, float diffuse, float emissive) {}
+};
+
 class MaterialFactory
 {
     //material factory allows me to change materials at runtime
@@ -59,11 +65,11 @@ class MaterialFactory
     {
         Light,
         Diffuse,
-        Metal
-    };
+        Metal,
+	};
     //I used different names than the subclasses as I may mix and match materials
 
-    static std::unique_ptr<Material> createMaterial(MaterialType type, float3 albedo)
+    static std::unique_ptr<Material> createMaterial(MaterialType type, float3 albedo=float3())
     {
         switch (type)
         {

@@ -27,9 +27,23 @@ void Screen::drawUI()
             {
                 should_reset = true;
             }
-
+			if (ImGui::MenuItem("Open"))
+			{
+				m_win_states.open_obj = true;
+			}
             ImGui::EndMenu();
         }
+		if (m_win_states.open_obj)
+		{
+			ImGui::Begin("open new obj");
+			ImGui::InputText("filename", m_obj_name, sizeof(m_obj_name), ImGuiInputTextFlags_EnterReturnsTrue);
+			if (ImGui::Button("Open"))
+			{
+				should_reset = true;
+				m_win_states.open_obj = false;
+			}
+			ImGui::End();
+		}
         if (m_win_states.save)
         {
             ImGui::Begin("Save settings");

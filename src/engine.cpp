@@ -4,14 +4,18 @@ void Engine::loadObjAsScene(std::string filename)
 {
     Obj m(filename);
     auto temp = m.getScene();
-    
-    m_data = temp;
+	std::vector<std::shared_ptr<Material>> mats;
+	mats.push_back(MaterialFactory::createMaterial(MaterialFactory::Diffuse, float3(1.0,0.0,0.0)));
+	mats.push_back(MaterialFactory::createMaterial(MaterialFactory::Metal, float3(1.0, 0.0, 0.0)));
+	m_data = temp;
 
+	m_data.push_back(new Sphere(float3(-2.0, 0.0, -2.0), 1.0f, mats));
     node = KDNode().build(m_data, 0);
 }
 
 void Engine::restart()
 {
+	loadObjAsScene(m_screen->getObjFile());
     float *temp_col = m_screen->getColour();
     float3 rand_num = float3(temp_col[0], temp_col[1], temp_col[2]);
     std::cout << rand_num << std::endl;
@@ -19,7 +23,7 @@ void Engine::restart()
 	mats.push_back(MaterialFactory::createMaterial(MaterialFactory::Diffuse, rand_num));
 	mats.push_back(MaterialFactory::createMaterial(MaterialFactory::Diffuse, float3(1.0, 0.0, 0.0)));
 
-    for (int face = 0; face < m_data.size(); face++)
+    for (int face = 1; face < m_data.size(); face++)
         m_data[face]->setMaterial(mats);
     m_screen->reset();
 }
@@ -79,7 +83,6 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
     }
     else
     {
-
         float3 unit_direction = unit(ray.getDirection());
         float t = 0.5 * (unit_direction.y() + 1.0);
         return float3(1.0, 1.0, 1.0) * (1.0 - t) + float3(0.5, 0.7, 1.0) * t;

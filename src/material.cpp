@@ -27,7 +27,6 @@ float3 WorldSpaceHemi(float u1, float u2, float3 normal)
 
 bool Emissive::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
 {
-
     attenuation = m_colour;
     return false;
 }

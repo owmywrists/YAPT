@@ -31,14 +31,8 @@ class Sphere : public Surface
         return unit(hit - m_location);
     }
     std::shared_ptr<Material> getMatPtr(float3 hit) { 
-		float chance = drand48();
-
-		if (chance > 0.1f) {
-			return m_mats[0];
-		}
-		else {
-			return m_mats[1];
-		}
+		int m = rand() % m_mats.size();
+		return m_mats[m];
 	}
     void setMaterial(std::vector<std::shared_ptr<Material>> mat_types)
     {

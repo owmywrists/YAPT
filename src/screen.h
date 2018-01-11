@@ -26,7 +26,6 @@ class Screen
     unsigned int getHeight() { return m_height; }
     float *getColour() { return m_color; }
     bool getState() { return should_reset; }
-	std::string getObjFile() { return m_obj_name; }
     sf::Sprite getDrawableView();
     void drawUI();
     void loadImage(std::vector<float3> img);
@@ -38,16 +37,10 @@ class Screen
     struct Window_states
     {
         bool save;
-		bool open_obj;
     };
-	std::string file_to_open;
     std::vector<float3> m_pixelBuffer;
     sf::Image m_img;
-
-
     char m_img_name[32];
-	char m_obj_name[32];
-
     sf::Texture m_tex;
     std::mutex m_mtx;
     Window_states m_win_states;

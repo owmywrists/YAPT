@@ -12,6 +12,7 @@ class Engine
 {
   public:
     Engine(Camera cam, Screen *screen) : m_cam(cam), m_screen(screen) {}
+	~Engine();
     void loadObjAsScene(std::string filename);
     void render();
     void restart();

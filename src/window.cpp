@@ -2,8 +2,8 @@
 
 Window::~Window()
 {
-    m_win->~RenderWindow();
-    m_screen->~Screen();
+	delete m_win;
+	delete m_screen;
 }
 
 void Window::init()

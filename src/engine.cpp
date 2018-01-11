@@ -37,7 +37,6 @@ void Engine::loadBuffer(std::vector<float3> image)
 void Engine::render()
 {
     HitInfo hit;
-    omp_set_num_threads(24);
     std::vector<float3> temp_img;
     temp_img.resize(m_screen->getWidth() * m_screen->getHeight());
 #pragma omp parallel for schedule(dynamic, 1) private(hit)

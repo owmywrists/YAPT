@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 
 class float3
 {
@@ -11,31 +12,37 @@ class float3
         entity[0] = 0.0;
         entity[1] = 0.0;
         entity[2] = 0.0;
+		assert(!HasNans());
     }
     float3(float x, float y, float z)
     {
         entity[0] = x;
         entity[1] = y;
         entity[2] = z;
+		assert(!HasNans());
     }
+
+	bool HasNans() const {
+		return std::isnan(entity[0]) || std::isnan(entity[1]) || std::isnan(entity[2]);
+	}
     float x() const { return entity[0]; }
     float y() const { return entity[1]; }
     float z() const { return entity[2]; }
-    float dot(float3 rhs)
+    inline float dot(float3 rhs)
     {
         return this->x() * rhs.x() + this->y() * rhs.y() + this->z() * rhs.z();
     }
-    float3 cross(float3 rhs)
+    inline float3 cross(float3 rhs)
     {
         return float3(this->y() * rhs.z() - this->z() * rhs.y(),
                       this->z() * rhs.x() - this->x() * rhs.z(),
                       this->x() * rhs.y() - this->y() * rhs.x());
     }
-    float length()
+    inline float length()
     {
         return sqrt(this->dot(*this));
     }
-    float sqrtLength()
+    inline float sqrtLength()
     {
         return this->dot(*this);
     }

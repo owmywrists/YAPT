@@ -1,5 +1,7 @@
 #include "engine.h"
+Engine::~Engine() {
 
+}
 void Engine::loadObjAsScene(std::string filename)
 {
     Obj m(filename);

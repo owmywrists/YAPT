@@ -9,6 +9,7 @@ to build:
 - create build folder and inside run "cmake .."
 
 example renders:
+![Alt text](dragon.png?raw=true "Dragon clay")
 ![Alt text](dragon.gif?raw=true "Dragon rendering with kd-trees")
 ![Alt text](test_github.gif?raw=true "ImGUI test")
 ![Alt text](suzanne.png?raw=true "Suzanne render")

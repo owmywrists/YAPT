@@ -1,5 +1,14 @@
 #include "material.h"
 
+float3 sample_skybox(sf::Image &img, float u, float v)
+{
+	int width = img.getSize().x;
+	int height = img.getSize().y;
+	int sx, sy;
+	sf::Color temp = img.getPixel(int(abs(u*width))%width, int(abs(v*height))%height);
+	return float3(temp.r, temp.g, temp.b);
+}
+
 float3 cosineSampleHemi(float u1, float u2)
 {
     float z = std::pow(1.0 - u1, 1.0 / 1.0);
@@ -15,6 +24,7 @@ float3 cosineSampleHemi(float u1, float u2)
 
 float3 WorldSpaceHemi(float u1, float u2, float3 normal)
 {
+
     float3 p = cosineSampleHemi(u1, u2);
     float3 v = float3(0.0, 1.0, 0.0).cross(normal);
     v = unit(v);

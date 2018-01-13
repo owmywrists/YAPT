@@ -11,7 +11,7 @@
 class Engine
 {
   public:
-    Engine(Camera cam, Screen *screen) : m_cam(cam), m_screen(screen) {}
+	  Engine(Camera cam, Screen *screen) : m_cam(cam), m_screen(screen) { hdri.loadFromFile("../hdri.jpg"); }
 	~Engine();
     void loadObjAsScene(std::string filename);
     void render();
@@ -24,4 +24,5 @@ class Engine
     float3 trace(Ray &ray,HitInfo &hit, int depth);
     void loadBuffer(std::vector<float3> image);
     Screen *m_screen;
+	sf::Image hdri;
 };

@@ -82,8 +82,10 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
     else
     {
 
-        float3 unit_direction = unit(ray.getDirection());
-        float t = 0.5 * (unit_direction.y + 1.0);
-        return float3(1.0, 1.0, 1.0) * (1.0 - t) + float3(0.5, 0.7, 1.0) * t;
+        float3 ud = unit(ray.getDirection());
+        float t = 0.5 * (ud.y + 1.0);
+		float3 sb = sample_skybox(hdri, ud.x, ud.y)/255.0;
+        //return float3(1.0, 1.0, 1.0) * (1.0 - t) + float3(0.5, 0.7, 1.0) * t;
+		return sb;
     }
 }

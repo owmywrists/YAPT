@@ -5,8 +5,10 @@
 #include "drand.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
-
+#include <SFML\Graphics.hpp>
 class Material;
+
+float3 sample_skybox(sf::Image &img, float u, float v);
 
 struct HitInfo
 {

@@ -8,6 +8,17 @@ to build:
 - copy imgui-sfml/imconfig-SFML.h to imgui/imconfig.h
 - create build folder and inside run "cmake .."
 
+Features:
+- KD Trees
+- Materials: emissive, lambertian, mirror
+- Interactive rendering
+
+
+TODO:
+- Mix materials
+- Fix normal issues
+- Better sampling methods
+
 example renders:
 ![Alt text](dragon.png?raw=true "Dragon clay")
 ![Alt text](test_github.gif?raw=true "ImGUI test")

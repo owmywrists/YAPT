@@ -16,7 +16,7 @@ float3 cosineSampleHemi(float u1, float u2)
 float3 WorldSpaceHemi(float u1, float u2, float3 normal)
 {
     float3 p = cosineSampleHemi(u1, u2);
-    float3 v = float3(0.00023, 1.0, 0.000021).cross(normal);
+    float3 v = float3(0.0, 1.0, 0.0).cross(normal);
     v = unit(v);
     float3 u = v.cross(normal);
 
@@ -27,7 +27,6 @@ float3 WorldSpaceHemi(float u1, float u2, float3 normal)
 
 bool Emissive::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
 {
-
     attenuation = m_colour;
     return false;
 }

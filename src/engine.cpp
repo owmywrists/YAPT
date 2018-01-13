@@ -23,7 +23,7 @@ void Engine::restart()
 	mats.push_back(MaterialFactory::createMaterial(MaterialFactory::Diffuse, float3(1.0, 0.0, 0.0)));
 
     for (int face = 0; face < m_data.size(); face++)
-        m_data[face]->setMaterial(mats);
+        m_data[face]->setMaterial(mats[0]);
     m_screen->reset();
 }
 void Engine::loadBuffer(std::vector<float3> image)

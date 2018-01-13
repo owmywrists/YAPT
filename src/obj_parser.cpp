@@ -41,9 +41,8 @@ float3 Obj::face(int i)
 vector<Surface *> Obj::getScene()
 {
 	vector<Surface *> m_scene;
-	std::vector<std::shared_ptr<Material>> m;
-	m.push_back(MaterialFactory::createMaterial(MaterialFactory::Diffuse, float3(1.0, 0.0, 0.0)));
-	m.push_back(MaterialFactory::createMaterial(MaterialFactory::Diffuse, float3(1.0, 1.0, 1.0)));
+	std::shared_ptr<Material> m;
+	m = MaterialFactory::createMaterial(MaterialFactory::Diffuse, float3(0.5, 0.5, 0.5));
 	for (int i = 0; i < m_faces.size(); i++)
 	{
 		float3 f = face(i);

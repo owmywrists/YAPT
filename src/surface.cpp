@@ -28,6 +28,10 @@ bool Sphere::intersection(Ray &ray, HitInfo &hit)
     return false;
 }
 
+Triangle::~Triangle()
+{
+}
+
 bool Triangle::intersection(Ray &ray, HitInfo &hit)
 {
     float3 edge1 = m_v1 - m_v0;

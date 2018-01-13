@@ -47,9 +47,9 @@ vector<Surface *> Obj::getScene()
 	for (int i = 0; i < m_faces.size(); i++)
 	{
 		float3 f = face(i);
-		float3 v0 = m_vertices[f.x() - 1];
-		float3 v1 = m_vertices[f.y() - 1];
-		float3 v2 = m_vertices[f.z() - 1];
+		float3 v0 = m_vertices[f.x - 1];
+		float3 v1 = m_vertices[f.y - 1];
+		float3 v2 = m_vertices[f.z - 1];
 		m_scene.push_back(new Triangle(v0, v1, v2,
 									   m,
 									   float3()));

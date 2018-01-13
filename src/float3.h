@@ -4,39 +4,34 @@
 #include <math.h>
 #include <assert.h>
 
-class float3
+
+template <class T> class v3
 {
   public:
-    float3()
+    v3()
     {
-        entity[0] = 0.0;
-        entity[1] = 0.0;
-        entity[2] = 0.0;
+        x = 0.0;
+        y = 0.0;
+        z = 0.0;
 		assert(!HasNans());
     }
-    float3(float x, float y, float z)
+    v3(T x, T y, T z): x(x), y(y), z(z)
     {
-        entity[0] = x;
-        entity[1] = y;
-        entity[2] = z;
 		assert(!HasNans());
     }
 
 	bool HasNans() const {
-		return std::isnan(entity[0]) || std::isnan(entity[1]) || std::isnan(entity[2]);
+		return std::isnan(x) || std::isnan(y) || std::isnan(z);
 	}
-    float x() const { return entity[0]; }
-    float y() const { return entity[1]; }
-    float z() const { return entity[2]; }
-    inline float dot(float3 rhs)
+    inline float dot(v3<T> rhs)
     {
-        return this->x() * rhs.x() + this->y() * rhs.y() + this->z() * rhs.z();
+        return this->x * rhs.x + this->y * rhs.y + this->z * rhs.z;
     }
-    inline float3 cross(float3 rhs)
+    inline v3<T> cross(v3 rhs)
     {
-        return float3(this->y() * rhs.z() - this->z() * rhs.y(),
-                      this->z() * rhs.x() - this->x() * rhs.z(),
-                      this->x() * rhs.y() - this->y() * rhs.x());
+        return v3(this->y * rhs.z - this->z * rhs.y,
+                      this->z * rhs.x - this->x * rhs.z,
+                      this->x * rhs.y - this->y * rhs.x);
     }
     inline float length()
     {
@@ -47,10 +42,10 @@ class float3
         return this->dot(*this);
     }
 
-    inline float3 unit(float3 v);
-    void setX(float num) { entity[0] = num; }
-    void setY(float num) { entity[1] = num; }
-    void setZ(float num) { entity[2] = num; }
+
+    void setX(float num) { x = num; }
+    void setY(float num) { y = num; }
+    void setZ(float num) { z = num; }
     void set(float x, float y, float z)
     {
         setX(x);
@@ -59,64 +54,79 @@ class float3
     }
     inline float operator[](int i) const { return entity[i]; }
 
-    friend std::ostream &operator<<(std::ostream &os, float3 &rhs);
-    friend std::istream &operator>>(std::istream &is, float3 &rhs);
+    template<typename T> friend std::ostream &operator<<(std::ostream &os, v3 &rhs);
+    template<typename T> friend std::istream &operator>>(std::istream &is, v3 &rhs);
 
     float entity[3];
+	T x, y, z;
 };
 
-inline float3 operator+(const float3 &lhs, const float &rhs)
+template <typename T>
+inline v3<T> operator+(const v3<T> &lhs, const float &rhs)
 {
-    return float3(lhs.x() + rhs, lhs.y() + rhs, lhs.z() + rhs);
+    return v3<T>(lhs.x + rhs, lhs.y + rhs, lhs.z + rhs);
 }
 
-inline float3 operator-(const float3 &lhs, const float &rhs)
+template <typename T>
+inline v3<T> operator-(const v3<T> &lhs, const float &rhs)
 {
-    return float3(lhs.x() - rhs, lhs.y() - rhs, lhs.z() - rhs);
+    return v3<T>(lhs.x - rhs, lhs.y - rhs, lhs.z - rhs);
 }
 
-inline float3 operator/(const float3 &lhs, const float &rhs)
+template <typename T>
+inline v3<T> operator/(const v3<T> &lhs, const float &rhs)
 {
-    return float3(lhs.x() / rhs, lhs.y() / rhs, lhs.z() / rhs);
+    return v3<T>(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 }
 
-inline float3 operator*(const float3 &lhs, const float &rhs)
+template <typename T>
+inline v3<T> operator*(const v3<T> &lhs, const float &rhs)
 {
-    return float3(lhs.x() * rhs, lhs.y() * rhs, lhs.z() * rhs);
+    return v3<T>(lhs.x * rhs, lhs.y * rhs, lhs.z * rhs);
 }
 
-inline float3 operator+(const float3 &lhs, const float3 &rhs)
+template <typename T>
+inline v3<T> operator+(const v3<T> &lhs, const v3<T> &rhs)
 {
-    return float3(lhs.x() + rhs.x(), lhs.y() + rhs.y(), lhs.z() + rhs.z());
-}
-inline float3 operator-(const float3 &lhs, const float3 &rhs)
-{
-    return float3(lhs.x() - rhs.x(), lhs.y() - rhs.y(), lhs.z() - rhs.z());
+    return v3<T>(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z);
 }
 
-inline float3 operator*(const float3 &lhs, const float3 &rhs)
+template <typename T>
+inline v3<T> operator-(const v3<T> &lhs, const v3<T> &rhs)
 {
-    return float3(lhs.x() * rhs.x(), lhs.y() * rhs.y(), lhs.z() * rhs.z());
+    return v3<T>(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
 }
 
-inline bool operator==(const float3 &lhs, const float3 &rhs)
+template <typename T>
+inline v3<T> operator*(const v3<T> &lhs, const v3<T> &rhs)
 {
-    return (lhs.x() == rhs.x() && lhs.y() == rhs.y() && lhs.z() == rhs.z());
+    return v3<T>(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
 }
 
-inline std::ostream &operator<<(std::ostream &os, float3 &rhs)
+template <typename T>
+inline bool operator==(const v3<T> &lhs, const v3<T> &rhs)
 {
-    os << rhs.x() << " " << rhs.y() << " " << rhs.z();
+    return v3<T>(lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
+}
+
+template <typename T>
+inline std::ostream &operator<<(std::ostream &os, v3<T> &rhs)
+{
+    os << rhs.x << " " << rhs.y << " " << rhs.z;
     return os;
 }
 
-inline std::istream &operator>>(std::istream &is, float3 &rhs)
+template <typename T>
+inline std::istream &operator>>(std::istream &is, v3<T> &rhs)
 {
-    is >> rhs.entity[0] >> rhs.entity[1] >> rhs.entity[2];
+    is >> rhs.x >> rhs.y >> rhs.z;
     return is;
 }
 
-inline float3 unit(float3 v)
-{
-    return v / v.length();
+template <typename T> 
+inline v3<T> unit(v3<T> v) {
+	return v/ v.length();
 }
+
+typedef v3<float> v3f;
+typedef v3<float> float3;

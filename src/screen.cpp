@@ -93,9 +93,9 @@ void Screen::loadImage(std::vector<float3> img)
 
 sf::Color Screen::transform(float3 pixel)
 {
-    sf::Color colour = sf::Color(sqrtf(std::min(pixel.x(), 1.0f)) * 255.0,
-                                 sqrtf(std::min(pixel.y(), 1.0f)) * 255.0,
-                                 sqrtf(std::min(pixel.z(), 1.0f)) * 255.0);
+    sf::Color colour = sf::Color(sqrtf(std::min(pixel.x, 1.0f)) * 255.0,
+                                 sqrtf(std::min(pixel.y, 1.0f)) * 255.0,
+                                 sqrtf(std::min(pixel.z, 1.0f)) * 255.0);
     return colour;
 }
 

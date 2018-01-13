@@ -20,7 +20,7 @@ float3 WorldSpaceHemi(float u1, float u2, float3 normal)
     v = unit(v);
     float3 u = v.cross(normal);
 
-    float3 sample = unit((u * p.x()) + (v * p.y()) + (normal * p.z()));
+    float3 sample = unit((u * p.x) + (v * p.y) + (normal * p.z));
 
     return sample;
 }

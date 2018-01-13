@@ -46,13 +46,13 @@ KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth)
         switch (axis)
         {
         case 0:
-            midpoint.x() >= surfaces[i]->getMidpoint().x() ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
+            midpoint.x >= surfaces[i]->getMidpoint().x ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
             break;
         case 1:
-            midpoint.y() >= surfaces[i]->getMidpoint().y() ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
+            midpoint.y >= surfaces[i]->getMidpoint().y ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
             break;
         case 2:
-            midpoint.z() >= surfaces[i]->getMidpoint().z() ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
+            midpoint.z >= surfaces[i]->getMidpoint().z ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
             break;
         }
     }

@@ -78,7 +78,7 @@ class Triangle : public Surface
     float3 v1() const { return m_v1; }
     float3 v2() const { return m_v2; }
     std::shared_ptr<Material> getMatPtr(float3 hit) { 
-		int m = int(hit.x()*10) % m_mats.size();
+		int m = int(hit.x*10) % m_mats.size();
 		return m_mats[m];
 	}
     void setMaterial(std::vector<std::shared_ptr<Material>> mat_types)
@@ -90,13 +90,13 @@ class Triangle : public Surface
 
 
      return AABB(float3(
-        std::min(std::min(v0().x(), v1().x()), v2().x() ),
-        std::min(std::min(v0().y(), v1().y()), v2().y() ),
-        std::min(std::min(v0().z(), v1().z()), v2().z() )),
+        std::min(std::min(v0().x, v1().x), v2().x ),
+        std::min(std::min(v0().y, v1().y), v2().y ),
+        std::min(std::min(v0().z, v1().z), v2().z )),
         float3(
-        std::max(std::max(v0().x(), v1().x()), v2().x() ),
-        std::max(std::max(v0().y(), v1().y()), v2().y() ),
-        std::max(std::max(v0().z(), v1().z()), v2().z() ))
+        std::max(std::max(v0().x, v1().x), v2().x ),
+        std::max(std::max(v0().y, v1().y), v2().y ),
+        std::max(std::max(v0().z, v1().z), v2().z ))
      );
     }
     float3 getMidpoint()const

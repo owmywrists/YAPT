@@ -51,7 +51,9 @@ bool Lambertian::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_r
 
 bool Mirror::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
 {
-    new_ray = Ray(ray.getHit(hit.t), ray.getDirection() - hit.normal * 2.0 * ray.getDirection().dot(hit.normal));
+
+	float3 r = float3(drand48(), drand48(), drand48())*glossiness;
+    new_ray = Ray(ray.getHit(hit.t), ray.getDirection() - hit.normal * 2.0 * ray.getDirection().dot(hit.normal) + r);
 	attenuation = m_colour;
     return true;
 }

@@ -8,7 +8,7 @@ void Engine::loadObjAsScene(std::string filename)
     Obj m(filename);
     auto temp = m.getScene();
     m_data = temp;
-	m_data.push_back(new Sphere(float3(-2.0, 0.0, -2.0), 0.7f, MaterialFactory::createMaterial(MaterialFactory::Metal, float3(1.0, 140.0/255.0, 0.0))));
+	m_data.push_back(new Sphere(float3(-2.0, 0.0, -2.0), 0.7f, std::make_shared<Mirror>(float3(1.0, 140.0/255.0, 0.0), 0.8f)));
     node = KDNode().build(m_data, 0);
 }
 
@@ -18,8 +18,8 @@ void Engine::restart()
     float3 rand_num = float3(temp_col[0], temp_col[1], temp_col[2]);
     std::cout << rand_num << std::endl;
 	std::vector<std::shared_ptr<Material>> mats;
-	mats.push_back(MaterialFactory::createMaterial(MaterialFactory::Diffuse, rand_num));
-	mats.push_back(MaterialFactory::createMaterial(MaterialFactory::Diffuse, float3(1.0, 0.0, 0.0)));
+	mats.push_back(std::make_shared<Lambertian>( rand_num));
+	mats.push_back(std::make_shared<Lambertian>(float3(1.0, 0.0, 0.0)));
 
     for (int face = 0; face < m_data.size(); face++)
         m_data[face]->setMaterial(mats[0]);

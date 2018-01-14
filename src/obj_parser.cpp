@@ -42,7 +42,7 @@ vector<Surface *> Obj::getScene()
 {
 	vector<Surface *> m_scene;
 	std::shared_ptr<Material> m;
-	m = MaterialFactory::createMaterial(MaterialFactory::Diffuse, float3(0.8, 0.8, 0.8));
+	m = std::make_shared<Lambertian>(float3(0.8, 0.8, 0.8));
 	for (int i = 0; i < m_faces.size(); i++)
 	{
 		float3 f = face(i);

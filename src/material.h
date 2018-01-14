@@ -48,11 +48,12 @@ class Lambertian : public Material
 class Mirror : public Material
 {
   public:
-    Mirror(float3 c): m_colour(c){}
+    Mirror(float3 c, float glossiness = 0.0f): m_colour(c), glossiness(glossiness){}
     bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const;
 
 private:
 	float3 m_colour;
+	float glossiness;
 };
 
 class MaterialFactory

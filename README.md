@@ -13,13 +13,13 @@ Features:
 - Materials: emissive, lambertian, mirror
 - Interactive rendering
 
-
 TODO:
 - Mix materials
 - Fix normal issues
 - Better sampling methods
 
 example renders:
+![Alt text](image_lighting.png?raw=true "Image Based lighting")
 ![Alt text](dragon.png?raw=true "Dragon clay")
 ![Alt text](test_github.gif?raw=true "ImGUI test")
 ![Alt text](suzanne.png?raw=true "Suzanne render")

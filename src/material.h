@@ -27,8 +27,8 @@ class Material
 class Emissive : public Material
 {
   public:
-    Emissive(float3 c) : m_colour(c){};
-    bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const;
+    Emissive(float3 c) : m_colour(c){}
+	bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const;
     float3 emitted() const { return m_colour; }
 
   private:
@@ -56,28 +56,3 @@ private:
 	float glossiness;
 };
 
-class MaterialFactory
-{
-    //material factory allows me to change materials at runtime
-  public:
-    enum MaterialType
-    {
-        Light,
-        Diffuse,
-        Metal
-    };
-    //I used different names than the subclasses as I may mix and match materials
-
-    static std::unique_ptr<Material> createMaterial(MaterialType type, float3 albedo)
-    {
-        switch (type)
-        {
-        case Light:
-            return std::make_unique<Emissive>(albedo);
-        case Diffuse:
-            return std::make_unique<Lambertian>(albedo);
-        case Metal:
-            return std::make_unique<Mirror>(albedo);
-        }
-    }
-};

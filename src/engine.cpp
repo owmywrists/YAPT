@@ -8,7 +8,7 @@ void Engine::loadObjAsScene(std::string filename)
     Obj m(filename);
     auto temp = m.getScene();
     m_data = temp;
-	m_data.push_back(new Sphere(float3(-2.0, 0.0, -2.0), 0.7f, std::make_shared<Mirror>(float3(1.0, 140.0/255.0, 0.0), 0.8f)));
+	m_data.push_back(new Sphere(float3(-2.0, 0.0, -1.0), 0.7f, std::make_shared<Mirror>(float3(1.0, 140.0/255.0, 0.0), 0.4f)));
     node = KDNode().build(m_data, 0);
 }
 
@@ -18,13 +18,14 @@ void Engine::restart()
     float3 rand_num = float3(temp_col[0], temp_col[1], temp_col[2]);
     std::cout << rand_num << std::endl;
 	std::vector<std::shared_ptr<Material>> mats;
-	mats.push_back(std::make_shared<Lambertian>( rand_num));
+	mats.push_back(std::make_shared<Lambertian>(rand_num));
 	mats.push_back(std::make_shared<Lambertian>(float3(1.0, 0.0, 0.0)));
 
-    for (int face = 0; face < m_data.size(); face++)
+    for (int face = 0; face < m_data.size()-1; face++)
         m_data[face]->setMaterial(mats[0]);
     m_screen->reset();
 }
+
 void Engine::loadBuffer(std::vector<float3> image)
 {
     for (int x = 0; x < m_screen->getWidth(); x++)
@@ -48,8 +49,8 @@ void Engine::render()
         {
             Ray ortho = Ray(float3(x, y, 0), float3(0, 0, -1));
             float3 colour = float3(0.0, 0.0, 0.0);
-            float u = float(x + drand48());
-            float v = float(y + drand48());
+            float u = float(x + drand48())/m_screen->getWidth();
+            float v = float(y + drand48())/m_screen->getHeight();
             Ray persp = m_cam.getRay(u, v);
             colour = colour + trace(persp, hit, 0);
             temp_img[x + y * m_screen->getWidth()] = colour;
@@ -63,8 +64,8 @@ void Engine::render()
 
 float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
 {
-    float tmin = 1e5;
-    if (node->intersect(node, ray,tmin, hit))
+	ray.tmin = 1e5;
+    if (node->intersect(node, ray, hit))
     {
         Ray new_ray;
         float3 col(1.0, 1.0, 1.0);

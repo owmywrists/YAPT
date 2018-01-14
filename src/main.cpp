@@ -20,7 +20,8 @@ void render_thread(Engine *engine, Window *win)
 int main()
 {
     Window *win = new Window("YAPT", 1280, 720);
-    Engine engine(Camera(1280, 720, 90.0), win->getScreenPtr());
+	Camera cam(1280, 720, float3(0, 0, 0), float3(0, 0, -1.0), float3(0, 1.0, 0), 0.08f, 2.2f, 90.0f);
+    Engine engine(cam, win->getScreenPtr());
     engine.loadObjAsScene("../objs/dragon.obj");
     std::thread t(render_thread, &engine, win);
 

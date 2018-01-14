@@ -82,7 +82,7 @@ KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth)
     return node;
 }
 
-bool KDNode::closestIntersection(Ray &ray, HitInfo &hit,float &tmin, std::vector<Surface *> surfaces)
+bool KDNode::closestIntersection(Ray &ray, HitInfo &hit, std::vector<Surface *> surfaces)
 {
     float min_hit = 1e5;
     for (auto &s : surfaces)
@@ -90,41 +90,41 @@ bool KDNode::closestIntersection(Ray &ray, HitInfo &hit,float &tmin, std::vector
         if (s->intersection(ray, hit))
         {
             //std::cout << hit.t << std::endl;
-            if (hit.t < tmin)
+            if (hit.t < ray.tmin)
             {
                 hit.normal = s->getNormal(ray.getHit(hit.t));
                 hit.mat = s->getMatPtr();
-                tmin = hit.t;
+                ray.tmin = hit.t;
             }
         }
     }
-    if (tmin < 1e5 && tmin > 1e-5)
+    if (ray.tmin < 1e5 && ray.tmin > 1e-5)
     {
-        hit.t = tmin;
+        hit.t = ray.tmin;
         return true;
     }
     return false;
 }
 
-bool KDNode::intersect(KDNode *node, Ray &ray,float &tmin, HitInfo &hit)
+bool KDNode::intersect(KDNode *node, Ray &ray, HitInfo &hit)
 {
     float dist;
     if (node->aabb.hit(ray, dist))
     {
-    if (dist > tmin) return false;
+    if (dist > ray.tmin) return false;
 
         if (!node->leaf)
         {
-            bool hit_left = intersect(node->left, ray,tmin, hit);
+            bool hit_left = intersect(node->left, ray,hit);
 
-            bool hit_right = intersect(node->right, ray, tmin,hit);
+            bool hit_right = intersect(node->right, ray, hit);
             return hit_left || hit_right;
         }
         else
         {
-            if (closestIntersection(ray, hit, tmin,node->surface))
+            if (closestIntersection(ray, hit,node->surface))
             {
-                tmin = hit.t;
+                ray.tmin = hit.t;
                 return true;
             }
             

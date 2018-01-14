@@ -52,14 +52,11 @@ class Triangle : public Surface
   public:
 	  Triangle(float3 v0, float3 v1, float3 v2, std::shared_ptr<Material> mat_type,
 		  float3 normal = float3()) : m_v0(v0), m_v1(v1), m_v2(v2), m_normal(normal), m_mat(mat_type) {}
-
     ~Triangle();
     bool intersection(Ray &ray, HitInfo &hit);
     float3 getNormal(float3 hit)
     {
-        float3 edge1 = m_v1 - m_v0;
-        float3 edge2 = m_v2 - m_v0;
-        return unit(edge1.cross(edge2));
+        return unit((m_v1 - m_v0).cross(m_v2 - m_v0));
     }
     float3 v0() const { return m_v0; }
     float3 v1() const { return m_v1; }

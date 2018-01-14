@@ -15,7 +15,7 @@ public:
 
     KDNode(){};
     KDNode *build(std::vector<Surface*> &surfaces, int depth);
-    bool intersect(KDNode* node, Ray &ray,float &tmin,HitInfo &hit);
+    bool intersect(KDNode* node, Ray &ray,HitInfo &hit);
 private:
-    bool closestIntersection(Ray &ray, HitInfo &hit, float &tmin,std::vector<Surface*> s);
+    bool closestIntersection(Ray &ray, HitInfo &hit, std::vector<Surface*> s);
 };

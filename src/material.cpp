@@ -4,9 +4,7 @@ float3 sample_skybox(sf::Image &img, float u, float v)
 {
 	int width = img.getSize().x;
 	int height = img.getSize().y;
-	float sx = (u + 1.0) / 2.0;
-	float sy = 1.0 -(v + 1.0) / 2.0;
-	sf::Color temp = img.getPixel(int(sx*width)%width, int(sy*height)%height);
+	sf::Color temp = img.getPixel(int(u*width )%width, int(v*height)%height);
 	return float3(temp.r, temp.g, temp.b);
 }
 

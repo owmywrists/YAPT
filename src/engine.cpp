@@ -7,7 +7,6 @@ void Engine::loadObjAsScene(std::string filename)
 {
     Obj m(filename);
     auto temp = m.getScene();
-    
     m_data = temp;
 
     node = KDNode().build(m_data, 0);
@@ -81,10 +80,11 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
     }
     else
     {
-
         float3 ud = unit(ray.getDirection());
         float t = 0.5 * (ud.y + 1.0);
-		float3 sb = sample_skybox(hdri, ud.x, ud.y)/255.0;
+		float u_ = 0.5 + atan2(ud.z, ud.x) / (2 * M_PI);
+		float v_ = 0.5 - asin(ud.y) / M_PI;
+		float3 sb = sample_skybox(hdri, u_, v_)/255.0;
         //return float3(1.0, 1.0, 1.0) * (1.0 - t) + float3(0.5, 0.7, 1.0) * t;
 		return sb;
     }

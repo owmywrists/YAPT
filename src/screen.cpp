@@ -4,17 +4,11 @@ Screen::~Screen()
 {
     m_img.~Image();
     m_tex.~Texture();
-    m_mtx.~mutex();
     m_pixelBuffer.~vector();
 }
 void Screen::drawUI()
 {
     ImGui::StyleColorsDark();
-    ImGui::Begin("HELLO");
-    if (ImGui::ColorPicker3("Test", m_color))
-    {
-        should_reset = true;
-    }
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -30,21 +24,37 @@ void Screen::drawUI()
 
             ImGui::EndMenu();
         }
+		if (ImGui::BeginMenu("Windows"))
+		{
+			if (ImGui::MenuItem("Colour")) m_win_states.colour = !m_win_states.colour;
+
+			ImGui::EndMenu();
+		}
+
+
         if (m_win_states.save)
         {
             ImGui::Begin("Save settings");
             ImGui::InputText("filename", m_img_name, sizeof(m_img_name), ImGuiInputTextFlags_EnterReturnsTrue);
             if (ImGui::Button("Save to file"))
             {
-                std::lock_guard<std::mutex> lk(m_mtx); //reserves screen while saving
                 m_img.saveToFile(m_img_name);
                 m_win_states.save = false;
             }
             ImGui::End();
         }
+
+		if (m_win_states.colour)
+		{
+			ImGui::Begin("Colour");
+			if (ImGui::ColorPicker3("Test", m_color))
+			{
+				should_reset = true;
+			}
+			ImGui::End();
+		}
     }
     ImGui::EndMainMenuBar();
-    ImGui::End();
 }
 
 void Screen::reset()

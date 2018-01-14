@@ -18,6 +18,12 @@ class Screen
         m_tex.loadFromImage(m_img);
         should_reset = false;
         m_win_states.save = false;
+		m_win_states.colour = false;
+		debug_text.move(sf::Vector2f(20, height - 40));
+		debug_text.scale(sf::Vector2f(0.8,0.8));
+
+		Font.loadFromFile("../res/fonts/courier.ttf");
+
     };
     ~Screen();
     void blit();
@@ -31,19 +37,23 @@ class Screen
     void loadImage(std::vector<float3> img);
     void reset();
 
+
+	sf::Text debug_text;
+	sf::Font Font;
   private:
     float3 avg(float3 current_avg, float3 new_colour);
     sf::Color transform(float3 pixel);
     struct Window_states
     {
         bool save;
+		bool colour;
     };
+
     std::vector<float3> m_pixelBuffer;
     sf::Image m_img;
     char m_img_name[32];
     sf::Texture m_tex;
-    std::mutex m_mtx;
-    Window_states m_win_states;
+	Window_states m_win_states;
     bool should_reset;
     float m_color[3] = {1.0f, 1.0f, 1.0f};
     int m_width;

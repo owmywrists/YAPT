@@ -36,6 +36,7 @@ void Window::update()
     m_win->clear();
     m_drawableView = m_screen->getDrawableView();
     m_win->draw(m_drawableView);
+	m_win->draw(m_screen->debug_text);
     ImGui::SFML::Render(*m_win);
     m_win->display();
 }

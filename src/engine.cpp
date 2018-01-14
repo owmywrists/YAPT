@@ -10,6 +10,10 @@ void Engine::loadObjAsScene(std::string filename)
     m_data = temp;
 	m_data.push_back(new Sphere(float3(-2.0, 0.0, -1.0), 0.7f, std::make_shared<Mirror>(float3(1.0, 140.0/255.0, 0.0), 0.4f)));
     node = KDNode().build(m_data, 0);
+
+	m_screen->debug_text.setString(sf::String("triangles: " + std::to_string(m_data.size())));
+	m_screen->debug_text.setFont(m_screen->Font);
+	m_screen->debug_text.setColor(sf::Color::White);
 }
 
 void Engine::restart()

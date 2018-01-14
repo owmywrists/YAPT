@@ -19,6 +19,7 @@ TODO:
 - Better sampling methods
 
 example renders:
+![Alt text](hdri.png?raw=true "Image Based lighting")
 ![Alt text](image_lighting.png?raw=true "Image Based lighting")
 ![Alt text](dragon.png?raw=true "Dragon clay")
 ![Alt text](test_github.gif?raw=true "ImGUI test")

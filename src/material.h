@@ -48,8 +48,11 @@ class Lambertian : public Material
 class Mirror : public Material
 {
   public:
-    Mirror() {}
+    Mirror(float3 c): m_colour(c){}
     bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const;
+
+private:
+	float3 m_colour;
 };
 
 class MaterialFactory
@@ -73,7 +76,7 @@ class MaterialFactory
         case Diffuse:
             return std::make_unique<Lambertian>(albedo);
         case Metal:
-            return std::make_unique<Mirror>();
+            return std::make_unique<Mirror>(albedo);
         }
     }
 };

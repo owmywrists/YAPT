@@ -6,7 +6,7 @@ class Surface
 {
   public:
     virtual bool intersection(Ray &ray, HitInfo &hit) = 0;
-    virtual std::shared_ptr<Material> getMatPtr(float3 hit) = 0;
+    virtual std::shared_ptr<Material> getMatPtr() = 0;
     virtual float3 getNormal(float3 hit) = 0;
 	virtual void setMaterial(std::shared_ptr<Material> mat_type) = 0;
     virtual AABB getBoundingBox() const = 0;
@@ -35,6 +35,7 @@ class Sphere : public Surface
         return AABB(m_location - float3(m_radius, m_radius, m_radius), m_location +
                                                                            float3(m_radius, m_radius, m_radius));
     }
+	std::shared_ptr<Material> getMatPtr() { return m_mat; }
     float3 getMidpoint()const
     {
         return m_location;
@@ -63,7 +64,7 @@ class Triangle : public Surface
     float3 v0() const { return m_v0; }
     float3 v1() const { return m_v1; }
     float3 v2() const { return m_v2; }
-    std::shared_ptr<Material> getMatPtr(float3 hit) { 
+    std::shared_ptr<Material> getMatPtr() { 
 		return m_mat;
 	}
     void setMaterial(std::shared_ptr<Material> mat_type)

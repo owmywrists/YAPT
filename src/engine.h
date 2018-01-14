@@ -11,7 +11,7 @@
 class Engine
 {
   public:
-	  Engine(Camera cam, Screen *screen) : m_cam(cam), m_screen(screen) { hdri.loadFromFile("../hdri_indoor.jpg"); }
+	  Engine(Camera cam, Screen *screen) : m_cam(cam), m_screen(screen) { hdri.loadFromFile("../hdris/hdri_indoor.jpg"); }
 	~Engine();
     void loadObjAsScene(std::string filename);
     void render();

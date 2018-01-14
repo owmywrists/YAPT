@@ -8,7 +8,7 @@ void Engine::loadObjAsScene(std::string filename)
     Obj m(filename);
     auto temp = m.getScene();
     m_data = temp;
-
+	m_data.push_back(new Sphere(float3(-2.0, 0.0, -2.0), 0.7f, MaterialFactory::createMaterial(MaterialFactory::Metal, float3(1.0, 140.0/255.0, 0.0))));
     node = KDNode().build(m_data, 0);
 }
 

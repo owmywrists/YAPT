@@ -56,3 +56,22 @@ private:
 	float glossiness;
 };
 
+class Mix : public Material
+{
+public:
+	Mix(std::shared_ptr<Material> mat1, std::shared_ptr<Material> mat2, float mix) :mat1(mat1), mat2(mat2), mix(mix) {}
+	bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const;
+private:
+	std::shared_ptr<Material> mat1, mat2;
+	float mix;
+};
+
+class Transparent : public Material
+{
+public:
+	Transparent(float3 c, float mix) : m_colour(c), mix(mix) {}
+	bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const;
+private:
+	float3 m_colour;
+	float mix;
+};

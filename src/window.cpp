@@ -11,6 +11,7 @@ void Window::init()
     m_win = new sf::RenderWindow(sf::VideoMode(m_prop.width, m_prop.height), m_prop.title);
     ImGui::SFML::Init(*m_win);
 
+
     m_screen = new Screen(m_prop.width, m_prop.height);
     m_delta_clock.restart();
 }

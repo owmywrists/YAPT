@@ -10,7 +10,7 @@ float3 sample_skybox(sf::Image &img, float u, float v)
 
 float3 cosineSampleHemi(float u1, float u2)
 {
-    float z = std::pow(1.0 - u1, 1.0 / 1.0);
+    float z = std::pow(1.0 - u1, 3.0 / 5.0);
     float phi = 2.0 * M_PI * u2;
     float theda = sqrt(std::max(0.0, 1.0 - z * z));
 
@@ -51,9 +51,29 @@ bool Lambertian::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_r
 
 bool Mirror::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
 {
-
 	float3 r = float3(drand48(), drand48(), drand48())*glossiness;
     new_ray = Ray(ray.getHit(hit.t), ray.getDirection() - hit.normal * 2.0 * ray.getDirection().dot(hit.normal) + r);
 	attenuation = m_colour;
     return true;
+}
+
+bool Mix::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
+{
+	float3 att1, att2;
+	Ray nray1, nray2;
+
+	mat1->scatter(ray, hit, att1, nray1);
+	mat2->scatter(ray, hit, att2, nray2);
+
+	if (drand48() > mix) new_ray = nray1; else new_ray = nray2;
+
+
+
+	attenuation = (att1 * mix) + (att2 * (1.0f - mix));
+	return true;
+}
+
+bool Transparent::scatter(Ray & ray, HitInfo & hit, float3 & attenuation, Ray & new_ray) const
+{
+	return false;
 }

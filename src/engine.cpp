@@ -8,7 +8,11 @@ void Engine::loadObjAsScene(std::string filename)
     Obj m(filename);
     auto temp = m.getScene();
     m_data = temp;
-	m_data.push_back(new Sphere(float3(-2.0, 0.0, -1.0), 0.7f, std::make_shared<Mirror>(float3(1.0, 140.0/255.0, 0.0), 0.4f)));
+
+	auto m1 = std::make_shared<Lambertian>(float3(0.0, 1.0, 0.0));
+	auto m2 = std::make_shared<Mirror>(float3(1.0, 0.0, 0.0), 0.0);
+
+	m_data.push_back(new Sphere(float3(-2.0, 0.0, -1.0), 0.7f, std::make_shared<Mix>(m1, m2, 0.4)));
     node = KDNode().build(m_data, 0);
 
 	m_screen->debug_text.setString(sf::String("triangles: " + std::to_string(m_data.size())));
@@ -25,7 +29,7 @@ void Engine::restart()
 	mats.push_back(std::make_shared<Lambertian>(rand_num));
 	mats.push_back(std::make_shared<Lambertian>(float3(1.0, 0.0, 0.0)));
 
-    for (int face = 0; face < m_data.size()-1; face++)
+    for (int face = 0; face < m_data.size(); face++)
         m_data[face]->setMaterial(mats[0]);
     m_screen->reset();
 }

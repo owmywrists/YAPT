@@ -22,7 +22,7 @@ class Screen
 		debug_text.move(sf::Vector2f(20, height - 40));
 		debug_text.scale(sf::Vector2f(0.8,0.8));
 
-		Font.loadFromFile("../res/fonts/courier.ttf");
+		Font.loadFromFile("../res/fonts/helvetica.ttf");
 
     };
     ~Screen();

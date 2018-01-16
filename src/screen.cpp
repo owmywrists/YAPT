@@ -9,7 +9,7 @@ Screen::~Screen()
 void Screen::drawUI()
 {
     ImGui::StyleColorsDark();
-	//ImGui::PushFont(pFont);
+
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -73,11 +73,6 @@ sf::Sprite Screen::getDrawableView()
     return sprite;
 }
 
-void Screen::blit()
-{
-    sample++;
-    std::cout << sample << std::endl;
-}
 
 float3 Screen::avg(float3 current_avg, float3 new_colour)
 {

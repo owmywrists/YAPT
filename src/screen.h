@@ -26,7 +26,6 @@ class Screen
 
     };
     ~Screen();
-    void blit();
     void setPixel(int x, int y, float3 colour);
     unsigned int getWidth() { return m_width; }
     unsigned int getHeight() { return m_height; }
@@ -40,6 +39,8 @@ class Screen
 
 	sf::Text debug_text;
 	sf::Font Font;
+
+	int sample;
   private:
     float3 avg(float3 current_avg, float3 new_colour);
     sf::Color transform(float3 pixel);
@@ -48,7 +49,7 @@ class Screen
         bool save;
 		bool colour;
     };
-
+	sf::Clock clock;
     std::vector<float3> m_pixelBuffer;
     sf::Image m_img;
     char m_img_name[32];
@@ -58,5 +59,4 @@ class Screen
     float m_color[3] = {1.0f, 1.0f, 1.0f};
     int m_width;
     int m_height;
-    int sample;
 };

@@ -29,7 +29,6 @@ void Obj::parse_faces()
 Obj::Obj(string filename)
 {
 	m_filename = filename;
-
 	parse_faces();
 }
 

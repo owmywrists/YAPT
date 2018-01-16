@@ -11,7 +11,9 @@
 class Engine
 {
   public:
-	  Engine(Camera cam, Screen *screen) : m_cam(cam), m_screen(screen) { hdri.loadFromFile("../res/hdris/hdri_indoor.jpg"); }
+	  Engine(Camera cam, Screen *screen) : m_cam(cam), m_screen(screen) { hdri.loadFromFile("../res/hdris/hdri_indoor.jpg");
+	  clock.restart();
+	  }
 	~Engine();
     void loadObjAsScene(std::string filename);
     void render();
@@ -21,6 +23,7 @@ class Engine
     std::vector<Surface*> m_data;
     KDNode *node;
     Camera m_cam;
+	sf::Clock clock;
     float3 trace(Ray &ray,HitInfo &hit, int depth);
     void loadBuffer(std::vector<float3> image);
     Screen *m_screen;

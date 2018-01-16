@@ -10,7 +10,7 @@ void Engine::loadObjAsScene(std::string filename)
     m_data = temp;
 
 	auto m1 = std::make_shared<Lambertian>(float3(0.0, 1.0, 0.0));
-	auto m2 = std::make_shared<Mirror>(float3(1.0, 0.0, 0.0), 0.0);
+	auto m2 = std::make_shared<Mirror>(float3(1.0, 1.0, 1.0), 0.0);
 
 	m_data.push_back(new Sphere(float3(-2.0, 0.0, -1.0), 0.7f, std::make_shared<Mix>(m1, m2, 0.4)));
     node = KDNode().build(m_data, 0);
@@ -50,6 +50,7 @@ void Engine::render()
     HitInfo hit;
     std::vector<float3> temp_img;
     temp_img.resize(m_screen->getWidth() * m_screen->getHeight());
+	sf::Time start = clock.getElapsedTime();
 #pragma omp parallel for schedule(dynamic, 1) private(hit)
     for (int x = 0; x < m_screen->getWidth(); x++)
     {
@@ -64,8 +65,10 @@ void Engine::render()
             temp_img[x + y * m_screen->getWidth()] = colour;
         }
     }
+	sf::Time end = clock.getElapsedTime();
+	std::cout << "sample " << m_screen->sample << " took: " << (end - start).asSeconds() << " seconds" << std::endl;
     m_screen->loadImage(temp_img);
-    m_screen->blit();
+	m_screen->sample++;
     if (m_screen->getState())
         restart();
 }
@@ -78,7 +81,7 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
         Ray new_ray;
         float3 col(1.0, 1.0, 1.0);
         float3 light = hit.mat->emitted();
-        if (depth < 10 && hit.mat->scatter(ray, hit, col, new_ray))
+        if (depth < 2 && hit.mat->scatter(ray, hit, col, new_ray))
         {
             return light + col * trace(new_ray, hit, depth + 1);
         }

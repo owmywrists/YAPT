@@ -5,6 +5,7 @@ void Obj::parse_faces()
 	string line;
 	string word;
 	m_obj.open(m_filename);
+
 	while (std::getline(m_obj, line))
 	{
 
@@ -42,10 +43,10 @@ vector<Surface *> Obj::getScene()
 	vector<Surface *> m_scene;
 	std::shared_ptr<Material> m;
 
-	auto m1 = std::make_shared<Lambertian>(float3(1.0, 0.0, 0.0));
+	auto m1 = std::make_shared<Lambertian>(float3(0.0, 1.0, 0.0));
 	auto m2 = std::make_shared<Mirror>(float3(1.0, 1.0, 1.0), 0.0);
 
-	m = std::make_shared<Mix>(m1, m2, 0.75);
+	m = std::make_shared<Mix>(m1, m2, 1.9f);
 
 	for (int i = 0; i < m_faces.size(); i++)
 	{

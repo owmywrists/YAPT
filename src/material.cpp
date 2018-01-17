@@ -7,16 +7,21 @@ float3 sample_skybox(sf::Image &img, float u, float v)
 	sf::Color temp = img.getPixel(int(u*width )%width, int(v*height)%height);
 	return float3(temp.r, temp.g, temp.b);
 }
+float fresnel(float ior, float ndotv) {
+	float r0 = pow((1.0f - ior) / (1.0f + ior), 2);
+	float x = pow(1.0f - ndotv, 5);
+
+	return(r0 + (1.0f - r0)*x);
+}
+
 
 float3 cosineSampleHemi(float u1, float u2)
 {
     float z = std::pow(1.0 - u1, 3.0 / 5.0);
     float phi = 2.0 * M_PI * u2;
-    float theda = sqrt(std::max(0.0, 1.0 - z * z));
-
-    float theta = 2 * M_PI * u2;
-    float x = theda * cos(phi);
-    float y = theda * sin(phi);
+    float theta = sqrt(std::max(0.0, 1.0 - z * z));
+    float x = theta * cos(phi);
+    float y = theta * sin(phi);
 
     return float3(x, y, z);
 }
@@ -61,15 +66,13 @@ bool Mix::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) con
 {
 	float3 att1, att2;
 	Ray nray1, nray2;
+	float f = fresnel(mix, unit(ray.getDirection()*(-1)).dot(unit(hit.normal)));
 
 	mat1->scatter(ray, hit, att1, nray1);
 	mat2->scatter(ray, hit, att2, nray2);
 
-	if (drand48() > mix) new_ray = nray1; else new_ray = nray2;
-
-
-
-	attenuation = (att1 * mix) + (att2 * (1.0f - mix));
+	if (drand48() > f) new_ray = nray1; else new_ray = nray2;
+	attenuation = (att2* f) + (att1 * (1.0f - f));
 	return true;
 }
 
@@ -77,3 +80,6 @@ bool Transparent::scatter(Ray & ray, HitInfo & hit, float3 & attenuation, Ray & 
 {
 	return false;
 }
+
+
+

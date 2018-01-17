@@ -2,9 +2,7 @@
 
 Screen::~Screen()
 {
-    m_img.~Image();
-    m_tex.~Texture();
-    m_pixelBuffer.~vector();
+
 }
 void Screen::drawUI()
 {
@@ -31,7 +29,6 @@ void Screen::drawUI()
 
 			ImGui::EndMenu();
 		}
-
 
         if (m_win_states.save)
         {

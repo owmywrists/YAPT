@@ -1,12 +1,13 @@
 #include "obj_parser.h"
 
-void Obj::parse_faces()
+void load_obj(string filename, vector<float3> &vertices, vector<float3> &faces)
 {
+	std::ifstream obj;
 	string line;
 	string word;
-	m_obj.open(m_filename);
-
-	while (std::getline(m_obj, line))
+	obj.open(filename);
+	vector<float3> temp_v, temp_f;
+	while (std::getline(obj, line))
 	{
 
 		if (line.substr(0, 2) == "v ")
@@ -14,49 +15,17 @@ void Obj::parse_faces()
 			std::istringstream ss(line.substr(2));
 			float3 v;
 			ss >> v;
-			m_vertices.push_back(v);
+			temp_v.push_back(v);
 		}
 		else if (line.substr(0, 2) == "f ")
 		{
 			std::istringstream ss(line.substr(2));
 			float3 f;
 			ss >> f;
-			m_faces.push_back(f);
+			temp_f.push_back(f);
 		}
 	}
-	m_obj.close();
-}
-
-Obj::Obj(string filename)
-{
-	m_filename = filename;
-	parse_faces();
-}
-
-float3 Obj::face(int i)
-{
-	return m_faces[i];
-}
-
-vector<Surface *> Obj::getScene()
-{
-	vector<Surface *> m_scene;
-	std::shared_ptr<Material> m;
-
-	auto m1 = std::make_shared<Lambertian>(float3(0.0, 1.0, 0.0));
-	auto m2 = std::make_shared<Mirror>(float3(1.0, 1.0, 1.0), 0.0);
-
-	m = std::make_shared<Mix>(m1, m2, 1.9f);
-
-	for (int i = 0; i < m_faces.size(); i++)
-	{
-		float3 f = face(i);
-		float3 v0 = m_vertices[f.x - 1];
-		float3 v1 = m_vertices[f.y - 1];
-		float3 v2 = m_vertices[f.z - 1];
-		m_scene.push_back(new Triangle(v0, v1, v2,
-									   m,
-									   float3()));
-	}
-	return m_scene;
+	vertices = temp_v;
+	faces = temp_f;
+	obj.close();
 }

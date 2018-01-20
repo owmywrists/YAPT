@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include "obj_parser.h"
 #include "surface.h"
@@ -7,21 +8,23 @@
 #include "kd_tree.h"
 #include "drand.h"
 #include <omp.h>
+#include "mesh.h"
 
 class Engine
 {
   public:
-	  Engine(Camera cam, Screen *screen) : m_cam(cam), m_screen(screen) { hdri.loadFromFile("../res/hdris/hdri_indoor.jpg");
-	  clock.restart();
+	  Engine(Camera cam, Screen *screen) : m_cam(cam), m_screen(screen) 
+	  { 
+		  hdri.loadFromFile("../res/hdris/hdri_indoor.jpg");
+		  clock.restart();
+		  mesh.load("../res/objs/suzanne.obj");
 	  }
 	~Engine();
-    void loadObjAsScene(std::string filename);
     void render();
     void restart();
 
   private:
-    std::vector<Surface*> m_data;
-    KDNode *node;
+	Mesh mesh;
     Camera m_cam;
 	sf::Clock clock;
     float3 trace(Ray &ray,HitInfo &hit, int depth);

@@ -3,22 +3,7 @@
 Engine::~Engine() {
 
 }
-void Engine::loadObjAsScene(std::string filename)
-{
-    Obj m(filename);
-    auto temp = m.getScene();
-    m_data = temp;
 
-	auto m1 = std::make_shared<Lambertian>(float3(0.0, 1.0, 0.0));
-	auto m2 = std::make_shared<Mirror>(float3(1.0, 1.0, 1.0), 0.0);
-
-	m_data.push_back(new Sphere(float3(-2.0, 0.0, -1.0), 0.7f, std::make_shared<Mix>(m1, m2, 1.9f)));
-    node = KDNode().build(m_data, 0);
-
-	m_screen->debug_text.setString(sf::String("triangles: " + std::to_string(m_data.size())));
-	m_screen->debug_text.setFont(m_screen->Font);
-	m_screen->debug_text.setColor(sf::Color::White);
-}
 
 void Engine::restart()
 {
@@ -30,8 +15,8 @@ void Engine::restart()
 	mats.push_back(std::make_shared<Lambertian>(rand_num));
 	mats.push_back(std::make_shared<Lambertian>(float3(1.0, 0.0, 0.0)));
 
-    for (int face = 0; face < m_data.size(); face++)
-        m_data[face]->setMaterial(mats[0]);
+    for (int face = 0; face < mesh.size(); face++)
+        //m_data[face]->setMaterial(mats[0]);
     m_screen->reset();
 }
 
@@ -81,7 +66,7 @@ void Engine::render()
 float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
 {
 	ray.tmin = 1e5;
-    if (node->intersect(node, ray, hit))
+    if (mesh.intersect(ray, hit))
     {
         Ray new_ray;
         float3 col(1.0, 1.0, 1.0);

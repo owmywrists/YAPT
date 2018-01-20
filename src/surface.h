@@ -13,6 +13,12 @@ class Surface
     virtual float3 getMidpoint() const = 0;
 };
 
+struct Vertex
+{
+	float3 pos;
+	float3 normal;
+};
+
 class Sphere : public Surface
 {
   public:

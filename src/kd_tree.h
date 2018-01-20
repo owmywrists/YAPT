@@ -1,3 +1,4 @@
+#pragma once
 #include "surface.h"
 #include <vector>
 #include "ray.h"

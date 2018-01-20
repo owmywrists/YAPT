@@ -7,6 +7,7 @@ float3 sample_skybox(sf::Image &img, float u, float v)
 	sf::Color temp = img.getPixel(int(u*width )%width, int(v*height)%height);
 	return float3(temp.r, temp.g, temp.b);
 }
+
 float fresnel(float ior, float ndotv) {
 	float r0 = pow((1.0f - ior) / (1.0f + ior), 2);
 	float x = pow(1.0f - ndotv, 5);
@@ -66,11 +67,10 @@ bool Mix::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) con
 {
 	float3 att1, att2;
 	Ray nray1, nray2;
-	float f = fresnel(mix, unit(ray.getDirection()*(-1)).dot(unit(hit.normal)));
-
+	float f = fresnel(mix, hit.normal.dot(unit(ray.getDirection()*(-1))));
 	mat1->scatter(ray, hit, att1, nray1);
 	mat2->scatter(ray, hit, att2, nray2);
-
+	if (f > 1.0) f = 1.0f;
 	if (drand48() > f) new_ray = nray1; else new_ray = nray2;
 	attenuation = (att2* f) + (att1 * (1.0f - f));
 	return true;

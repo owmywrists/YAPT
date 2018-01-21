@@ -34,26 +34,34 @@ Triangle::~Triangle()
 
 bool Triangle::intersection(Ray &ray, HitInfo &hit)
 {
-    float3 edge1 = m_v1 - m_v0;
-    float3 edge2 = m_v2 - m_v0;
+    float3 edge1 = v1->pos - v0->pos;
+    float3 edge2 = v2->pos - v0->pos;
     float3 h = ray.getDirection().cross(edge2);
     float a = edge1.dot(h);
 
     float f = 1.0 / a;
-    float3 s = ray.getOrigin() - m_v0;
+    float3 s = ray.getOrigin() - v0->pos;
     float u = f * (s.dot(h));
 
     if (u < 0.0 || u > 1.0)
         return false;
 
+
+
     float3 q = s.cross(edge1);
     float v = f * ray.getDirection().dot(q);
     if (v < 0.0 || u + v > 1.0)
         return false;
+
+	
+
     float t = edge2.dot(q) * f;
-    if (t > 1e-9)
+    if (t > 1e-9 && hit.t < ray.tmin)
     {
         hit.t = t;
+		//printf("(1-u-v): %f u: %f v: %f \n", 1 - u - v, u, v);
+		hit.normal = unit(v1->normal*u + v2->normal*v + v0->normal*(1 - u - v));
+		//hit.normal = getFaceNormal();
         return true;
     }
     else

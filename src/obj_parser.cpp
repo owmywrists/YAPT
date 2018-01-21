@@ -1,20 +1,24 @@
 #include "obj_parser.h"
 
-void load_obj(string filename, vector<float3> &vertices, vector<float3> &faces)
+void load_obj(string filename, vector<Vertex> &vertices, vector<float3> &faces)
 {
 	std::ifstream obj;
 	string line;
 	string word;
 	obj.open(filename);
-	vector<float3> temp_v, temp_f;
+	vector<float3> temp_f;
+	vector<Vertex> temp_v;
 	while (std::getline(obj, line))
 	{
 
 		if (line.substr(0, 2) == "v ")
 		{
 			std::istringstream ss(line.substr(2));
-			float3 v;
-			ss >> v;
+			float3 p;
+			Vertex v;
+			ss >> p;
+			v.pos = p;
+			v.normal = float3();
 			temp_v.push_back(v);
 		}
 		else if (line.substr(0, 2) == "f ")

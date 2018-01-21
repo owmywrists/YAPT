@@ -106,7 +106,7 @@ inline v3<T> operator*(const v3<T> &lhs, const v3<T> &rhs)
 template <typename T>
 inline bool operator==(const v3<T> &lhs, const v3<T> &rhs)
 {
-    return v3<T>(lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
+    return (lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
 }
 
 template <typename T>

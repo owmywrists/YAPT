@@ -17,7 +17,8 @@ class Engine
 	  { 
 		  hdri.loadFromFile("../res/hdris/hdri_indoor.jpg");
 		  clock.restart();
-		  mesh.load("../res/objs/suzanne.obj");
+		  mesh.load("../res/objs/monkey.obj");
+		  mesh.calculate_normals();
 	  }
 	~Engine();
     void render();

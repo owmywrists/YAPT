@@ -11,5 +11,4 @@ using std::string;
 using std::vector;
 
 
-void load_obj(string filename, vector<float3> &vertices, vector<float3> &faces);
-
+void load_obj(string filename, vector<Vertex> &vertices, vector<float3> &faces);

@@ -56,17 +56,24 @@ class Sphere : public Surface
 class Triangle : public Surface
 {
   public:
-	  Triangle(float3 v0, float3 v1, float3 v2, std::shared_ptr<Material> mat_type,
-		  float3 normal = float3()) : m_v0(v0), m_v1(v1), m_v2(v2), m_normal(normal), m_mat(mat_type) {}
+	  Triangle(Vertex *va, Vertex *vb, Vertex *vc, std::shared_ptr<Material> mat_type): m_mat(mat_type),
+		  v0(va), v1(vb), v2(vc)
+	  {
+		 // v0.normal = v1.normal = v2.normal = float3();
+		 m_normal = unit((v1->pos - v0->pos).cross(v2->pos - v0->pos));
+	  }
+
     ~Triangle();
     bool intersection(Ray &ray, HitInfo &hit);
+
     float3 getNormal(float3 hit)
     {
-        return unit((m_v1 - m_v0).cross(m_v2 - m_v0));
+		return m_normal;
     }
-    float3 v0() const { return m_v0; }
-    float3 v1() const { return m_v1; }
-    float3 v2() const { return m_v2; }
+	float3 getFaceNormal()
+	{
+		return unit((v1->pos - v0->pos).cross(v2->pos - v0->pos));
+	}
     std::shared_ptr<Material> getMatPtr() { 
 		return m_mat;
 	}
@@ -76,27 +83,34 @@ class Triangle : public Surface
     }
     AABB getBoundingBox()const
     {
-
-
      return AABB(float3(
-        std::min(std::min(v0().x, v1().x), v2().x ),
-        std::min(std::min(v0().y, v1().y), v2().y ),
-        std::min(std::min(v0().z, v1().z), v2().z )),
+        std::min(std::min(v0->pos.x, v1->pos.x), v2->pos.x ),
+        std::min(std::min(v0->pos.y, v1->pos.y), v2->pos.y ),
+        std::min(std::min(v0->pos.z, v1->pos.z), v2->pos.z )),
         float3(
-        std::max(std::max(v0().x, v1().x), v2().x ),
-        std::max(std::max(v0().y, v1().y), v2().y ),
-        std::max(std::max(v0().z, v1().z), v2().z ))
-     );
+        std::max(std::max(v0->pos.x, v1->pos.x), v2->pos.x ),
+        std::max(std::max(v0->pos.y, v1->pos.y), v2->pos.y ),
+        std::max(std::max(v0->pos.z, v1->pos.z), v2->pos.z )));
     }
     float3 getMidpoint()const
     {
-        float3 sum = (v0() + v1() + v2());
+        float3 sum = (v0->pos + v1->pos + v2->pos);
         float3 avg = sum/3.0;
-        return (v0() + v1() + v2()) / 3.0;
+        return (v0->pos + v1->pos + v2->pos) / 3.0;
     }
 
+	bool contains_vertex(Vertex *v)
+	{
+		return (v == v0) || (v == v1) || (v == v2);
+	}
+	void set_vertex_attribute_normal(float3 normal, Vertex v)
+	{
+		if (v.pos == v0->pos) v0->normal = normal;
+		else if (v.pos == v1->pos) v1->normal = normal;
+		else if (v.pos == v2->pos) v2->normal = normal;
+	}
   private:
-    float3 m_v0, m_v1, m_v2;
+	Vertex *v0, *v1, *v2;
     std::shared_ptr<Material> m_mat;
     float3 m_normal;
 };

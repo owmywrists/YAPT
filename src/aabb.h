@@ -10,23 +10,7 @@ class AABB
 
     bool hit(Ray &ray, float &t)
     {
-        /*
-            float tmin, tmax;
-            for (int a=0; a <3; a++){
-                float invD = 1.0f / ray.getDirection()[a];
-                float t0 = (getMin()[a] - ray.getOrigin()[a])*invD;
-                float t1 = (getMax()[a] - ray.getOrigin()[a]) * invD;
-                if (invD <0.0f){
-                    std::swap(t0,t1);
-                }
-                tmin = t0 > tmin ? t0: tmin;
-                tmax = t1 < tmax ? t1 : tmax;
-                t = tmin;
-            }
-            return tmax >= tmin;
-
-           */ 
-          float3 inv_rd = ray.getDirection();
+        float3 inv_rd = ray.getDirection();
 
         float tx1 = (min.x - ray.getOrigin().x) / inv_rd.x;
         float tx2 = (max.x - ray.getOrigin().x) / inv_rd.x;

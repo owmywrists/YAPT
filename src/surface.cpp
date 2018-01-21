@@ -56,11 +56,13 @@ bool Triangle::intersection(Ray &ray, HitInfo &hit)
 	
 
     float t = edge2.dot(q) * f;
-    if (t > 1e-9 && hit.t < ray.tmin)
+    if (t > 1e-9 && t < ray.tmin)
     {
         hit.t = t;
 		//printf("(1-u-v): %f u: %f v: %f \n", 1 - u - v, u, v);
-		hit.normal = unit(v1->normal*u + v2->normal*v + v0->normal*(1 - u - v));
+		float3 temp_normal = unit(v1->normal*u + v2->normal*v + v0->normal*(1 - u - v));
+		if (unit(ray.getDirection()).dot(temp_normal)> 0) temp_normal = temp_normal * (-1);
+		hit.normal = temp_normal;
 		//hit.normal = getFaceNormal();
         return true;
     }

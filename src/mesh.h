@@ -27,6 +27,7 @@ public:
 	}
 	void calculate_normals() 
 	{
+#pragma omp parallel for schedule(dynamic, 1)
 		for (int v = 0; v < vertices.size(); v++) 
 		{ // for(auto v: vertices) copies data, not what i want
 			float3 normal = float3();

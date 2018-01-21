@@ -89,13 +89,8 @@ bool KDNode::closestIntersection(Ray &ray, HitInfo &hit, std::vector<Surface *> 
     {
         if (s->intersection(ray, hit))
         {
-            //std::cout << hit.t << std::endl;
-            //if (hit.t < ray.tmin)
-            //{
-                //hit.normal = s->getNormal(ray.getHit(hit.t));
-                hit.mat = s->getMatPtr();
-                ray.tmin = hit.t;
-            //}
+			hit.mat = s->getMatPtr();
+			ray.tmin = hit.t;
         }
     }
     if (ray.tmin < 1e5 && ray.tmin > 1e-5)

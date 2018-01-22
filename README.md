@@ -17,9 +17,10 @@ TODO:
 - Mix materials
 - Fix normal issues
 - Better sampling methods
-
+- 
 example renders:
-![Alt text](hdri.png?raw=true "Image Based lighting")
+Demonstrating DoF, Fresnel reflectance, interpolated vertex normals, hdri lighting, 100k triangles
+![Alt text](dragon_reflective.png?raw=true "Showing off features of the raytracer")
 ![Alt text](image_lighting.png?raw=true "Image Based lighting")
 ![Alt text](dragon.png?raw=true "Dragon clay")
 ![Alt text](test_github.gif?raw=true "ImGUI test")

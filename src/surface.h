@@ -2,6 +2,7 @@
 #include "material.h"
 #include "aabb.h"
 #include "drand.h"
+
 class Surface
 {
   public:
@@ -102,12 +103,6 @@ class Triangle : public Surface
 	bool contains_vertex(Vertex *v)
 	{
 		return (v == v0) || (v == v1) || (v == v2);
-	}
-	void set_vertex_attribute_normal(float3 normal, Vertex v)
-	{
-		if (v.pos == v0->pos) v0->normal = normal;
-		else if (v.pos == v1->pos) v1->normal = normal;
-		else if (v.pos == v2->pos) v2->normal = normal;
 	}
   private:
 	Vertex *v0, *v1, *v2;

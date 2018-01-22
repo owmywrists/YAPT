@@ -15,6 +15,7 @@ template <class T> class v3
         z = 0.0;
 		assert(!HasNans());
     }
+	v3(float xyz) :x(xyz), y(xyz), z(xyz) {}
     v3(T x, T y, T z): x(x), y(y), z(z)
     {
 		assert(!HasNans());

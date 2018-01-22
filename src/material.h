@@ -6,9 +6,16 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <SFML\Graphics.hpp>
+
 class Material;
 
-float3 sample_skybox(sf::Image &img, float u, float v);
+inline float3 sample_skybox(sf::Image &img, float u, float v)
+{
+	int width = img.getSize().x;
+	int height = img.getSize().y;
+	sf::Color temp = img.getPixel(int(u*width) % width, int(v*height) % height);
+	return float3(temp.r, temp.g, temp.b);
+}
 
 struct HitInfo
 {

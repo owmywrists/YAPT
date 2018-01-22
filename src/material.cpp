@@ -1,12 +1,6 @@
 #include "material.h"
 
-float3 sample_skybox(sf::Image &img, float u, float v)
-{
-	int width = img.getSize().x;
-	int height = img.getSize().y;
-	sf::Color temp = img.getPixel(int(u*width )%width, int(v*height)%height);
-	return float3(temp.r, temp.g, temp.b);
-}
+
 
 float fresnel(float ior, float ndotv) {
 	float r0 = pow((1.0f - ior) / (1.0f + ior), 2);
@@ -31,7 +25,9 @@ float3 WorldSpaceHemi(float u1, float u2, float3 normal)
 {
 
     float3 p = cosineSampleHemi(u1, u2);
-    float3 v = float3(0.0, 1.0, 0.0).cross(normal);
+	float3 up = float3(0.0, 1, 0.0);
+	float3 v;
+	v = up.cross(normal);
     v = unit(v);
     float3 u = v.cross(normal);
 
@@ -48,7 +44,8 @@ bool Emissive::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray
 
 bool Lambertian::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
 {
-    float3 target = ray.getHit(hit.t) + WorldSpaceHemi(drand48(), drand48(), hit.normal);
+	
+    float3 target = ray.getHit(hit.t) + cosineSampleHemi(drand48(), drand48());
     new_ray = Ray(ray.getHit(hit.t), target - ray.getHit(hit.t));
 
     attenuation = m_colour;

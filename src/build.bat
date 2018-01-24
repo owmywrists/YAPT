@@ -1,12 +1,12 @@
 @echo off
 
+chdir ..\build
 
-:: Change to your LLVM installation
 set "LLVMPath=C:\Program Files\LLVM"
-:: Change to your Visual Studio 2017 installation
+
 set "VSPath=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
 set "VSVersion=14.10.25017"
-:: Change to your Windows Kit version & installation
+
 set "WinSDKVersion=10.0.14393.0"
 set "WinSDKPath=C:\Program Files (x86)\Windows Kits\10"
 :: Change this to your resulting exe
@@ -59,10 +59,9 @@ set "files=main.o imgui-SFML.o imgui_draw.o imgui_demo.o imgui.o window.o surfac
     @set "LINK_FILES=%LINK_FILES% %%f"
 )
 
-
-
 lld-link.exe %files% -out:"%OUTPUT%" %LDFLAGS% %LDLIBS%
 
+chdir release
+yapt.exe
 
-release/yapt.exe
 PAUSE

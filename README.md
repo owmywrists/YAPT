@@ -9,10 +9,5 @@ Features:
 
 Example renders:
 - Demonstrating DoF, Fresnel reflectance, interpolated vertex normals, hdri lighting, 100k triangles
-![Alt text](dragon_reflective.png?raw=true "Showing off features of the raytracer")
-![Alt text](image_lighting.png?raw=true "Image Based lighting")
-![Alt text](dragon.png?raw=true "Dragon clay")
-![Alt text](test_github.gif?raw=true "ImGUI test")
-![Alt text](suzanne.png?raw=true "Suzanne render")
-![Alt text](finalrender.png?raw=true "Final render 12500 samples")
-![Alt text](example.gif?raw=true "Example")
+![Alt text](res/images/dragon_glass.png?raw=true "Glass refraction")
+![Alt text](res/images/dragon_reflective.png?raw=true "Fresnel reflection")

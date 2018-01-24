@@ -17,7 +17,7 @@ class Engine
     { 
         hdri.loadFromFile("../../res/hdris/road.jpg");
         clock.restart();
-        mesh.load("../../res/objs/dragon_ground.obj");
+        mesh.load("../../res/objs/dragon.obj");
         mesh.calculate_normals();
         
     }

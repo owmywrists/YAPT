@@ -21,11 +21,11 @@ void render_thread(Engine *engine, Window *win)
 int main(int argc, char* argv[])
 {
     Window *win = new Window("YAPT", 1280, 720);
-	Camera cam(1280, 720, float3(0, 0, 3.0), float3(0, 0, -1.0), float3(0, 1.0, 0), 0.1f, 6.f, 90.0f);
+    Camera cam(1280, 720, float3(0, 0, 3.0), float3(0, 0, -1.0), float3(0, 1.0, 0), 0.0f, 6.f, 90.0f);
     Engine engine(cam, win->getScreenPtr());
-
+    
     std::thread t(render_thread, &engine, win);
-
+    
     while (win->getWindowPtr()->isOpen())
     {
         win->update();

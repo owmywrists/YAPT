@@ -21,21 +21,6 @@ float3 cosineSampleHemi(float u1, float u2)
     return float3(x, y, z);
 }
 
-float3 WorldSpaceHemi(float u1, float u2, float3 normal)
-{
-
-    float3 p = cosineSampleHemi(u1, u2);
-	float3 up = float3(0.0, 1, 0.0);
-	float3 v;
-	v = up.cross(normal);
-    v = unit(v);
-    float3 u = v.cross(normal);
-
-    float3 sample = unit((u * p.x) + (v * p.y) + (normal * p.z));
-
-    return sample;
-}
-
 bool Emissive::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
 {
     attenuation = m_colour;
@@ -46,7 +31,7 @@ bool Lambertian::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_r
 {
 	
     float3 target = ray.getHit(hit.t) + cosineSampleHemi(drand48(), drand48());
-    new_ray = Ray(ray.getHit(hit.t), target - ray.getHit(hit.t));
+    new_ray = Ray(ray.getHit(hit.t) + hit.normal*0.001, target - ray.getHit(hit.t));
 
     attenuation = m_colour;
     return true;

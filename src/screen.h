@@ -22,7 +22,7 @@ class Screen
 		debug_text.move(sf::Vector2f(20, height - 40));
 		debug_text.scale(sf::Vector2f(0.8,0.8));
 
-		Font.loadFromFile("../res/fonts/helvetica.ttf");
+		Font.loadFromFile("../../res/fonts/helvetica.ttf");
 
     };
     ~Screen();
@@ -35,11 +35,8 @@ class Screen
     void drawUI();
     void loadImage(std::vector<float3> img);
     void reset();
-
-
 	sf::Text debug_text;
 	sf::Font Font;
-
 	int sample;
   private:
     float3 avg(float3 current_avg, float3 new_colour);

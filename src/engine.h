@@ -15,9 +15,9 @@ class Engine
   public:
 	  Engine(Camera cam, Screen *screen) : m_cam(cam), m_screen(screen) 
 	  { 
-		  hdri.loadFromFile("../res/hdris/road.jpg");
+		  hdri.loadFromFile("../../res/hdris/road.jpg");
 		  clock.restart();
-		  mesh.load("../res/objs/dragon_ground.obj");
+		  mesh.load("../../res/objs/suzanne_hi_ground.obj");
 		  mesh.calculate_normals();
 
 	  }

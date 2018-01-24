@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
-
+#include <omp.h>
 
 template <class T> class v3
 {
@@ -73,9 +73,7 @@ inline v3<T> operator-(const v3<T> &lhs, const float &rhs)
 {
     return v3<T>(lhs.x - rhs, lhs.y - rhs, lhs.z - rhs);
 }
-
-template <typename T>
-inline v3<T> operator/(const v3<T> &lhs, const float &rhs)
+template <typename T> inline v3<T> operator/(const v3<T> &lhs, const float &rhs)
 {
     return v3<T>(lhs.x / rhs, lhs.y / rhs, lhs.z / rhs);
 }
@@ -97,13 +95,11 @@ inline v3<T> operator-(const v3<T> &lhs, const v3<T> &rhs)
 {
     return v3<T>(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z);
 }
-
 template <typename T>
 inline v3<T> operator*(const v3<T> &lhs, const v3<T> &rhs)
 {
     return v3<T>(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
 }
-
 template <typename T>
 inline bool operator==(const v3<T> &lhs, const v3<T> &rhs)
 {
@@ -123,11 +119,8 @@ inline std::istream &operator>>(std::istream &is, v3<T> &rhs)
     is >> rhs.x >> rhs.y >> rhs.z;
     return is;
 }
-
-template <typename T> 
-inline v3<T> unit(v3<T> v) {
+template <typename T> inline v3<T> unit(v3<T> v) {
 	return v/ v.length();
 }
-
 typedef v3<float> v3f;
 typedef v3<float> float3;

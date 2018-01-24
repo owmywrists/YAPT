@@ -25,6 +25,7 @@ void load_obj(string filename, vector<Vertex> &vertices, vector<float3> &faces)
 		{
 			std::istringstream ss(line.substr(2));
 			float3 f;
+            v3<std::string> string;
 			ss >> f;
 			temp_f.push_back(f);
 		}

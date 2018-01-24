@@ -22,6 +22,7 @@ void Engine::restart()
 
 void Engine::loadBuffer(std::vector<float3> image)
 {
+#pragma omp parallel for
     for (int x = 0; x < m_screen->getWidth(); x++)
     {
         for (int y = 0; y < m_screen->getHeight(); y++)
@@ -41,20 +42,27 @@ void Engine::render()
 	Ray persp, ortho;
 	float3 colour = float3();
 	float u, v;
-#pragma omp parallel for schedule(dynamic, 1) private(hit, persp, ortho, colour, u, v)
-    for (int x = 0; x < m_screen->getWidth(); x++)
-    {
-        for (int y = 0; y < m_screen->getHeight(); y++)
-        {
-            ortho = Ray(float3(x, y, 0), float3(0, 0, -1));
-            colour = float3(0.0, 0.0, 0.0);
-            u = float(x + drand48())/m_screen->getWidth();
-            v = float(y + drand48())/m_screen->getHeight();
-            persp = m_cam.getRay(u, v);
-            colour = colour + trace(persp, hit, 0);
-            temp_img[x + y * m_screen->getWidth()] = colour;
-        }
-    }
+	const int tile_size = 80;
+#pragma omp parallel for schedule(static) private(hit, persp, ortho, colour, u, v) collapse(2)
+	for (int tx = 0; tx < m_screen->getWidth() / tile_size; tx++) 
+	{
+		for (int ty = 0; ty < m_screen->getHeight() / tile_size; ty++)
+		{
+			for (int x = 0; x < tile_size; x++)
+			{
+				for (int y = 0; y < tile_size; y++)
+				{
+					ortho = Ray(float3(x, y, 0), float3(0, 0, -1));
+					colour = float3(0.0, 0.0, 0.0);
+					u = float(x + tx*tile_size + drand48()) / m_screen->getWidth();
+					v = float(y + ty*tile_size + drand48()) / m_screen->getHeight();
+					persp = m_cam.getRay(u, v);
+					colour = colour + trace(persp, hit, 0);
+					temp_img[x + tx*tile_size + (ty*tile_size + y) * m_screen->getWidth()] = colour;
+				}
+			}
+		}
+	}
 	sf::Time end = clock.getElapsedTime();
 	std::cout << "sample " << m_screen->sample << " took: " << (end - start).asSeconds() << " seconds" << std::endl;
     m_screen->loadImage(temp_img);
@@ -62,7 +70,6 @@ void Engine::render()
     if (m_screen->getState())
         restart();
 }
-
 float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
 {
 	ray.tmin = 1e5;
@@ -71,7 +78,7 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
         Ray new_ray;
         float3 col(1.0, 1.0, 1.0);
         float3 light = hit.mat->emitted();
-        if (depth < 10 && hit.mat->scatter(ray, hit, col, new_ray))
+        if (depth < 2 && hit.mat->scatter(ray, hit, col, new_ray))
         {
             return light + col * trace(new_ray, hit, depth + 1);
         }

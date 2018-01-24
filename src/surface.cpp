@@ -59,7 +59,7 @@ bool Triangle::intersection(Ray &ray, HitInfo &hit)
     if (t > 1e-9 && t < ray.tmin)
     {
         hit.t = t;
-		float3 temp_normal = unit(v1->normal*u + v2->normal*v + v0->normal*(1 - u - v));
+		float3 temp_normal = unit(v0->normal*u + v1->normal*v + v2->normal*(1 - u - v));
 		if (unit(ray.getDirection()).dot(temp_normal)> 0) temp_normal = temp_normal * (-1);
 		hit.normal = temp_normal;
         return true;

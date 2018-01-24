@@ -22,7 +22,7 @@ public:
 		{
 			float3 f = face_ptr[i];
 			tris.push_back(Triangle(&vertices[f.x - 1], &vertices[f.y - 1], &vertices[f.z - 1], m1));
-			faces.push_back(new Triangle(&vertices[f.x - 1], &vertices[f.y - 1], &vertices[f.z - 1], m1));
+			faces.push_back(new Triangle(&vertices[f.x - 1], &vertices[f.y - 1], &vertices[f.z - 1], m));
 		}
 	}
 	void calculate_normals() 

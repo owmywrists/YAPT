@@ -21,7 +21,6 @@ KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth)
         for (int i = 1; i < surfaces.size(); i++){
             node->aabb.expand(surfaces[i]->getBoundingBox());
         }
-
         node->left = new KDNode();
         node->right = new KDNode();
         node->left->surface = std::vector<Surface *>();

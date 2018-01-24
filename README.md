@@ -1,25 +1,14 @@
-#YAPT
-
-Yet Another PathTracer
-
-to build:
-- type "git clone --recursive https://github.com/owmywrists/YAPT
-- add a lib folder and put glew and sfml inside
-- copy imgui-sfml/imconfig-SFML.h to imgui/imconfig.h
-- create build folder and inside run "cmake .."
+# Yet Another PathTracer
 
 Features:
 - KD Trees
 - Materials: emissive, lambertian, mirror
 - Interactive rendering
+- interpolated normals (vertex normals)
+- multithreading with OpenMP
 
-TODO:
-- Mix materials
-- Fix normal issues
-- Better sampling methods
-- 
-example renders:
-Demonstrating DoF, Fresnel reflectance, interpolated vertex normals, hdri lighting, 100k triangles
+Example renders:
+- Demonstrating DoF, Fresnel reflectance, interpolated vertex normals, hdri lighting, 100k triangles
 ![Alt text](dragon_reflective.png?raw=true "Showing off features of the raytracer")
 ![Alt text](image_lighting.png?raw=true "Image Based lighting")
 ![Alt text](dragon.png?raw=true "Dragon clay")

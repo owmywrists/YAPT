@@ -1,4 +1,5 @@
-build
 lib
 8716c74cb11076e02f9feb84647ebc96.png
 c1d0e023e547eccdc9c8d13db3ff6722.png
+build/*.o
+build/release

@@ -2,12 +2,12 @@
 
 Screen::~Screen()
 {
-
+    
 }
 void Screen::drawUI()
 {
     ImGui::StyleColorsDark();
-
+    
     if (ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
@@ -20,16 +20,19 @@ void Screen::drawUI()
             {
                 should_reset = true;
             }
-
+            if (ImGui::MenuItem("Open obj"))
+            {
+                m_win_states.open = true;
+            }
             ImGui::EndMenu();
         }
-		if (ImGui::BeginMenu("Windows"))
-		{
-			if (ImGui::MenuItem("Colour")) m_win_states.colour = !m_win_states.colour;
-
-			ImGui::EndMenu();
-		}
-
+        if (ImGui::BeginMenu("Windows"))
+        {
+            if (ImGui::MenuItem("Colour")) m_win_states.colour = !m_win_states.colour;
+            
+            ImGui::EndMenu();
+        }
+        
         if (m_win_states.save)
         {
             ImGui::Begin("Save settings");
@@ -41,16 +44,27 @@ void Screen::drawUI()
             }
             ImGui::End();
         }
-
-		if (m_win_states.colour)
-		{
-			ImGui::Begin("Colour");
-			if (ImGui::ColorPicker3("Test", m_color))
-			{
-				should_reset = true;
-			}
-			ImGui::End();
-		}
+        if(m_win_states.open)
+        {
+            ImGui::Begin("Open obj");
+            ImGui::InputText("obj to open", obj_to_open, sizeof(obj_to_open));
+            if(ImGui::Button("Open"))
+            {
+                m_win_states.open = false;
+                should_reset = true;
+            }
+            ImGui::End();
+        }
+        
+        if (m_win_states.colour)
+        {
+            ImGui::Begin("Colour");
+            if (ImGui::ColorPicker3("Test", m_color))
+            {
+                should_reset = true;
+            }
+            ImGui::End();
+        }
     }
     ImGui::EndMainMenuBar();
 }
@@ -96,7 +110,7 @@ void Screen::loadImage(std::vector<float3> img)
 
 sf::Color Screen::transform(float3 pixel)
 {
-
+    
     sf::Color colour = sf::Color(std::min(pixel.x, 1.0f) * 255.0,
                                  std::min(pixel.y, 1.0f) * 255.0,
                                  std::min(pixel.z, 1.0f) * 255.0);

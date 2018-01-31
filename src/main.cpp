@@ -2,7 +2,6 @@
 #include "window.h"
 #include "float3.h"
 #include "material.h"
-#include "hitlist.h"
 #include "obj_parser.h"
 #include "engine.h"
 #include "drand.h"

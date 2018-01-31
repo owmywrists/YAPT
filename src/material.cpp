@@ -9,7 +9,6 @@ float fresnel(float ior, float ndotv) {
     return(r0 + (1.0f - r0)*x);
 }
 
-
 float3 cosineSampleHemi(float u1, float u2)
 {
     float z = std::pow(1.0 - u1, 3.0 / 5.0);
@@ -23,16 +22,14 @@ float3 cosineSampleHemi(float u1, float u2)
 
 bool Emissive::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
 {
-    attenuation = m_colour;
+    attenuation = float3(hit.normal.x,hit.normal.y, hit.normal.z);
     return false;
 }
 
 bool Lambertian::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
 {
-    
-    float3 target = ray.getHit(hit.t) + cosineSampleHemi(drand48(), drand48());
-    new_ray = Ray(ray.getHit(hit.t) + hit.normal*0.001, target - ray.getHit(hit.t));
-    
+    float3 offset = hit.normal*(1e-5);
+    new_ray = Ray(ray.getHit(hit.t) + offset, cosineSampleHemi(drand48(), drand48()));
     attenuation = m_colour;
     return true;
 }

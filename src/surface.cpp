@@ -24,7 +24,6 @@ bool Sphere::intersection(Ray &ray, HitInfo &hit)
             return true;
         }
     }
-
     return false;
 }
 
@@ -36,32 +35,30 @@ bool Triangle::intersection(Ray &ray, HitInfo &hit)
 {
     float3 edge1 = v1->pos - v0->pos;
     float3 edge2 = v2->pos - v0->pos;
+    
     float3 h = ray.getDirection().cross(edge2);
     float a = edge1.dot(h);
-
+    
     float f = 1.0 / a;
     float3 s = ray.getOrigin() - v0->pos;
     float u = f * (s.dot(h));
-
-    if (u < 0.0 || u > 1.0)
-        return false;
-
-
-
+    
+    if (u < 0.0 || u > 1.0) return false;
+    
     float3 q = s.cross(edge1);
     float v = f * ray.getDirection().dot(q);
-    if (v < 0.0 || u + v > 1.0)
-        return false;
-
-	
-
+    if (v < 0.0 || u + v > 1.0) return false;
+    
     float t = edge2.dot(q) * f;
     if (t > 1e-9 && t < ray.tmin)
     {
         hit.t = t;
-		float3 temp_normal = unit(v0->normal*u + v1->normal*v + v2->normal*(1 - u - v));
-		if (unit(ray.getDirection()).dot(temp_normal)> 0) temp_normal = temp_normal * (-1);
-		hit.normal = temp_normal;
+        
+        //float3 temp_normal = unit(edge1.cross(edge2));
+        //temp_normal = unit((v0->pos - v1->pos).cross(v0->pos - v2->pos));
+        float3 temp_normal = unit(v1->normal*u + v2->normal*v + v0->normal*(1. - u - v));
+        
+        hit.normal = temp_normal;
         return true;
     }
     else

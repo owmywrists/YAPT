@@ -81,7 +81,7 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
     {
         Ray new_ray;
         float3 col(1.0, 1.0, 1.0);
-        float3 light = hit.mat->emitted(hit);
+        float3 light = hit.mat->emitted();
         if (depth < 10 && hit.mat->scatter(ray, hit, col, new_ray))
         {
             return light + col * trace(new_ray, hit, depth + 1);

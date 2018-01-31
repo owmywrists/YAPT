@@ -2,7 +2,6 @@
 #include <string>
 #include "obj_parser.h"
 #include "surface.h"
-#include "hitlist.h"
 #include "camera.h"
 #include "screen.h"
 #include "kd_tree.h"
@@ -17,16 +16,16 @@ class Engine
     { 
         hdri.loadFromFile("../../res/hdris/road.jpg");
         clock.restart();
-        mesh.load("../../res/objs/dragon.obj");
+        mesh.load("../../res/objs/dragon_normals.obj");
         mesh.calculate_normals();
         
     }
     ~Engine();
     void render();
     void restart();
+    Mesh mesh;
     
     private:
-    Mesh mesh;
     Camera m_cam;
     sf::Clock clock;
     float3 trace(Ray &ray,HitInfo &hit, int depth);

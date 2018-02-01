@@ -18,8 +18,12 @@ void Engine::restart()
     //for (int face = 0; face < mesh.size(); face++)
     //m_data[face]->setMaterial(mats[0]);
     m_screen->reset();
+    std::string obj_loc = "../../res/objs/";
+    std::string hdri_loc = "../../res/hdris/";
     std::string obj_open = m_screen->obj_to_open;
-    mesh.load(obj_open);
+    std::string hdri_load = m_screen->hdri_to_load;
+    mesh.load(obj_loc + obj_open);
+    hdri.loadFromFile(hdri_loc + hdri_load);
 }
 
 void Engine::loadBuffer(std::vector<float3> image)

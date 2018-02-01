@@ -14,7 +14,7 @@ void Screen::drawUI()
         {
             if (ImGui::MenuItem("Save"))
             {
-                m_win_states.save = true;
+                m_win_states.save= !m_win_states.save;
             }
             if (ImGui::MenuItem("Reset"))
             {
@@ -22,7 +22,11 @@ void Screen::drawUI()
             }
             if (ImGui::MenuItem("Open obj"))
             {
-                m_win_states.open = true;
+                m_win_states.open = !m_win_states.open;
+            }
+            if (ImGui::MenuItem("Load hdri"))
+            {
+                m_win_states.hdri = !m_win_states.hdri;
             }
             ImGui::EndMenu();
         }
@@ -51,6 +55,17 @@ void Screen::drawUI()
             if(ImGui::Button("Open"))
             {
                 m_win_states.open = false;
+                should_reset = true;
+            }
+            ImGui::End();
+        }
+        if(m_win_states.hdri)
+        {
+            ImGui::Begin("Load hdri");
+            ImGui::InputText("hdri to load", hdri_to_load, sizeof(hdri_to_load));
+            if(ImGui::Button("Load"))
+            {
+                m_win_states.hdri = false;
                 should_reset = true;
             }
             ImGui::End();

@@ -18,6 +18,8 @@ class Screen
         m_tex.loadFromImage(m_img);
         should_reset = false;
         m_win_states.save = false;
+        m_win_states.hdri = false;
+        m_win_states.open = false;
         m_win_states.colour = false;
         debug_text.move(sf::Vector2f(20, height - 40));
         debug_text.scale(sf::Vector2f(0.8,0.8));
@@ -38,7 +40,10 @@ class Screen
     sf::Text debug_text;
     sf::Font Font;
     int sample;
+    
     char obj_to_open[64];
+    char hdri_to_load[64];
+    
     private:
     float3 avg(float3 current_avg, float3 new_colour);
     sf::Color transform(float3 pixel);
@@ -47,6 +52,7 @@ class Screen
         bool save;
         bool colour;
         bool open;
+        bool hdri;
     };
     sf::Clock clock;
     std::vector<float3> m_pixelBuffer;

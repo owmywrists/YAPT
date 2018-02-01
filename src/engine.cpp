@@ -7,13 +7,12 @@ Engine::~Engine() {
 
 void Engine::restart()
 {
-    //m_cam.move(float3(sin(10), 0, cos(10) + 3.0));
     float *temp_col = m_screen->getColour();
     float3 rand_num = float3(temp_col[0], temp_col[1], temp_col[2]);
     std::cout << rand_num << std::endl;
     std::vector<std::shared_ptr<Material>> mats;
-    mats.push_back(std::make_shared<Lambertian>(rand_num));
-    mats.push_back(std::make_shared<Lambertian>(float3(1.0, 0.0, 0.0)));
+    //mats.push_back(std::make_shared<Lambertian>(rand_num));
+    //mats.push_back(std::make_shared<Lambertian>(float3(1.0, 0.0, 0.0)));
     
     //for (int face = 0; face < mesh.size(); face++)
     //m_data[face]->setMaterial(mats[0]);
@@ -40,11 +39,10 @@ void Engine::loadBuffer(std::vector<float3> image)
 }
 void Engine::render()
 {
-    //omp_set_num_threads(3);
     HitInfo hit;
     std::vector<float3> temp_img;
     temp_img.resize(m_screen->getWidth() * m_screen->getHeight());
-    sf::Time start = clock.getElapsedTime();
+    sf::Time start(clock.getElapsedTime());
     
     Ray persp, ortho;
     float3 colour = float3();
@@ -84,24 +82,24 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
     if (mesh.intersect(ray, hit))
     {
         Ray new_ray;
-        float3 col(1.0, 1.0, 1.0);
-        float3 light = hit.mat->emitted();
-        if (depth < 10 && hit.mat->scatter(ray, hit, col, new_ray))
+        float3 contribution(1.0, 1.0, 1.0);
+        float3 light_emitted(hit.mat->colour());
+        if (depth < 10 && hit.mat->scatter(ray, hit, contribution, new_ray))
         {
-            return light + col * trace(new_ray, hit, depth + 1);
+            return light_emitted + contribution * trace(new_ray, hit, depth + 1);
         }
         else
         {
-            return light;
+            return light_emitted; 
         }
     }
-    else
+    else //must be sky
     {
         float3 ud = unit(ray.getDirection());
         float t = 0.5 * (ud.y + 1.0);
         float u_ = 0.5 + atan2(ud.z, ud.x) / (2 * M_PI);
         float v_ = 0.5 - asin(ud.y) / M_PI;
-        float3 sb = sample_skybox(hdri, u_, v_)/255.0;
+        float3 sb = sample_texture(hdri, u_, v_)/255.0;
         
         return sb;
     }

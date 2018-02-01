@@ -57,7 +57,8 @@ bool Triangle::intersection(Ray &ray, HitInfo &hit)
         //float3 temp_normal = unit(edge1.cross(edge2));
         //temp_normal = unit((v0->pos - v1->pos).cross(v0->pos - v2->pos));
         float3 temp_normal = unit(v1->normal*u + v2->normal*v + v0->normal*(1. - u - v));
-        
+        hit.u = (v1->tx*u + v2->tx*v + v0->tx*(1. -u - v));
+        hit.v = 1.0 -(v1->ty*u + v2->ty*v + v0->ty*(1. -u - v));
         hit.normal = temp_normal;
         return true;
     }

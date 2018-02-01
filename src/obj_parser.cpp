@@ -67,8 +67,9 @@ void load_obj(string filename,
             n_ptr_temp.push_back(n);
         }
     }
-    
+    /*
     std::ofstream out;
+    
     out.open("out.obj");
     for (int i = 0; i < v_temp.size(); i++)
     {
@@ -99,6 +100,7 @@ void load_obj(string filename,
             << std::endl;
     }
     out.close();
+    */
     printf("I am done\n");
     vertices = v_temp;
     vertex_ptr = f_ptr;

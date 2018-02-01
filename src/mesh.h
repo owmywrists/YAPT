@@ -1,6 +1,7 @@
 #pragma once
 #include "surface.h"
 #include "obj_parser.h"
+#include <SFML/Graphics.hpp>
 #include "kd_tree.h"
 
 class Mesh {
@@ -18,19 +19,20 @@ class Mesh {
                  normals,  normal_ptr, 
                  uvs, uv_ptr);
         std::shared_ptr<Material> m;
-        
-        auto m1 = std::make_shared<Lambertian>(float3(0.7));
+        texture.loadFromFile("../../res/tex/knuckles.png");
+        auto m1 = std::make_shared<Lambertian>(texture);
         auto m2 = std::make_shared<Mirror>(float3(0.9), 0.1);
         auto m3 = std::make_shared<Glass>(float3(0.9), 0.5);
         auto m4 = std::make_shared<Emissive>(float3());
-        m = std::make_shared<Mix>(m1, m2, 1.9f);
+        m = std::make_shared
+            <Mix>(m1, m2, 1.9f);
         
         for (int i = 0; i < face_ptr.size(); i++)
         {
             float3 f = face_ptr[i];
-            float3 uv = uv_ptr[i];
-            float3 n = normal_ptr[i];
             
+            float3 n = normal_ptr[i];
+            float3 uv = uv_ptr[i];
             vertices[f.x-1].tx = uvs[uv.x-1].x;
             vertices[f.x-1].ty = uvs[uv.x-1].y;
             
@@ -53,14 +55,13 @@ class Mesh {
                             Triangle(&vertices[f.x - 1],
                                      &vertices[f.y - 1],
                                      &vertices[f.z - 1], 
-                                     m3));
+                                     m1));
         }
         printf("Finished making mesh\n");
         root = KDNode().build(faces, 0);
         printf("Finished building kdtree");
         
     }
-    
     void calculate_normals() 
     {
         
@@ -87,9 +88,11 @@ class Mesh {
     int size()const{ return faces.size(); }
     
     KDNode *root;
+    std::vector<Surface*> faces;
+    sf::Image texture;
     private:
     std::vector<Vertex> vertices;
-    std::vector<Surface*> faces;
+    
     std::vector<Triangle> tris;
     std::vector<float3> normals;
     std::vector<float3> uvs;

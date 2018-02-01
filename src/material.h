@@ -9,7 +9,7 @@
 
 class Material;
 
-inline float3 sample_skybox(sf::Image &img, float u, float v)
+inline float3 sample_texture(const sf::Image &img, float u, float v)
 {
     int width = img.getSize().x;
     int height = img.getSize().y;
@@ -22,13 +22,15 @@ struct HitInfo
     float t;
     float3 normal;
     std::shared_ptr<Material> mat;
+    float3 colour;
+    float u, v;
 };
 
 class Material
 {
     public:
     virtual bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const = 0;
-    virtual float3 emitted() const { return float3(0.0, 0.0, 0.0); }
+    virtual float3 colour(){return float3();}
 };
 
 class Emissive : public Material
@@ -36,7 +38,7 @@ class Emissive : public Material
     public:
     Emissive(float3 c) : m_colour(c){}
     bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const;
-    float3 emitted() const { return m_colour; }
+    float3 colour() const { return m_colour; }
     
     private:
     float3 m_colour;
@@ -45,11 +47,11 @@ class Emissive : public Material
 class Lambertian : public Material
 {
     public:
-    Lambertian(float3 c) : m_colour(c) {}
+    Lambertian(sf::Image t):texture(t) {}
     bool scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const;
     
     private:
-    float3 m_colour;
+    sf::Image texture;
 };
 
 class Mirror : public Material

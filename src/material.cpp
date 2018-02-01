@@ -1,7 +1,5 @@
 #include "material.h"
 
-
-
 float fresnel(float ior, float ndotv) {
     float r0 = pow((1.0f - ior) / (1.0f + ior), 2);
     float x = pow(1.0f - ndotv, 5);
@@ -30,7 +28,7 @@ bool Lambertian::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_r
 {
     float3 offset = hit.normal*(1e-5);
     new_ray = Ray(ray.getHit(hit.t) + offset, cosineSampleHemi(drand48(), drand48()));
-    attenuation = m_colour;
+    attenuation = sample_texture(texture, hit.u, hit.v)/255.0;
     return true;
 }
 
@@ -62,4 +60,3 @@ bool Glass::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) c
     attenuation = m_colour;
     return true;
 }
-

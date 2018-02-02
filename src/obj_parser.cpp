@@ -2,7 +2,7 @@
 
 void load_obj(string filename, 
               vector<Vertex> &vertices, vector<float3> &vertex_ptr, vector<float3> &normals,  vector<float3> &normal_ptr,
-              vector<float3> &uvs,      vector<float3> &uv_ptr)
+              vector<UV> &uvs,      vector<float3> &uv_ptr)
 {
     std::ifstream obj;
     string line;
@@ -13,7 +13,7 @@ void load_obj(string filename,
     vector<float3> n_ptr_temp;
     vector<float3> n_temp;
     vector<float3> uv_ptr_temp;
-    vector<float3> uv_temp;
+    vector<UV> uv_temp;
     
     float3 f;
     v3<int> fi;
@@ -34,11 +34,11 @@ void load_obj(string filename,
         }
         else if (line.substr(0,3) == "vt ")
         {
-            float tx, ty;
+            UV temp;
             std::istringstream ss(line.substr(3));
-            ss >> tx >> ty;
-            float3 uv_t(tx,ty,0);
-            uv_temp.push_back(uv_t);
+            ss >> temp.x >> temp.y;
+            //float3 uv_t(tx,ty,0);
+            uv_temp.push_back(temp);
         }
         else if (line.substr(0,3) == "vn ")
         {

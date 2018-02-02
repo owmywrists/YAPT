@@ -8,7 +8,7 @@ class Mesh {
     public:
     Mesh() {}
     
-    void load(std::string filename)
+    void load(std::string filename, std::string atlas_name)
     {
         std::vector<float3> face_ptr, normal_ptr, uv_ptr;
         vertices.clear(); faces.clear(); tris.clear(); normals.clear();
@@ -19,7 +19,7 @@ class Mesh {
                  normals,  normal_ptr, 
                  uvs, uv_ptr);
         std::shared_ptr<Material> m;
-        texture.loadFromFile("../../res/tex/knuckles.png");
+        texture.loadFromFile(atlas_name);
         auto m1 = std::make_shared<Lambertian>(texture);
         auto m2 = std::make_shared<Mirror>(float3(0.9), 0.1);
         auto m3 = std::make_shared<Glass>(float3(0.9), 0.5);
@@ -46,15 +46,31 @@ class Mesh {
             vertices[f.y-1].normal = normals[n.y-1];
             vertices[f.z-1].normal = normals[n.z-1];
             
-            tris.push_back(Triangle(&vertices[f.x - 1],
-                                    &vertices[f.y - 1],
-                                    &vertices[f.z - 1],
+            tris.push_back(Triangle(&vertices[f.x - 1].pos,
+                                    &vertices[f.y - 1].pos,
+                                    &vertices[f.z - 1].pos,
+                                    
+                                    &normals[n.x-1],
+                                    &normals[n.y-1],
+                                    &normals[n.z-1],
+                                    
+                                    &uvs[uv.x-1],
+                                    &uvs[uv.y-1],
+                                    &uvs[uv.z-1],
                                     m1));
             
             faces.push_back(new 
-                            Triangle(&vertices[f.x - 1],
-                                     &vertices[f.y - 1],
-                                     &vertices[f.z - 1], 
+                            Triangle(&vertices[f.x - 1].pos,
+                                     &vertices[f.y - 1].pos,
+                                     &vertices[f.z - 1].pos,
+                                     
+                                     &normals[n.x-1],
+                                     &normals[n.y-1],
+                                     &normals[n.z-1],
+                                     
+                                     &uvs[uv.x-1],
+                                     &uvs[uv.y-1],
+                                     &uvs[uv.z-1],
                                      m1));
         }
         printf("Finished making mesh\n");
@@ -71,9 +87,9 @@ class Mesh {
             float3 normal = float3();
             for (int i = 0; i < tris.size(); i++) 
             {
-                if (tris[i].contains_vertex(&vertices[v])) {
-                    normal = normal + tris[i].getNormal();
-                }
+                //if (tris[i].contains_vertex(&vertices[v])) {
+                //normal = normal + tris[i].getNormal();
+                //}
             }
             //vertices[v].normal = unit(normal);
         }
@@ -95,6 +111,6 @@ class Mesh {
     
     std::vector<Triangle> tris;
     std::vector<float3> normals;
-    std::vector<float3> uvs;
+    std::vector<UV> uvs;
     
 };

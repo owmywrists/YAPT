@@ -43,6 +43,7 @@ class Screen
     
     char obj_to_open[64];
     char hdri_to_load[64];
+    char texture_atlas[64];
     
     private:
     float3 avg(float3 current_avg, float3 new_colour);

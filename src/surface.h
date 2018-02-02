@@ -20,6 +20,11 @@ struct Vertex
     float tx, ty;
 };
 
+struct UV
+{
+    float x,y;
+};
+
 class Sphere : public Surface
 {
     public:
@@ -54,8 +59,11 @@ class Sphere : public Surface
 class Triangle : public Surface
 {
     public:
-    Triangle(Vertex *va, Vertex *vb, Vertex *vc, std::shared_ptr<Material> mat_type): m_mat(mat_type),
-    v0(va), v1(vb), v2(vc){}
+    Triangle(float3 *pa, float3 *pb, float3 *pc,
+             float3 *na, float3 *nb, float3 *nc,
+             UV *uva, UV *uvb, UV *uvc,
+             std::shared_ptr<Material> mat_type): m_mat(mat_type),
+    p0(pa), p1(pb), p2(pc), n0(na), n1(nb), n2(nc), uv0(uva), uv1(uvb), uv2(uvc){}
     
     ~Triangle();
     bool intersection(Ray &ray, HitInfo &hit);
@@ -70,28 +78,32 @@ class Triangle : public Surface
     AABB getBoundingBox()const
     {
         return AABB(float3(
-            std::min(std::min(v0->pos.x, v1->pos.x), v2->pos.x ),
-            std::min(std::min(v0->pos.y, v1->pos.y), v2->pos.y ),
-            std::min(std::min(v0->pos.z, v1->pos.z), v2->pos.z )),
+            std::min(std::min(p0->x, p1->x), p2->x ),
+            std::min(std::min(p0->y, p1->y), p2->y ),
+            std::min(std::min(p0->z, p1->z), p2->z )),
                     float3(
-            std::max(std::max(v0->pos.x, v1->pos.x), v2->pos.x ),
-            std::max(std::max(v0->pos.y, v1->pos.y), v2->pos.y ),
-            std::max(std::max(v0->pos.z, v1->pos.z), v2->pos.z )));
+            std::max(std::max(p0->x, p1->x), p2->x ),
+            std::max(std::max(p0->y, p1->y), p2->y ),
+            std::max(std::max(p0->z, p1->z), p2->z )));
     }
     float3 getMidpoint()const
     {
-        return (v0->pos + v1->pos + v2->pos) /3.0;
+        return (*p0 + *p1 + *p2) /3.0;
     }
-    
+    /*
     bool contains_vertex(Vertex *v)
     {
-        return (v == v0) || (v == v1) || (v == v2);
+        //return (v == v0) || (v == v1) || (v == v2);
     }
+    */
     float3 getNormal()
     {
-        return unit((v1->pos - v0->pos).cross(v2->pos - v0->pos));
+        return unit((*p1 - *p0).cross(*p2 - *p0));
     }
     private:
-    Vertex *v0, *v1, *v2;
+    //Vertex *v0, *v1, *v2;
+    float3 *p0, *p1, *p2;
+    float3 *n0, *n1, *n2;
+    UV *uv0, *uv1, *uv2;
     std::shared_ptr<Material> m_mat;
 };

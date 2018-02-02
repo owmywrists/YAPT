@@ -52,6 +52,7 @@ void Screen::drawUI()
         {
             ImGui::Begin("Open obj");
             ImGui::InputText("obj to open", obj_to_open, sizeof(obj_to_open));
+            ImGui::InputText("texture atlas to open", texture_atlas, sizeof(texture_atlas));
             if(ImGui::Button("Open"))
             {
                 m_win_states.open = false;

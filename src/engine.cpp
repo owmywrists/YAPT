@@ -19,9 +19,14 @@ void Engine::restart()
     m_screen->reset();
     std::string obj_loc = "../../res/objs/";
     std::string hdri_loc = "../../res/hdris/";
+    std::string tex_loc = "../../res/tex/";
+    
     std::string obj_open = m_screen->obj_to_open;
     std::string hdri_load = m_screen->hdri_to_load;
-    mesh.load(obj_loc + obj_open);
+    std::string tex_load = m_screen->texture_atlas;
+    
+    //mesh.texture.loadFromFile(tex_loc + tex_load);
+    mesh.load(obj_loc + obj_open, tex_loc + tex_load);
     hdri.loadFromFile(hdri_loc + hdri_load);
 }
 

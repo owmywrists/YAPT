@@ -16,11 +16,11 @@ class Engine
     { 
         hdri.loadFromFile("../../res/hdris/road.jpg");
         clock.restart();
-        mesh.load("../../res/objs/dragon_normals.obj");
-        strcpy(m_screen->obj_to_open, "dragon_normals.obj");
+        strcpy(m_screen->texture_atlas, "Hamburger.png");
+        mesh.load("../../res/objs/Hamburger.obj", "../../res/tex/Hamburger.png");
+        strcpy(m_screen->obj_to_open, "Hamburger.obj");
         strcpy(m_screen->hdri_to_load, "road.jpg");
         mesh.calculate_normals();
-        
     }
     ~Engine();
     void render();

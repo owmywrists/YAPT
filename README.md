@@ -2,12 +2,19 @@
 
 Features:
 - KD Trees
-- Materials: emissive, lambertian, mirror
+- Materials: emissive, lambertian, mirror, mix
 - Interactive rendering
-- interpolated normals (vertex normals)
-- multithreading with OpenMP
+- Interpolated normals (vertex normals)
+- Multithreading with OpenMP
+- UV texture mapping
+- Fresnel reflection
+- DoF
+- OBJ parsing
+- Immediate mode GUI (Dear ImGui)
+- 
 
 Example renders:
-- Demonstrating DoF, Fresnel reflectance, interpolated vertex normals, hdri lighting, 100k triangles
+![Alt text](res/images/snow_scene.png?raw=ture "Snow scene")
+Credit to https://poly.google.com/view/cspkBmqAq8g for the model
 ![Alt text](res/images/dragon_glass.png?raw=true "Glass refraction")
 ![Alt text](res/images/dragon_reflective.png?raw=true "Fresnel reflection")

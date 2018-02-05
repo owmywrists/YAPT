@@ -99,7 +99,7 @@ inline bool operator==(const v3<T> &lhs, const v3<T> &rhs)
 }
 
 template <typename T>
-inline std::ostream &operator<<(std::ostream &os, v3<T> &rhs)
+inline std::ostream &operator<<(std::ostream &os, v3<T> rhs)
 {
     os << rhs.x << " " << rhs.y << " " << rhs.z;
     return os;

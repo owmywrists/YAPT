@@ -14,8 +14,8 @@ float3 cosineSampleHemi(float u1, float u2)
     float theta = sqrt(std::max(0.0, 1.0 - z * z));
     float x = theta * cos(phi);
     float y = theta * sin(phi);
-    
-    return float3(x, y, z);
+    float offset = drand48()/1000.0f;
+    return float3(x + offset, y, z + offset);
 }
 
 bool Emissive::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
@@ -28,7 +28,7 @@ bool Lambertian::scatter(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_r
 {
     float3 offset = hit.normal*(1e-5);
     new_ray = Ray(ray.getHit(hit.t) + offset, cosineSampleHemi(drand48(), drand48()));
-    attenuation = sample_texture(texture, hit.u, hit.v)/255.0;
+    attenuation = sample_texture(texture, hit.u, hit.v);
     return true;
 }
 

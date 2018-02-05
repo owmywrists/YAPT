@@ -4,3 +4,4 @@ c1d0e023e547eccdc9c8d13db3ff6722.png
 build/*.o
 build/release
 res/*
+!/res/images

@@ -23,7 +23,7 @@ class Mesh {
         auto m1 = std::make_shared<Lambertian>(texture);
         auto m2 = std::make_shared<Mirror>(float3(0.9), 0.1);
         auto m3 = std::make_shared<Glass>(float3(0.9), 0.5);
-        auto m4 = std::make_shared<Emissive>(float3());
+        auto m4 = std::make_shared<Emissive>(float3(1.0));
         m = std::make_shared
             <Mix>(m1, m2, 1.9f);
         
@@ -33,18 +33,6 @@ class Mesh {
             
             float3 n = normal_ptr[i];
             float3 uv = uv_ptr[i];
-            vertices[f.x-1].tx = uvs[uv.x-1].x;
-            vertices[f.x-1].ty = uvs[uv.x-1].y;
-            
-            vertices[f.y-1].tx = uvs[uv.y-1].x; 
-            vertices[f.y-1].ty = uvs[uv.y-1].y;
-            
-            vertices[f.z-1].tx = uvs[uv.z-1].x; 
-            vertices[f.z-1].ty = uvs[uv.z-1].y;
-            
-            vertices[f.x-1].normal = normals[n.x-1]; 
-            vertices[f.y-1].normal = normals[n.y-1];
-            vertices[f.z-1].normal = normals[n.z-1];
             
             tris.push_back(Triangle(&vertices[f.x - 1].pos,
                                     &vertices[f.y - 1].pos,
@@ -71,7 +59,7 @@ class Mesh {
                                      &uvs[uv.x-1],
                                      &uvs[uv.y-1],
                                      &uvs[uv.z-1],
-                                     m1));
+                                     m));
         }
         printf("Finished making mesh\n");
         root = KDNode().build(faces, 0);
@@ -99,8 +87,12 @@ class Mesh {
     bool intersect(Ray &ray, HitInfo &hit) 
     {
         return root->intersect(root, ray, hit);
-        //return KDNode().closestIntersection(ray, hit, faces);
     }
+    bool light_intersect(Ray &ray, HitInfo &hit)
+    {
+        return root->closestIntersection(ray, hit, faces);
+    }
+    
     int size()const{ return faces.size(); }
     
     KDNode *root;

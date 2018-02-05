@@ -9,6 +9,12 @@
 #include <omp.h>
 #include "mesh.h"
 
+enum ray_type
+{
+    SCATTER= 0,
+    SHADOW
+};
+
 class Engine
 {
     public:
@@ -26,11 +32,10 @@ class Engine
     void render();
     void restart();
     Mesh mesh;
-    
     private:
     Camera m_cam;
     sf::Clock clock;
-    float3 trace(Ray &ray,HitInfo &hit, int depth);
+    float3 trace(Ray &ray,HitInfo &hit, int depth, ray_type type=SCATTER);
     void loadBuffer(std::vector<float3> image);
     Screen *m_screen;
     sf::Image hdri;

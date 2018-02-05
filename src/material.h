@@ -14,7 +14,7 @@ inline float3 sample_texture(const sf::Image &img, float u, float v)
     int width = img.getSize().x;
     int height = img.getSize().y;
     sf::Color temp = img.getPixel(int(u*width) % width, int(v*height) % height);
-    return float3(temp.r, temp.g, temp.b);
+    return float3(temp.r, temp.g, temp.b)/255.0;
 }
 
 struct HitInfo

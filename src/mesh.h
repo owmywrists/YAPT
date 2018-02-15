@@ -1,8 +1,3 @@
-#pragma once
-#include "surface.h"
-#include "obj_parser.h"
-#include <SFML/Graphics.hpp>
-#include "kd_tree.h"
 
 class Mesh {
     public:
@@ -59,12 +54,17 @@ class Mesh {
                                      &uvs[uv.x-1],
                                      &uvs[uv.y-1],
                                      &uvs[uv.z-1],
-                                     m));
+                                     m1));
         }
         printf("Finished making mesh\n");
-        root = KDNode().build(faces, 0);
-        printf("Finished building kdtree");
         
+        
+    }
+    
+    void generate_kdtree()
+    {
+        root = KDNode().build(faces,0);
+        printf("Finished building kdtree");
     }
     void calculate_normals() 
     {

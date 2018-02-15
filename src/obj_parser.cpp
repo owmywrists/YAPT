@@ -67,41 +67,7 @@ void load_obj(string filename,
             n_ptr_temp.push_back(n);
         }
     }
-    /*
-    std::ofstream out;
-    
-    out.open("out.obj");
-    for (int i = 0; i < v_temp.size(); i++)
-    {
-        out <<"v " <<  v_temp[i].pos << std::endl;
-    }
-    for (int i = 0; i < uv_temp.size(); i++)
-    {
-        out << "vt " << uv_temp[i] << std::endl;
-    }
-    for (int i =0; i < n_temp.size(); i++)
-    {
-        out << "vn " << n_temp[i] << std::endl;
-    }
-    out << "s off" << std::endl;
-    printf("%d", f_ptr.size());
-    for (int i = 0; i < f_ptr.size(); i++)
-    {
-        out << "f " << 
-            f_ptr[i].x << "/" 
-            << uv_ptr_temp[i].x << "/" 
-            << n_ptr_temp[i].x << " " <<
-            f_ptr[i].y << "/" 
-            << uv_ptr_temp[i].y << "/" 
-            << n_ptr_temp[i].y << " " <<
-            f_ptr[i].z << "/" 
-            << uv_ptr_temp[i].z << "/" 
-            << n_ptr_temp[i].z
-            << std::endl;
-    }
-    out.close();
-    */
-    printf("I am done\n");
+    printf("Loaded obj\n");
     vertices = v_temp;
     vertex_ptr = f_ptr;
     normals = n_temp;

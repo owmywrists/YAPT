@@ -1,8 +1,3 @@
-#ifndef AABB_H
-#define AABB_H
-
-#include "float3.h"
-#include "ray.h"
 class AABB
 {
     public:
@@ -70,5 +65,3 @@ class AABB
     private:
     float3 max, min;
 };
-
-#endif

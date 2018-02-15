@@ -1,11 +1,5 @@
-#pragma once
 #include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
 #include <sstream>
-#include "surface.h"
-#include "float3.h"
 #include <algorithm>
 
 using std::string;

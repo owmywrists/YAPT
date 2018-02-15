@@ -38,7 +38,7 @@ template <class T> class v3
     {
         return sqrt(this->dot(*this));
     }
-    inline float sqrtLength()
+    inline float sqrd_length()
     {
         return this->dot(*this);
     }

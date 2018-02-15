@@ -7,22 +7,7 @@ Engine::~Engine() {
 
 void Engine::restart()
 {
-    float *temp_col = m_screen->getColour();
-    float3 rand_num = float3(temp_col[0], temp_col[1], temp_col[2]);
-    std::cout << rand_num << std::endl;
-    std::vector<std::shared_ptr<Material>> mats;
-    
     m_screen->reset();
-    std::string obj_loc = "../../res/objs/";
-    std::string hdri_loc = "../../res/hdris/";
-    std::string tex_loc = "../../res/tex/";
-    
-    std::string obj_open = m_screen->obj_to_open;
-    std::string hdri_load = m_screen->hdri_to_load;
-    std::string tex_load = m_screen->texture_atlas;
-    
-    mesh.load(obj_loc + obj_open, tex_loc + tex_load);
-    hdri.loadFromFile(hdri_loc + hdri_load);
 }
 
 void Engine::loadBuffer(std::vector<float3> image)
@@ -77,44 +62,61 @@ void Engine::render()
         restart();
 }
 
+float3 Engine::hdri_sky(Ray &ray)
+{
+    float3 ud = unit(ray.getDirection());
+    float t = 0.5 * (ud.y + 1.0);
+    float u_ = 0.5 + atan2(ud.z, ud.x) / (2 * M_PI);
+    float v_ = 0.5 - asin(ud.y) / M_PI;
+    
+    return(sample_texture(scene->hdri, u_, v_));
+    
+}
+
 float3 Engine::trace(Ray &ray, HitInfo &hit, int depth, ray_type type)
 {
     ray.tmin = 1e5;
-    ray_type ray_type = SCATTER;
-    if (mesh.intersect(ray, hit))
+    ray_type next_type = SCATTER;
+    HitInfo previous_hit = hit;
+    int l = rand() % scene->lights.size();
+    
+    if (scene->mesh.intersect(ray, hit))
     {
         Ray new_ray;
-        float3 contribution(0.0);
         float3 light_emitted(hit.mat->colour());
-        HitInfo temp = hit;
-        if (depth < 20 && hit.mat->scatter(ray, hit, contribution, new_ray))
+        float3 contribution(0.0f);
+        if (depth < 50 && hit.mat->scatter(ray, hit, contribution, new_ray))
         {
-            float3 sun = float3(3.0f, 5.0f, -4.0f);
-            float3 sun_dir = unit(sun);
             if (drand48() < 0.5)
             {
-                ray_type = SHADOW;
-                if (sun_dir.dot(hit.normal) < 0.0) return light_emitted;
-                new_ray= Ray(ray.getHit(hit.t) + hit.normal*(1e-5), sun_dir);
+                next_type = SHADOW;
+                Ray next_light_ray = scene->lights[l]->get_light_ray(ray.getHit(hit.t), hit.normal);
+                if (unit(next_light_ray.getDirection()).dot(hit.normal)<0.0) return light_emitted;
+                new_ray = next_light_ray;
                 
             }
-            if (type ==SHADOW)
-                contribution = contribution*0.1;
+            if(type == SHADOW)
+                contribution = previous_hit.colour;
             
-            return light_emitted + contribution * trace(new_ray, hit, depth + 1,ray_type);
+            return light_emitted + contribution * trace(new_ray, hit, depth + 1,next_type);
         }
         else
         {
             return light_emitted; 
         }
     }
-    else //must be sky
+    else
     {
-        float3 ud = unit(ray.getDirection());
-        float t = 0.5 * (ud.y + 1.0);
-        float u_ = 0.5 + atan2(ud.z, ud.x) / (2 * M_PI);
-        float v_ = 0.5 - asin(ud.y) / M_PI;
+        if (type == SCATTER){
+            return hdri_sky(ray)*2.0;
+            
+        }
+        else
+        {
+            Ray prev_light_ray = scene->lights[l]->get_light_ray(ray.getHit(previous_hit.t), previous_hit.normal);
+            
+            return scene->lights[l]->get_contribution(prev_light_ray, previous_hit)*scene->lights.size();
+        }
         
-        return(sample_texture(hdri, u_, v_));
     }
 }

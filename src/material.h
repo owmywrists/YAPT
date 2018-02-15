@@ -1,12 +1,3 @@
-#pragma once
-#include "ray.h"
-#include "float3.h"
-#include <memory>
-#include "drand.h"
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <SFML/Graphics.hpp>
-
 class Material;
 
 inline float3 sample_texture(const sf::Image &img, float u, float v)

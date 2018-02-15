@@ -1,8 +1,3 @@
-#pragma once
-#include "material.h"
-#include "aabb.h"
-#include "drand.h"
-
 class Surface
 {
     public:

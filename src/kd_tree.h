@@ -1,10 +1,3 @@
-#pragma once
-#include "surface.h"
-#include <vector>
-#include "ray.h"
-#include "material.h"
-#include "aabb.h"
-
 class KDNode{
     public:
     AABB aabb;

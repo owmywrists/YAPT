@@ -4,86 +4,6 @@ Screen::~Screen()
 {
     
 }
-void Screen::drawUI()
-{
-    ImGui::StyleColorsDark();
-    
-    if (ImGui::BeginMainMenuBar())
-    {
-        if (ImGui::BeginMenu("File"))
-        {
-            if (ImGui::MenuItem("Save"))
-            {
-                m_win_states.save= !m_win_states.save;
-            }
-            if (ImGui::MenuItem("Reset"))
-            {
-                should_reset = true;
-            }
-            if (ImGui::MenuItem("Open obj"))
-            {
-                m_win_states.open = !m_win_states.open;
-            }
-            if (ImGui::MenuItem("Load hdri"))
-            {
-                m_win_states.hdri = !m_win_states.hdri;
-            }
-            ImGui::EndMenu();
-        }
-        if (ImGui::BeginMenu("Windows"))
-        {
-            if (ImGui::MenuItem("Colour")) m_win_states.colour = !m_win_states.colour;
-            
-            ImGui::EndMenu();
-        }
-        
-        if (m_win_states.save)
-        {
-            ImGui::Begin("Save settings");
-            ImGui::InputText("filename", m_img_name, sizeof(m_img_name), ImGuiInputTextFlags_EnterReturnsTrue);
-            if (ImGui::Button("Save to file"))
-            {
-                m_img.saveToFile(m_img_name);
-                m_win_states.save = false;
-            }
-            ImGui::End();
-        }
-        if(m_win_states.open)
-        {
-            ImGui::Begin("Open obj");
-            ImGui::InputText("obj to open", obj_to_open, sizeof(obj_to_open));
-            ImGui::InputText("texture atlas to open", texture_atlas, sizeof(texture_atlas));
-            if(ImGui::Button("Open"))
-            {
-                m_win_states.open = false;
-                should_reset = true;
-            }
-            ImGui::End();
-        }
-        if(m_win_states.hdri)
-        {
-            ImGui::Begin("Load hdri");
-            ImGui::InputText("hdri to load", hdri_to_load, sizeof(hdri_to_load));
-            if(ImGui::Button("Load"))
-            {
-                m_win_states.hdri = false;
-                should_reset = true;
-            }
-            ImGui::End();
-        }
-        
-        if (m_win_states.colour)
-        {
-            ImGui::Begin("Colour");
-            if (ImGui::ColorPicker3("Test", m_color))
-            {
-                should_reset = true;
-            }
-            ImGui::End();
-        }
-    }
-    ImGui::EndMainMenuBar();
-}
 
 void Screen::reset()
 {
@@ -99,7 +19,6 @@ sf::Sprite Screen::getDrawableView()
     sprite.setTexture(m_tex, true);
     return sprite;
 }
-
 
 float3 Screen::avg(float3 current_avg, float3 new_colour)
 {

@@ -1,16 +1,16 @@
 @echo off
 
-chdir ..\build
 
+:: Change to your LLVM installation
 set "LLVMPath=C:\Program Files\LLVM"
-
+:: Change to your Visual Studio 2017 installation
 set "VSPath=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
 set "VSVersion=14.10.25017"
-
+:: Change to your Windows Kit version & installation
 set "WinSDKVersion=10.0.14393.0"
 set "WinSDKPath=C:\Program Files (x86)\Windows Kits\10"
 :: Change this to your resulting exe
-set "OUTPUT=release/yapt.exe"
+set "OUTPUT=..\build\release\yapt.exe"
 
 :: Setup
 set "VSBasePath=%VSPath%\VC\Tools\MSVC\%VSVersion%"
@@ -23,7 +23,8 @@ set CFLAGS= ^
  -I "..\lib\imgui" ^
  -I "..\lib\imgui-sfml" ^
  -fopenmp ^
- -xc -O3
+ -Wno-everything ^
+ -xc -O3 
 
 set CPPFLAGS= 
 
@@ -45,23 +46,11 @@ set LDLIBS= ^
 	sfml-main.lib sfml-graphics.lib sfml-graphics-s.lib opengl32.lib ^
 	sfml-window.lib sfml-system.lib sfml-window-s.lib sfml-system-s.lib jpeg.lib vorbis.lib vorbisfile.lib
 
-
-:: Compiling
+@set "b=..\build\"
+@echo Compiling...
 @echo on
-@for %%f in (..\src\*.cpp) do (
-    clang++.exe "%%~f" -o "%%~nf.o" -c %CFLAGS%
-)
-
-set "files=main.o imgui-SFML.o imgui_draw.o imgui_demo.o imgui.o window.o surface.o screen.o obj_parser.o mesh.o material.o kd_tree.o hitlist.o engine.o camera.o"
-:: Linking
-@set "LINK_FILES="
-@for %%f in (*.o) do (
-    @set "LINK_FILES=%LINK_FILES% %%f"
-)
-
-lld-link.exe %files% -out:"%OUTPUT%" %LDFLAGS% %LDLIBS%
-
-chdir release
-yapt.exe
-
-PAUSE
+@clang++.exe main.cpp -o ..\build\main.o -c %CFLAGS%
+@echo %GREEN%Compiling finished at %time%
+@set "files=%b%main.o %b%imgui-SFML.o %b%imgui_draw.o %b%imgui_demo.o %b%imgui.o %b%yapt.res"
+@lld-link.exe %files% -out:"%OUTPUT%" %LDFLAGS% %LDLIBS%
+@cloc ..\src

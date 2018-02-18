@@ -49,8 +49,8 @@ set LDLIBS= ^
 @set "b=..\build\"
 @echo Compiling...
 @echo on
-@clang++.exe main.cpp -o ..\build\main.o -c %CFLAGS%
-@echo %GREEN%Compiling finished at %time%
-@set "files=%b%main.o %b%imgui-SFML.o %b%imgui_draw.o %b%imgui_demo.o %b%imgui.o %b%yapt.res"
+@clang++.exe yapt.cpp -o ..\build\yapt.o -c %CFLAGS%
+@echo %GREEN%Compiling finished
+@set "files=%b%yapt.o %b%imgui-SFML.o %b%imgui_draw.o %b%imgui_demo.o %b%imgui.o %b%yapt.res"
 @lld-link.exe %files% -out:"%OUTPUT%" %LDFLAGS% %LDLIBS%
 @cloc ..\src

@@ -13,53 +13,55 @@ void Engine::restart()
 void Engine::loadBuffer(std::vector<float3> image)
 {
 #pragma omp parallel for
-    for (int x = 0; x < m_screen->getWidth(); x++)
+    for (int x = 0; x < m_screen->width; x++)
     {
-        for (int y = 0; y < m_screen->getHeight(); y++)
+        for (int y = 0; y < m_screen->height; y++)
         {
-            float3 col = image[x + m_screen->getWidth() * y];
-            m_screen->setPixel(x, (m_screen->getHeight() - y), col);
+            float3 col = image[x + m_screen->width * y];
+            m_screen->setPixel(x, (m_screen->height - y), col);
         }
     }
 }
 void Engine::render()
 {
     HitInfo hit;
-    std::vector<float3> temp_img;
-    temp_img.resize(m_screen->getWidth() * m_screen->getHeight());
+    float3* temp_img = new float3[m_screen->width*m_screen->height];
     sf::Time start(clock.getElapsedTime());
     
     Ray persp, ortho;
     float3 colour = float3();
     float u, v;
-    const int tile_size = 80;
+    const int tile_size = 24;
 #pragma omp parallel for schedule(dynamic, 1) private(hit, persp, ortho, colour, u, v) collapse(2)
-    for (int tx = 0; tx < m_screen->getWidth() / tile_size; tx++) 
+    
+    for (int ty = m_screen->height/tile_size-1; ty >= 0; ty--)
     {
-        for (int ty = 0; ty < m_screen->getHeight() / tile_size; ty++)
+        for (int tx = 0; tx < m_screen->width / tile_size; tx++) 
         {
+            
+            m_screen->begin_tile(tx*tile_size, ty*tile_size, tile_size);
             for (int x = 0; x < tile_size; x++)
             {
                 for (int y = 0; y < tile_size; y++)
                 {
                     ortho = Ray(float3(x, y, 0), float3(0, 0, -1));
                     colour = float3(0.0, 0.0, 0.0);
-                    u = float(x + tx*tile_size + drand48()) / m_screen->getWidth();
-                    v = float(y + ty*tile_size + drand48()) / m_screen->getHeight();
-                    persp = m_cam.getRay(u, v);
+                    u = float(x + tx*tile_size + drand48()) / m_screen->width;
+                    v = float(y + ty*tile_size + drand48()) / m_screen->height;
+                    persp = m_cam.primary_ray(u, v);
                     colour = trace(persp, hit, 0);
                     
-                    temp_img[x + tx*tile_size + (ty*tile_size + y) * m_screen->getWidth()] = colour;
+                    temp_img[x + tx*tile_size + (ty*tile_size + y) * m_screen->width] = colour;
                 }
             }
+            m_screen->set_tile(tx*tile_size, ty*tile_size,tile_size, temp_img);
         }
     }
     sf::Time end = clock.getElapsedTime();
     std::cout << "sample " << m_screen->sample << " took: " << (end - start).asSeconds() << " seconds" << std::endl;
-    m_screen->loadImage(temp_img);
+    delete temp_img;
     m_screen->sample++;
-    if (m_screen->getState())
-        restart();
+    if (m_screen->should_reset) restart();
 }
 
 float3 Engine::hdri_sky(Ray &ray)

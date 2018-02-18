@@ -11,23 +11,23 @@ class Camera
         float aspect = float (width)/ float(height);
         float half_width = aspect * half_height;
         origin = pos;
-        w = unit(pos - lookat);
-        u = unit(up.cross(w));
-        v = w.cross(u);
-        l_l_c = origin - u*half_width * focal_length - v*half_height * focal_length - w*focal_length;
+        eye= unit(pos - lookat);
+        u = unit(up.cross(eye));
+        v = eye.cross(u);
+        bl= origin - u*half_width * focal_length - v*half_height * focal_length - eye*focal_length;
         horizontal = u*2 * half_width*focal_length;
         vertical = v*2 * half_height*focal_length;
         
     };
     
-    Ray getRay(float x, float y);
+    Ray primary_ray(float x, float y);
     
     private:
-    float3 l_l_c;
+    float3 bl;
     float3 horizontal;
     float3 origin;
     float3 vertical;
-    float3 u, v, w;
+    float3 u, v, eye;
     float m_aperture;
     
     int m_width;

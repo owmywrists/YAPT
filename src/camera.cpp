@@ -8,9 +8,9 @@ float3 random_in_unit_disk() {
     return p;
 }
 
-Ray Camera::getRay(float x, float y)
+Ray Camera::primary_ray(float x, float y)
 {
     float3 rd = random_in_unit_disk()*m_aperture;
     float3 offset = u * rd.x + v * rd.y;
-    return Ray(origin + offset, l_l_c + horizontal*x + vertical*y - origin - offset);
+    return Ray(origin + offset, bl + horizontal*x + vertical*y - origin - offset);
 }

@@ -20,7 +20,7 @@ class Mesh {
         auto m3 = std::make_shared<Glass>(float3(0.9), 0.5);
         auto m4 = std::make_shared<Emissive>(float3(1.0));
         m = std::make_shared
-            <Mix>(m1, m2, 1.9f);
+            <Mix>(m1, m2, 1.2f);
         
         for (int i = 0; i < face_ptr.size(); i++)
         {

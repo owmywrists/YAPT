@@ -2,7 +2,7 @@ class Light
 {
     public:
     virtual Ray get_light_ray(float3 hitpos, float3 normal)const = 0;
-    virtual float3 get_contribution(Ray &ray, HitInfo &hit)const = 0;
+    virtual float3 get_contribution(Ray &ray, HitInfo &hit) = 0;
     virtual void update(float3 p){};
 };
 
@@ -17,12 +17,14 @@ class Directional : public Light
         float3 sample = float3(drand48(), drand48(), drand48());
         return Ray(hitpos + normal*(1e-5), unit(m_direction + sample*m_size));
     }
-    float3 get_contribution(Ray &ray, HitInfo &hit)const
+    float3 get_contribution(Ray &ray, HitInfo &hit)
     {
-        float length = ray.getDirection().length()*hit.normal.length();
-        float costheta = fabs(ray.getDirection().dot(hit.normal))/length;
+        
+        float length =  m_direction.length()*hit.normal.length();
+        float costheta = fabs(m_direction.dot(hit.normal))/length;
         return m_colour*m_power*costheta;
     }
+    void update(float3 p){ m_direction = p;}
     private:
     float3 m_colour;
     float m_power, m_size;
@@ -37,18 +39,17 @@ class Point : public Light
     Ray get_light_ray(float3 hitpos, float3 normal)const
     {
         float3 sample = float3(drand48(), drand48(), drand48());
-        return Ray(hitpos + normal*(1e-5), unit(pos- hitpos + sample*m_size));
+        return Ray(hitpos + normal*(1e-5), unit(pos-hitpos + sample*m_size));
     }
-    
-    float3 get_contribution(Ray &ray, HitInfo &hit)const
+    float3 get_contribution(Ray &ray, HitInfo &hit)
     {
-        float3 hit_loc = ray.getHit(hit.t);
+        float3 hit_loc = ray.getOrigin();
         float dist2 = (pos - hit_loc).sqrd_length();
-        float length = ray.getDirection().length()*hit.normal.length();
-        float costheta = fabs(ray.getDirection().dot(hit.normal));
-        float invr2 = 1.0/(dist2);
-        
-        return unit(m_colour*invr2)*costheta*m_power;
+        float illuminance = m_power/(dist2*4*M_PI);
+        float length = (pos-hit_loc).length()*hit.normal.length();
+        float costheta = (pos-hit_loc).dot(hit.normal);
+        float3 col = m_colour*illuminance*costheta; 
+        return float3(fmin(col.x, 1.0), fmin(col.y,1.0), fmin(col.z, 1.0));
     }
     void update(float3 p)
     {

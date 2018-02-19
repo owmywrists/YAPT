@@ -2,18 +2,18 @@
 
 Window::~Window()
 {
-    delete m_win;
+    delete sf_win;
     delete m_screen;
 }
 
 void Window::init()
 {
-    m_win = new sf::RenderWindow(sf::VideoMode(m_prop.width, m_prop.height), m_prop.title);
-    ImGui::SFML::Init(*m_win);
+    sf_win = new sf::RenderWindow(sf::VideoMode(m_prop.width, m_prop.height), m_prop.title);
+    ImGui::SFML::Init(*sf_win);
     sf::Image icon;
     icon.loadFromFile("../../res/icon/yapt.jpg");
     
-    m_win->setIcon(1024, 1024, icon.getPixelsPtr());
+    sf_win->setIcon(1024, 1024, icon.getPixelsPtr());
     
     m_screen = new Screen(m_prop.width, m_prop.height);
     m_delta_clock.restart();
@@ -23,23 +23,22 @@ void Window::pollEvents()
 {
     sf::Event event;
     
-    while (m_win->pollEvent(event))
+    while (sf_win->pollEvent(event))
     {
         ImGui::SFML::ProcessEvent(event);
         if (event.type == sf::Event::Closed)
         {
-            m_win->close();
+            sf_win->close();
         }
     }
 }
 
 void Window::update()
 {
-    ImGui::SFML::Update(*m_win, m_delta_clock.restart());
-    //gui->update();
-    m_win->clear();
+    ImGui::SFML::Update(*sf_win, m_delta_clock.restart());
+    sf_win->clear();
     m_drawableView = m_screen->getDrawableView();
-    m_win->draw(m_drawableView);
-    ImGui::SFML::Render(*m_win);
-    m_win->display();
+    sf_win->draw(m_drawableView);
+    ImGui::SFML::Render(*sf_win);
+    sf_win->display();
 }

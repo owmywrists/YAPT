@@ -31,7 +31,7 @@ void Engine::render()
     Ray persp, ortho;
     float3 colour = float3();
     float u, v;
-    const int tile_size = 24;
+    const int tile_size = 20;
 #pragma omp parallel for schedule(dynamic, 1) private(hit, persp, ortho, colour, u, v) collapse(2)
     
     for (int ty = m_screen->height/tile_size-1; ty >= 0; ty--)
@@ -48,9 +48,8 @@ void Engine::render()
                     colour = float3(0.0, 0.0, 0.0);
                     u = float(x + tx*tile_size + drand48()) / m_screen->width;
                     v = float(y + ty*tile_size + drand48()) / m_screen->height;
-                    persp = m_cam.primary_ray(u, v);
+                    persp = m_cam->primary_ray(u, v);
                     colour = trace(persp, hit, 0);
-                    
                     temp_img[x + tx*tile_size + (ty*tile_size + y) * m_screen->width] = colour;
                 }
             }
@@ -110,14 +109,12 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth, ray_type type)
     else
     {
         if (type == SCATTER){
-            return hdri_sky(ray)*2.0;
-            
+            //return hdri_sky(ray)*2.0;
+            return float3();
         }
         else
         {
-            Ray prev_light_ray = scene->lights[l]->get_light_ray(ray.getHit(previous_hit.t), previous_hit.normal);
-            
-            return scene->lights[l]->get_contribution(prev_light_ray, previous_hit)*scene->lights.size();
+            return scene->lights[l]->get_contribution(ray, previous_hit)*scene->lights.size();
         }
         
     }

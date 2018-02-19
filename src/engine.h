@@ -8,7 +8,7 @@ enum ray_type
 class Engine
 {
     public:
-    Engine(Camera cam, Screen *screen,Scene* s) : m_cam(cam), m_screen(screen),
+    Engine(Camera *cam, Screen *screen,Scene* s) : m_cam(cam), m_screen(screen),
     scene(s)
     { 
         clock.restart();
@@ -18,7 +18,7 @@ class Engine
     void restart();
     Scene* scene;
     private:
-    Camera m_cam;
+    Camera* m_cam;
     sf::Clock clock;
     float3 trace(Ray &ray,HitInfo &hit, int depth, ray_type type=SCATTER);
     float3 hdri_sky(Ray &ray);

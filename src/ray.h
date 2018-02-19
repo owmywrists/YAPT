@@ -15,4 +15,3 @@ class Ray
     private:
     float3 m_origin, m_direction;
 };
-//could probably just make this a struct

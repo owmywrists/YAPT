@@ -12,7 +12,7 @@ KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth)
     if (surfaces.size() == 0)
         return node;
     
-    if (depth > 25 || surfaces.size() <= 6)
+    if (depth > 25 || surfaces.size() <= 10)
     {
         node->surface = surfaces;
         node->leaf = true;
@@ -30,7 +30,7 @@ KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth)
     node->aabb = surfaces[0]->getBoundingBox();
     float3 midpoint = float3();
     float s_rec = 1.0/float(surfaces.size());
-    for (int i = 1; i < surfaces.size(); i++)
+    for (int i =1;  i < surfaces.size(); i++)
     {
         node->aabb.expand(surfaces[i]->getBoundingBox());
         midpoint = midpoint + (surfaces[i]->getMidpoint() * s_rec);

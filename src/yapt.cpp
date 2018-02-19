@@ -38,15 +38,20 @@ void render_thread(Engine *engine, Window *win)
 int main(int argc, char* argv[])
 {
     Scene* scene = new Scene();
-    Window *win = new Window("YAPT", 1280, 720);
-    Camera cam(1280, 720, float3(0, 0, 6.7), float3(0, 0, -1.0), float3(0, 1.0, 0), 0.0f, 9.f, 50.0f);
+    Window *win = new Window("YAPT", 900, 900);
+    Camera *cam= new Camera(900, 900, float3(2.5, 2.7, 2.5), float3(-0.0, 0.8, -0.0), float3(0, 1.0, 0), 0.0f, 3.5f, 50.0f);
     Engine engine(cam, win->getScreenPtr(), scene);
     
     std::thread t(render_thread, &engine, win);
-    
+    sf::Clock c;
+    c.restart();
+    sf::Time time;
     while (win->sf_win->isOpen())
     {
         win->update();
+        sf::Time time = c.getElapsedTime();
+        //cam->origin = cam->origin + float3(sin(time.asSeconds()),0.0,0.0);
+        //scene->lights[0]->update(float3(0.0f, time.asSeconds()*5.0,0.0));
         win->pollEvents();
     }
     t.join();

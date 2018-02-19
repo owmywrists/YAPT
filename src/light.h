@@ -48,8 +48,9 @@ class Point : public Light
         float illuminance = m_power/(dist2*4*M_PI);
         float length = (pos-hit_loc).length()*hit.normal.length();
         float costheta = (pos-hit_loc).dot(hit.normal);
+        costheta = costheta < 0.0 ? 0.0 : costheta;
         float3 col = m_colour*illuminance*costheta; 
-        return float3(fmin(col.x, 1.0), fmin(col.y,1.0), fmin(col.z, 1.0));
+        return float3(fmin(col.x, 100.0), fmin(col.y,100.0), fmin(col.z, 100.0));
     }
     void update(float3 p)
     {

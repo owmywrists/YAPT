@@ -72,9 +72,9 @@ void Screen::begin_tile(int start_x, int start_y, int tile_size)
 sf::Color Screen::transform(float3 pixel)
 {
     
-    sf::Color colour = sf::Color(powf(std::min(pixel.x, 1.0f), 1/2.2)*255.0,
-                                 powf(std::min(pixel.y, 1.0f), 1/2.2)*255.0,
-                                 powf(std::min(pixel.z, 1.0f), 1/2.2)*255.0);
+    sf::Color colour = sf::Color(powf(std::min(pixel.x, 1.0f), 1./2.2)*255.0,
+                                 powf(std::min(pixel.y, 1.0f), 1./2.2)*255.0,
+                                 powf(std::min(pixel.z, 1.0f), 1./2.2)*255.0);
     return colour;
 }
 

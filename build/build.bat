@@ -50,7 +50,7 @@ set LDLIBS= ^
 @echo on
 @clang++.exe ..\src\main.cpp -o main.o -c %CFLAGS%
 @echo %GREEN%Compiling finished
-@set "files=main.o imgui-SFML.o imgui_draw.o imgui_demo.o imgui.o yapt.res"
+@set "files=main.o yapt.res"
 
 @lld-link.exe %files% -out:"%OUTPUT%" %LDFLAGS% %LDLIBS%
 

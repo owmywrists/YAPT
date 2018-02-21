@@ -36,8 +36,7 @@ class Sphere : public Surface
     }
     AABB getBoundingBox()const
     {
-        return AABB(m_location - float3(m_radius, m_radius, m_radius), m_location +
-                    float3(m_radius, m_radius, m_radius));
+        return AABB(m_location - m_radius, m_location +m_radius);
     }
     std::shared_ptr<Material> getMatPtr() { return m_mat; }
     float3 getMidpoint()const
@@ -85,12 +84,7 @@ class Triangle : public Surface
     {
         return (*p0 + *p1 + *p2) /3.0;
     }
-    /*
-    bool contains_vertex(Vertex *v)
-    {
-        //return (v == v0) || (v == v1) || (v == v2);
-    }
-    */
+    
     float3 getNormal()
     {
         return unit((*p1 - *p0).cross(*p2 - *p0));

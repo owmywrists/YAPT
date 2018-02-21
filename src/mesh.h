@@ -18,7 +18,7 @@ class Mesh {
         auto m1 = std::make_shared<Lambertian>(texture);
         auto m2 = std::make_shared<Mirror>(float3(0.9), 0.1);
         auto m3 = std::make_shared<Glass>(float3(0.9), 0.5);
-        auto m4 = std::make_shared<Emissive>(float3(1.0));
+        auto m4 = std::make_shared<Emissive>(float3(1.2));
         m = std::make_shared
             <Mix>(m1, m2, 1.2f);
         
@@ -55,7 +55,9 @@ class Mesh {
                                      &uvs[uv.y-1],
                                      &uvs[uv.z-1],
                                      m1));
+            
         }
+        //faces.push_back(new Sphere(float3(2.0, 3.0, 0.0), 0.5, m4));
         printf("Finished making mesh\n");
         
         

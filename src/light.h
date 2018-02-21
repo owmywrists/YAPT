@@ -21,7 +21,7 @@ class Directional : public Light
     {
         
         float length =  m_direction.length()*hit.normal.length();
-        float costheta = fabs(m_direction.dot(hit.normal))/length;
+        float costheta = fmax(m_direction.dot(hit.normal)/length, 0.1);
         return m_colour*m_power*costheta;
     }
     void update(float3 p){ m_direction = p;}
@@ -47,10 +47,10 @@ class Point : public Light
         float dist2 = (pos - hit_loc).sqrd_length();
         float illuminance = m_power/(dist2*4*M_PI);
         float length = (pos-hit_loc).length()*hit.normal.length();
-        float costheta = (pos-hit_loc).dot(hit.normal);
-        costheta = costheta < 0.0 ? 0.0 : costheta;
+        float costheta = (pos-hit_loc).dot(hit.normal)/length;
+        costheta = fmax(costheta, 0.0);
         float3 col = m_colour*illuminance*costheta; 
-        return float3(fmin(col.x, 100.0), fmin(col.y,100.0), fmin(col.z, 100.0));
+        return float3(fmax(col.x, 0.0), fmax(col.y,0.0), fmax(col.z, 0.0));
     }
     void update(float3 p)
     {

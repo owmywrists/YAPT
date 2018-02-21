@@ -31,7 +31,6 @@ void Engine::render()
     Ray persp, ortho;
     float3 colour = float3();
     float u, v;
-    const int tile_size = 20;
 #pragma omp parallel for schedule(dynamic, 1) private(hit, persp, ortho, colour, u, v) collapse(2)
     
     for (int ty = m_screen->height/tile_size-1; ty >= 0; ty--)
@@ -74,48 +73,40 @@ float3 Engine::hdri_sky(Ray &ray)
     
 }
 
-float3 Engine::trace(Ray &ray, HitInfo &hit, int depth, ray_type type)
+float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
 {
     ray.tmin = 1e5;
     ray_type next_type = SCATTER;
     HitInfo previous_hit = hit;
     int l = rand() % scene->lights.size();
-    
+    Ray next_light_ray;
     if (scene->mesh.intersect(ray, hit))
     {
         Ray new_ray;
         float3 light_emitted(hit.mat->colour());
-        float3 contribution(0.0f);
-        if (depth < 50 && hit.mat->scatter(ray, hit, contribution, new_ray))
+        float3 colour(0.0f);
+        if (depth < 50 && hit.mat->BSDF(ray, hit, colour, new_ray))
         {
-            if (drand48() < 0.5)
+            if (drand48() < 0.5) //magic number is probability of ray type 
             {
                 next_type = SHADOW;
-                Ray next_light_ray = scene->lights[l]->get_light_ray(ray.getHit(hit.t), hit.normal);
+                next_light_ray = scene->lights[l]->get_light_ray(ray.getHit(hit.t), hit.normal);
                 if (unit(next_light_ray.getDirection()).dot(hit.normal)<0.0) return light_emitted;
                 new_ray = next_light_ray;
-                
             }
-            if(type == SHADOW)
-                contribution = previous_hit.colour;
-            
-            return light_emitted + contribution * trace(new_ray, hit, depth + 1,next_type);
+            if (ray.type == SHADOW) colour = previous_hit.colour;
+            new_ray.type = next_type;
+            return light_emitted + colour*trace(new_ray, hit, depth + 1);
         }
         else
-        {
             return light_emitted; 
-        }
+        
     }
     else
     {
-        if (type == SCATTER){
-            //return hdri_sky(ray)*2.0;
-            return float3();
-        }
+        if(ray.type == SHADOW) return scene->lights[l]->get_contribution(ray, previous_hit);
         else
-        {
-            return scene->lights[l]->get_contribution(ray, previous_hit)*scene->lights.size();
-        }
-        
+            return float3();
     }
+    
 }

@@ -20,6 +20,7 @@ template <class T> class v3
     {
         //assert(!HasNans());
     }
+    v3(cpptoml::option<std::vector<double>> arr):x((*arr)[0]),y((*arr)[1]),z((*arr)[2]){}
     
     bool HasNans() const {
         return std::isnan(x) || std::isnan(y) || std::isnan(z);

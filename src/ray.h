@@ -1,3 +1,8 @@
+enum ray_type
+{
+    SCATTER,
+    SHADOW
+};
 
 class Ray
 {
@@ -12,6 +17,7 @@ class Ray
     float3 getDirection() { return m_direction; }
     
     mutable float tmin, tmax; //if i pass const to function, i can still edit these values
+    ray_type type;
     private:
     float3 m_origin, m_direction;
 };

@@ -43,7 +43,7 @@ class Point : public Light
     }
     float3 get_contribution(Ray &ray, HitInfo &hit)
     {
-        float3 hit_loc = ray.getOrigin();
+        float3 hit_loc = ray.origin;
         float dist2 = (pos - hit_loc).sqrd_length();
         float illuminance = m_power/(dist2*4*M_PI);
         float length = (pos-hit_loc).length()*hit.normal.length();

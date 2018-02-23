@@ -4,12 +4,15 @@
 #include <thread>
 #include <stdio.h>
 #include <SFML\Graphics.hpp>
-#include "../lib/imgui/imgui.h"
-#include "../imgui-sfml/imgui-SFML.h"
 #include "../lib/toml/cpptoml.h"
 #include <string>
 #include <memory>
 #include <omp.h>
+#include <fstream>
+#include <sstream>
+#include <algorithm>
+#define NDEBUG
+#include <assert.h>
 #include <stdlib.h>
 #include "float3.h"
 #include "drand.h"
@@ -35,10 +38,14 @@ void render_thread(Engine *engine, Window *win)
     }
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char** args)
 {
+    SceneSettings scene_settings;
+    
     auto config = cpptoml::parse_file("../../scene/scene.toml");
-    auto file = config->get_qualified_as<std::string>("mesh.file");
+    scene_settings.filename = config->get_qualified_as<std::string>("mesh.file").value_or("teapot.obj");
+    scene_settings.texture = config->get_qualified_as<std::string>("mesh.texture").value_or("error.png");
+    scene_settings.hdri = config->get_qualified_as<std::string>("scene.hdri").value_or("error.png");
     
     auto camera = config->get_table("camera");
     auto cam_pos = camera->get_array_of<double>("position");
@@ -48,10 +55,22 @@ int main(int argc, char* argv[])
     auto lights = config->get_table("lights");
     
     
-    Scene* scene = new Scene(file.value_or("mountain.obj"));
-    Window *win = new Window("YAPT", (*dimensions)[0], (*dimensions)[1]);
-    Camera *cam= new Camera((*dimensions)[0],(*dimensions)[1], float3(cam_pos), float3(cam_look), float3(0, 1.0, 0), 0.0f, 3.5f, *cam_fov);
-    Engine engine(cam, win->getScreenPtr(), scene);
+    Scene* scene = new Scene(scene_settings);
+    
+    Window *win = new Window("YAPT", 
+                             (*dimensions)[0], 
+                             (*dimensions)[1]);
+    
+    Camera *cam= new Camera((*dimensions)[0],
+                            (*dimensions)[1], 
+                            float3(cam_pos), 
+                            float3(cam_look), 
+                            float3(0, 1.0, 0), 
+                            0.0f, 
+                            3.5f, 
+                            *cam_fov);
+    
+    Engine engine(cam, win->screen, scene);
     engine.tile_size = *(camera->get_as<int64_t>("tile_size"));
     std::thread t(render_thread, &engine, win);
     sf::Clock c;
@@ -61,9 +80,8 @@ int main(int argc, char* argv[])
     {
         win->update();
         sf::Time time = c.getElapsedTime();
-        win->pollEvents();
+        win->poll_events();
     }
     t.join();
-    ImGui::SFML::Shutdown();
     return 0;
 }

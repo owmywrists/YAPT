@@ -3,10 +3,10 @@
 void Screen::reset()
 {
     sample = 1;
-    should_reset = false;
+    should_reset = should_save = false;
 }
 
-sf::Sprite Screen::getDrawableView()
+sf::Sprite Screen::get_drawable_view()
 {
     m_tex.loadFromImage(m_img);
     sf::Sprite sprite;
@@ -22,6 +22,7 @@ float3 Screen::avg(float3 current_avg, float3 new_colour)
 
 void Screen::loadImage(float3* img)
 {
+    
     sf::Image temp;
     temp.create(width, height, sf::Color::Black);
     
@@ -39,19 +40,26 @@ void Screen::loadImage(float3* img)
     m_img = temp;
 }
 
-
+void Screen::save_frame(float3* img, std::string filename)
+{
+    sf::Image temp;
+    temp.create(width, height, sf::Color::Black);
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            temp.setPixel(x,y,transform(m_pixelBuffer[y+x*width]));
+        }
+    }
+    temp.flipVertically();
+    temp.saveToFile(filename+".png");
+    should_save = false;
+}
 void Screen::set_tile(int start_x, int start_y, int tile_size, float3* pixels)
 {
-    
     for (int x = 0; x < tile_size; x++)
-    {
         for (int y = 0; y < tile_size; y++)
-        {
-            setPixel(start_x + x,start_y + y, pixels[ x + start_x + (y + start_y)*width]);
-        }
-        
-    }
-    
+        setPixel(start_x + x,start_y + y, pixels[ x + start_x + (y + start_y)*width]);
 }
 
 void Screen::begin_tile(int start_x, int start_y, int tile_size)
@@ -71,7 +79,6 @@ void Screen::begin_tile(int start_x, int start_y, int tile_size)
 
 sf::Color Screen::transform(float3 pixel)
 {
-    
     sf::Color colour = sf::Color(powf(std::min(pixel.x, 1.0f), 1./2.2)*255.0,
                                  powf(std::min(pixel.y, 1.0f), 1./2.2)*255.0,
                                  powf(std::min(pixel.z, 1.0f), 1./2.2)*255.0);

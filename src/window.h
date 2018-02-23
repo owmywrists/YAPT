@@ -13,15 +13,13 @@ class Window
         init();
     };
     ~Window();
-    Screen *getScreenPtr() { return m_screen; }
     void update();
-    void pollEvents();
+    void poll_events();
     sf::RenderWindow *sf_win;
-    
+    Screen *screen;
     private:
     windowProperties m_prop;
-    Screen *m_screen;
-    sf::Sprite m_drawableView;
+    sf::Sprite m_drawable_view;
     sf::Clock m_delta_clock;
     private:
     void init();

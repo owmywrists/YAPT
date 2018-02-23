@@ -3,42 +3,42 @@
 Window::~Window()
 {
     delete sf_win;
-    delete m_screen;
+    delete screen;
 }
 
 void Window::init()
 {
     sf_win = new sf::RenderWindow(sf::VideoMode(m_prop.width, m_prop.height), m_prop.title);
-    ImGui::SFML::Init(*sf_win);
     sf::Image icon;
     icon.loadFromFile("../../res/icon/yapt.jpg");
     
     sf_win->setIcon(1024, 1024, icon.getPixelsPtr());
     
-    m_screen = new Screen(m_prop.width, m_prop.height);
+    screen = new Screen(m_prop.width, m_prop.height);
     m_delta_clock.restart();
 }
 
-void Window::pollEvents()
+void Window::poll_events()
 {
     sf::Event event;
     
     while (sf_win->pollEvent(event))
     {
-        ImGui::SFML::ProcessEvent(event);
         if (event.type == sf::Event::Closed)
         {
             sf_win->close();
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        {
+            screen->should_save = true;
         }
     }
 }
 
 void Window::update()
 {
-    ImGui::SFML::Update(*sf_win, m_delta_clock.restart());
     sf_win->clear();
-    m_drawableView = m_screen->getDrawableView();
-    sf_win->draw(m_drawableView);
-    ImGui::SFML::Render(*sf_win);
+    m_drawable_view = screen->get_drawable_view();
+    sf_win->draw(m_drawable_view);
     sf_win->display();
 }

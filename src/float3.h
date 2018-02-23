@@ -25,6 +25,7 @@ template <class T> class v3
     bool HasNans() const {
         return std::isnan(x) || std::isnan(y) || std::isnan(z);
     }
+    
     inline float dot(v3<T> rhs)
     {
         return this->x * rhs.x + this->y * rhs.y + this->z * rhs.z;
@@ -117,3 +118,13 @@ template <typename T> inline v3<T> unit(v3<T> v) {
 }
 typedef v3<float> v3f;
 typedef v3<float> float3;
+
+
+inline float3 maxf3(float3 lhs, float max)
+{
+    return float3(fmax(lhs.x,max), fmax(lhs.y,max), fmax(lhs.z,max));
+}
+inline float3 minf3(float3 lhs, float min)
+{
+    return float3(fmin(lhs.x, min), fmin(lhs.y, min), fmin(lhs.z, min));
+}

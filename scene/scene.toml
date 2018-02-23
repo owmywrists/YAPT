@@ -1,9 +1,12 @@
 title = "world"
 
+[scene]
+hdri = "road.jpg"
+
 [mesh]
-file = "teapot.obj"
+file = "cornell.obj"
 material = "diffuse"
-texture = "grey.png"
+texture = "cornell.png"
 
 [lights]
 position = [5.0, 0.0, 6.0]
@@ -11,8 +14,8 @@ colour = [1.0, 0.0, 0.0]
 type = "directional"
 
 [camera]
-position = [1.5, 2.7, 2.8]
-lookat = [0.0, 0.9, 0.0]
+position = [0.0, 1.2, 2.3]
+lookat = [0.0, 1.2, 0.0]
 fov = 50.0
-dimensions = [1280, 720]
+dimensions = [720, 720]
 tile_size = 16 #must be a factor of the dimensions

@@ -1,15 +1,23 @@
-
+struct SceneSettings
+{
+    std::string filename;
+    std::string texture;
+    std::string hdri;
+    std::string material;
+};
 class Scene{
     public:
-    Scene(std::string filename)
+    Scene(SceneSettings settings)
     {
-        mesh.load("../../res/objs/"+ filename,
-                  "../../res/tex/grey.png");
+        info = settings;
+        mesh.load("../../res/objs/"+ settings.filename,
+                  "../../res/tex/" + settings.texture);
         mesh.generate_kdtree();
-        hdri.loadFromFile("../../res/hdris/road.jpg");
-        lights.push_back(new Point(float3(2.0f, 3.0f, 0.0f), float3(1.0f, 1.0f, 1.0f), 30.0f, 0.1f));
+        hdri.loadFromFile("../../res/hdris/"+settings.hdri);
+        lights.push_back(new Point(float3(0.0f, 2.3f, 0.0f), float3(1.0f, 0.4f, 0.15f), 100.0f, 1.0f));
     }
     Mesh mesh;
+    SceneSettings info;
     std::vector<Light*> lights;
     sf::Image hdri;
 };

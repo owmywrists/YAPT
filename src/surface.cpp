@@ -2,9 +2,9 @@
 
 bool Sphere::intersection(Ray &ray, HitInfo &hit)
 {
-    float3 oc = ray.getOrigin() - m_location;
-    float a = ray.getDirection().dot(ray.getDirection());
-    float b = oc.dot(ray.getDirection());
+    float3 oc = ray.origin - m_location;
+    float a = ray.direction.dot(ray.direction);
+    float b = oc.dot(ray.direction);
     float c = oc.dot(oc) - m_radius * m_radius;
     float disc = b * b - a * c;
     if (disc <= 0.0)
@@ -36,17 +36,17 @@ bool Triangle::intersection(Ray &ray, HitInfo &hit)
     float3 edge1 = *p1 - *p0;
     float3 edge2 = *p2 - *p0;
     
-    float3 h = ray.getDirection().cross(edge2);
+    float3 h = ray.direction.cross(edge2);
     float a = edge1.dot(h);
     
     float f = 1.0 / a;
-    float3 s = ray.getOrigin() - *p0;
+    float3 s = ray.origin - *p0;
     float u = f * (s.dot(h));
     
     if (u < 0.0 || u > 1.0) return false;
     
     float3 q = s.cross(edge1);
-    float v = f * ray.getDirection().dot(q);
+    float v = f * ray.direction.dot(q);
     if (v < 0.0 || u + v > 1.0) return false;
     
     float t = edge2.dot(q) * f;

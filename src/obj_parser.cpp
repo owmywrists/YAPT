@@ -1,49 +1,45 @@
-#include "obj_parser.h"
 
-void load_obj(string filename, 
-              vector<Vertex> &vertices, vector<float3> &vertex_ptr, vector<float3> &normals,  vector<float3> &normal_ptr,
-              vector<UV> &uvs,      vector<float3> &uv_ptr)
+void load_obj(std::string filename, 
+              std::vector<v3f> &positions, std::vector<v3i> &vertex_ptr, std::vector<v3f> &normals,  std::vector<v3i> &normal_ptr,
+              std::vector<v2f> &uvs,      std::vector<v3i> &uv_ptr)
 {
     std::ifstream obj;
-    string line;
-    string word;
+    std::string line;
+    std::string word;
     obj.open(filename);
-    vector<float3> f_ptr;
-    vector<Vertex> v_temp;
-    vector<float3> n_ptr_temp;
-    vector<float3> n_temp;
-    vector<float3> uv_ptr_temp;
-    vector<UV> uv_temp;
+    std::vector<v3i> f_ptr;
+    std::vector<v3f> v_temp;
+    std::vector<v3i> n_ptr_temp;
+    std::vector<v3f> n_temp;
+    std::vector<v3i> uv_ptr_temp;
+    std::vector<v2f> uv_temp;
     
-    float3 f;
-    v3<int> fi;
-    float3 uv;
-    v3<int> uvi;
-    float3 n;
-    v3<int> ni;
+    v3i f;
+    v3i fi;
+    v3i uv;
+    v3i uvi;
+    v3i n;
+    v3i ni;
     while (std::getline(obj, line))
     {
         if (line.substr(0, 2) == "v ")
         {
-            Vertex v;
-            std::istringstream ss(line.substr(2));
-            float3 p;
-            ss >> p;
-            v.pos = p;
-            v_temp.push_back(v);
+            v3f pos;
+            std::stringstream ss(line.substr(2));
+            ss >> pos;
+            v_temp.push_back(pos);
         }
         else if (line.substr(0,3) == "vt ")
         {
-            UV temp;
-            std::istringstream ss(line.substr(3));
+            v2f temp;
+            std::stringstream ss(line.substr(3));
             ss >> temp.x >> temp.y;
-            //float3 uv_t(tx,ty,0);
             uv_temp.push_back(temp);
         }
         else if (line.substr(0,3) == "vn ")
         {
-            std::istringstream ss(line.substr(3));
-            float3 vn;
+            std::stringstream ss(line.substr(3));
+            v3f vn;
             ss >> vn;
             n_temp.push_back(vn);
         }
@@ -58,17 +54,18 @@ void load_obj(string filename,
                    &fi.x, &uvi.x, &ni.x,
                    &fi.y, &uvi.y, &ni.y,
                    &fi.z, &uvi.z, &ni.z);
-            f = float3(fi.x, fi.y, fi.z);
             
-            uv = float3(uvi.x, uvi.y, uvi.z);
-            n = float3(ni.x, ni.y, ni.z);
+            f = v3i(fi.x, fi.y, fi.z);
+            uv = v3i(uvi.x, uvi.y, uvi.z);
+            n = v3i(ni.x, ni.y, ni.z);
+            
             f_ptr.push_back(f);
             uv_ptr_temp.push_back(uv);
             n_ptr_temp.push_back(n);
         }
     }
     printf("Loaded obj\n");
-    vertices = v_temp;
+    positions = v_temp;
     vertex_ptr = f_ptr;
     normals = n_temp;
     uvs = uv_temp;

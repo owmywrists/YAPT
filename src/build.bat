@@ -23,8 +23,7 @@ set CFLAGS= ^
  -I "..\lib\imgui" ^
  -I "..\lib\imgui-sfml" ^
  -fopenmp ^
- -Wno-everything ^
- -xc -O3 
+ -Wno-everything 
 
 set CPPFLAGS= 
 
@@ -49,8 +48,8 @@ set LDLIBS= ^
 @set "b=..\build\"
 @echo Compiling...
 @echo on
-@clang++.exe yapt.cpp -o ..\build\yapt.o -c %CFLAGS%
+@clang++.exe -g yapt.cpp -o ..\build\yapt.o -c %CFLAGS%
 @echo %GREEN%Compiling finished
-@set "files=%b%yapt.o %b%imgui-SFML.o %b%imgui_draw.o %b%imgui_demo.o %b%imgui.o %b%yapt.res"
+@set "files=%b%yapt.o %b%yapt.res"
 @lld-link.exe %files% -out:"%OUTPUT%" %LDFLAGS% %LDLIBS%
 @cloc ..\src

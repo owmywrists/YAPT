@@ -16,10 +16,10 @@ KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth)
     {
         node->surface = surfaces;
         node->leaf = true;
-        node->aabb = surfaces[0]->getBoundingBox();
+        node->aabb = surfaces[0]->get_bounding_box();
         
         for (int i = 1; i < surfaces.size(); i++){
-            node->aabb.expand(surfaces[i]->getBoundingBox());
+            node->aabb.expand(surfaces[i]->get_bounding_box());
         }
         node->left = new KDNode();
         node->right = new KDNode();
@@ -27,30 +27,30 @@ KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth)
         node->right->surface = std::vector<Surface *>();
         return node;
     }
-    node->aabb = surfaces[0]->getBoundingBox();
-    float3 midpoint = float3();
+    node->aabb = surfaces[0]->get_bounding_box();
+    v3f midpoint = v3f();
     float s_rec = 1.0/float(surfaces.size());
     for (int i =1;  i < surfaces.size(); i++)
     {
-        node->aabb.expand(surfaces[i]->getBoundingBox());
-        midpoint = midpoint + (surfaces[i]->getMidpoint() * s_rec);
+        node->aabb.expand(surfaces[i]->get_bounding_box());
+        midpoint = midpoint + (surfaces[i]->get_midpoint() * s_rec);
     }
     
     std::vector<Surface *> left_surfaces;
     std::vector<Surface *> right_surfaces;
-    int axis = node->aabb.getLongestAxis();
+    int axis = node->aabb.get_longest_axis();
     for (int i = 0; i < surfaces.size(); i++)
     {
         switch (axis)
         {
             case 0:
-            midpoint.x >= surfaces[i]->getMidpoint().x ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
+            midpoint.x >= surfaces[i]->get_midpoint().x ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
             break;
             case 1:
-            midpoint.y >= surfaces[i]->getMidpoint().y ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
+            midpoint.y >= surfaces[i]->get_midpoint().y ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
             break;
             case 2:
-            midpoint.z >= surfaces[i]->getMidpoint().z ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
+            midpoint.z >= surfaces[i]->get_midpoint().z ? right_surfaces.push_back(surfaces[i]) : left_surfaces.push_back(surfaces[i]);
             break;
         }
     }
@@ -59,11 +59,11 @@ KDNode *KDNode::build(std::vector<Surface *> &surfaces, int depth)
     {
         node->surface = surfaces;
         node->leaf = true;
-        node->aabb = surfaces[0]->getBoundingBox();
+        node->aabb = surfaces[0]->get_bounding_box();
         
         for (int i = 1; i < surfaces.size(); i++)
         {
-            node->aabb.expand(surfaces[i]->getBoundingBox());
+            node->aabb.expand(surfaces[i]->get_bounding_box());
         }
         
         node->left = new KDNode();

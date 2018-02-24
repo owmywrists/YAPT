@@ -11,10 +11,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-#define NDEBUG
-#include <assert.h>
-#include <stdlib.h>
-#include "float3.h"
+#include "v3.h"
 #include "drand.h"
 #include "ray.h"
 #include "camera.cpp"
@@ -63,9 +60,9 @@ int main(int argc, char** args)
     
     Camera *cam= new Camera((*dimensions)[0],
                             (*dimensions)[1], 
-                            float3(cam_pos), 
-                            float3(cam_look), 
-                            float3(0, 1.0, 0), 
+                            v3f(cam_pos), 
+                            v3f(cam_look), 
+                            v3f(0, 1.0, 0), 
                             0.0f, 
                             3.5f, 
                             *cam_fov);

@@ -1,11 +1,11 @@
 class AABB
 {
     public:
-    AABB(float3 min=float3(), float3 max=float3()) : min(min), max(max) {}
+    AABB(v3f min=v3f(), v3f max=v3f()) : min(min), max(max) {}
     
     bool hit(Ray &ray, float &t)
     {
-        float3 inv_rd = ray.direction;
+        v3f inv_rd = ray.direction;
         
         float tx1 = (min.x - ray.origin.x) / inv_rd.x;
         float tx2 = (max.x - ray.origin.x) / inv_rd.x;
@@ -52,9 +52,9 @@ class AABB
             max.z = (a.max.z);
     }
     
-    int getLongestAxis()
+    int get_longest_axis()
     {
-        float3 diff = max - min;
+        v3f diff = max - min;
         if (diff.x > diff.y && diff.x > diff.z)
             return 0;
         if (diff.y > diff.x && diff.y > diff.z)
@@ -63,5 +63,5 @@ class AABB
     }
     
     private:
-    float3 max, min;
+    v3f max, min;
 };

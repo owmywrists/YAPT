@@ -14,7 +14,7 @@ class Scene{
                   "../../res/tex/" + settings.texture);
         mesh.generate_kdtree();
         hdri.loadFromFile("../../res/hdris/"+settings.hdri);
-        lights.push_back(new Point(float3(0.0f, 2.3f, 0.0f), float3(1.0f, 0.4f, 0.15f), 100.0f, 1.0f));
+        lights.push_back(new Point(v3f(0.0f, 2.3f, 0.0f), v3f(1.0f, 0.4f, 0.15f), 100.0f, 1.0f));
     }
     Mesh mesh;
     SceneSettings info;

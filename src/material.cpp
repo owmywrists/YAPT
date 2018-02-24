@@ -7,27 +7,27 @@ float fresnel(float ior, float ndotv) {
     return(r0 + (1.0f - r0)*x);
 }
 
-float3 cosineSampleHemi(float u1, float u2)
+v3f cosineSampleHemi(float u1, float u2)
 {
     
     float z = sqrtf(1-u2);
     float phi = 2*M_PI*u1;
     float x = cos(phi)*2*sqrtf(u2);
     float y = sin(phi)*2*sqrtf(u2);
-    return float3(x, y, z);
+    return v3f(x, y, z);
     
 }
 
-bool Emissive::BRDF(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
+bool Emissive::BRDF(Ray &ray, HitInfo &hit, v3f &attenuation, Ray &new_ray) const
 {
     return false;
 }
 
 
 
-bool Lambertian::BRDF(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
+bool Lambertian::BRDF(Ray &ray, HitInfo &hit, v3f &attenuation, Ray &new_ray) const
 {
-    float3 offset = hit.normal*(1e-5);
+    v3f offset = hit.normal*(1e-5);
     float u1 = drand48(); float u2 = drand48();
     hit.costheta = u1;
     new_ray = Ray(ray.get_hit(hit.t) + offset, make_orthonormal_basis(cosineSampleHemi(u1, u2), hit.normal));
@@ -36,17 +36,17 @@ bool Lambertian::BRDF(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray)
     return true;
 }
 
-bool Mirror::BRDF(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
+bool Mirror::BRDF(Ray &ray, HitInfo &hit, v3f &attenuation, Ray &new_ray) const
 {
-    float3 r = float3(drand48(), drand48(), drand48())*glossiness;
+    v3f r = v3f(drand48(), drand48(), drand48())*glossiness;
     new_ray = Ray(ray.get_hit(hit.t), ray.direction - hit.normal * 2.0 * ray.direction.dot(hit.normal) + r);
     attenuation = m_colour;
     return true;
 }
 
-bool Mix::BRDF(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
+bool Mix::BRDF(Ray &ray, HitInfo &hit, v3f &attenuation, Ray &new_ray) const
 {
-    float3 att1, att2;
+    v3f att1, att2;
     Ray nray1, nray2;
     float f = fresnel(mix, hit.normal.dot(unit(ray.direction*(-1))));
     mat1->BRDF(ray, hit, att1, nray1);
@@ -57,9 +57,9 @@ bool Mix::BRDF(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
     return true;
 }
 
-bool Glass::BRDF(Ray &ray, HitInfo &hit, float3 &attenuation, Ray &new_ray) const
+bool Glass::BRDF(Ray &ray, HitInfo &hit, v3f &attenuation, Ray &new_ray) const
 {
-    float3 r = float3(drand48(), drand48(), drand48())*glossiness;
+    v3f r = v3f(drand48(), drand48(), drand48())*glossiness;
     new_ray = Ray(ray.get_hit(hit.t), ray.direction - hit.normal * 2.0 * ray.direction.dot(hit.normal*(-1)) + r);
     attenuation = m_colour;
     return true;

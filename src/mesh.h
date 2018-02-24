@@ -5,33 +5,33 @@ class Mesh {
     
     void load(std::string filename, std::string atlas_name)
     {
-        std::vector<float3> face_ptr, normal_ptr, uv_ptr;
-        vertices.clear(); faces.clear(); tris.clear(); normals.clear();
+        std::vector<v3i> face_ptr, normal_ptr, uv_ptr;
+        positions.clear(); faces.clear(); tris.clear(); normals.clear();
         
         uvs.clear();
         load_obj(filename, 
-                 vertices, face_ptr,
+                 positions, face_ptr,
                  normals,  normal_ptr, 
                  uvs, uv_ptr);
         std::shared_ptr<Material> m;
         texture.loadFromFile(atlas_name);
         auto m1 = std::make_shared<Lambertian>(texture);
-        auto m2 = std::make_shared<Mirror>(float3(0.9), 0.1);
-        auto m3 = std::make_shared<Glass>(float3(0.9), 0.5);
-        auto m4 = std::make_shared<Emissive>(float3(1.2));
+        auto m2 = std::make_shared<Mirror>(v3f(0.9), 0.1);
+        auto m3 = std::make_shared<Glass>(v3f(0.9), 0.5);
+        auto m4 = std::make_shared<Emissive>(v3f(1.2));
         m = std::make_shared
             <Mix>(m1, m2, 1.2f);
         
         for (int i = 0; i < face_ptr.size(); i++)
         {
-            float3 f = face_ptr[i];
+            v3i f = face_ptr[i];
             
-            float3 n = normal_ptr[i];
-            float3 uv = uv_ptr[i];
+            v3i n = normal_ptr[i];
+            v3i uv = uv_ptr[i];
             
-            tris.push_back(Triangle(&vertices[f.x - 1].pos,
-                                    &vertices[f.y - 1].pos,
-                                    &vertices[f.z - 1].pos,
+            tris.push_back(Triangle(&positions[f.x - 1],
+                                    &positions[f.y - 1],
+                                    &positions[f.z - 1],
                                     
                                     &normals[n.x-1],
                                     &normals[n.y-1],
@@ -43,9 +43,9 @@ class Mesh {
                                     m1));
             
             faces.push_back(new 
-                            Triangle(&vertices[f.x - 1].pos,
-                                     &vertices[f.y - 1].pos,
-                                     &vertices[f.z - 1].pos,
+                            Triangle(&positions[f.x - 1],
+                                     &positions[f.y - 1],
+                                     &positions[f.z - 1],
                                      
                                      &normals[n.x-1],
                                      &normals[n.y-1],
@@ -57,7 +57,7 @@ class Mesh {
                                      m1));
             
         }
-        //faces.push_back(new Sphere(float3(2.0, 3.0, 0.0), 0.5, m4));
+        //faces.push_back(new Sphere(v3f(2.0, 3.0, 0.0), 0.5, m4));
         printf("Finished making mesh\n");
         
         
@@ -72,9 +72,9 @@ class Mesh {
     {
         
 #pragma omp parallel for
-        for (int v = 0; v < vertices.size(); v++) 
+        for (int v = 0; v < positions.size(); v++) 
         {
-            float3 normal = float3();
+            v3f normal = v3f();
             for (int i = 0; i < tris.size(); i++) 
             {
                 //if (tris[i].contains_vertex(&vertices[v])) {
@@ -101,10 +101,10 @@ class Mesh {
     std::vector<Surface*> faces;
     sf::Image texture;
     private:
-    std::vector<Vertex> vertices;
+    std::vector<v3f> positions;
     
     std::vector<Triangle> tris;
-    std::vector<float3> normals;
-    std::vector<UV> uvs;
+    std::vector<v3f> normals;
+    std::vector<v2f> uvs;
     
 };

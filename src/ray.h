@@ -6,16 +6,16 @@ enum ray_type
 
 struct Ray
 {
-    Ray(float3 origin, float3 direction) : origin(origin), direction(direction){
+    Ray(v3f origin, v3f direction) : origin(origin), direction(direction){
         tmin = 0;
         tmax = FLT_MAX;
         type = SCATTER;
     };
     Ray(){};
-    float3 get_hit(float t) { return origin + direction * t; }
+    v3f get_hit(float t) { return origin + direction * t; }
     
     mutable float tmin, tmax; //if i pass const to function, i can still edit these values
     ray_type type;
-    float3 origin, direction;
+    v3f origin, direction;
     
 };

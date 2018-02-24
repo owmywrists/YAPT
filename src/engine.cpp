@@ -20,7 +20,7 @@ void Engine::render()
     sf::Time start(clock.getElapsedTime());
     
     Ray persp, ortho;
-    float3 colour = float3();
+    v3f colour = v3f();
     float u, v;
 #pragma omp parallel for schedule(dynamic, 1) private(hit, persp, ortho, colour, u, v) collapse(2)
     for (int ty = m_screen->height/tile_size-1; ty >= 0; ty--)
@@ -33,8 +33,8 @@ void Engine::render()
             {
                 for (int y = 0; y < tile_size; y++)
                 {
-                    ortho = Ray(float3(x, y, 0), float3(0, 0, -1));
-                    colour = float3(0.0, 0.0, 0.0);
+                    ortho = Ray(v3f(x, y, 0), v3f(0, 0, -1));
+                    colour = v3f(0.0, 0.0, 0.0);
                     u = float(x + tx*tile_size + drand48()) / m_screen->width;
                     v = float(y + ty*tile_size + drand48()) / m_screen->height;
                     persp = m_cam->primary_ray(u, v);
@@ -52,9 +52,9 @@ void Engine::render()
     if (m_screen->should_reset) restart();
 }
 
-float3 Engine::hdri_sky(Ray &ray)
+v3f Engine::hdri_sky(Ray &ray)
 {
-    float3 ud = unit(ray.direction);
+    v3f ud = unit(ray.direction);
     float t = 0.5 * (ud.y + 1.0);
     float u_ = 0.5 + atan2(ud.z, ud.x) / (2 * M_PI);
     float v_ = 0.5 - asin(ud.y) / M_PI;
@@ -63,7 +63,7 @@ float3 Engine::hdri_sky(Ray &ray)
     
 }
 
-float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
+v3f Engine::trace(Ray &ray, HitInfo &hit, int depth)
 {
     ray.tmin = 1e5;
     ray_type next_type = SCATTER;
@@ -73,8 +73,8 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
     if (scene->mesh.intersect(ray, hit))
     {
         Ray new_ray;
-        float3 light_emitted(hit.mat->colour());
-        float3 colour(0.0f);
+        v3f light_emitted(hit.mat->colour());
+        v3f colour(0.0f);
         if (depth < NUM_BOUNCES && hit.mat->BRDF(ray, hit, colour, new_ray))
         {
             next_light_ray = scene->lights[l]->get_light_ray(ray.get_hit(hit.t), hit.normal);
@@ -100,7 +100,7 @@ float3 Engine::trace(Ray &ray, HitInfo &hit, int depth)
         if(ray.type == SHADOW)
             return scene->lights[l]->get_contribution(ray, previous_hit);
         else
-            return float3();
+            return v3f();
     }
     
 }

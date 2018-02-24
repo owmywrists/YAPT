@@ -15,12 +15,12 @@ sf::Sprite Screen::get_drawable_view()
     return sprite;
 }
 
-float3 Screen::avg(float3 current_avg, float3 new_colour)
+v3f Screen::avg(v3f current_avg, v3f new_colour)
 {
     return current_avg + ((new_colour - current_avg) / float(sample));
 }
 
-void Screen::loadImage(float3* img)
+void Screen::loadImage(v3f* img)
 {
     
     sf::Image temp;
@@ -30,9 +30,9 @@ void Screen::loadImage(float3* img)
     {
         for (int y = 0; y < height; y++)
         {
-            float3 col = img[x + y * width];
+            v3f col = img[x + y * width];
             m_pixelBuffer[x + width * y] = avg(m_pixelBuffer[x + width * y], col);
-            float3 avg_col = m_pixelBuffer[x + y * width];
+            v3f avg_col = m_pixelBuffer[x + y * width];
             temp.setPixel(x, y, transform(avg_col));
         }
     }
@@ -40,7 +40,7 @@ void Screen::loadImage(float3* img)
     m_img = temp;
 }
 
-void Screen::save_frame(float3* img, std::string filename)
+void Screen::save_frame(v3f* img, std::string filename)
 {
     sf::Image temp;
     temp.create(width, height, sf::Color::Black);
@@ -55,7 +55,7 @@ void Screen::save_frame(float3* img, std::string filename)
     temp.saveToFile(filename+".png");
     should_save = false;
 }
-void Screen::set_tile(int start_x, int start_y, int tile_size, float3* pixels)
+void Screen::set_tile(int start_x, int start_y, int tile_size, v3f* pixels)
 {
     for (int x = 0; x < tile_size; x++)
         for (int y = 0; y < tile_size; y++)
@@ -69,15 +69,15 @@ void Screen::begin_tile(int start_x, int start_y, int tile_size)
     {
         for (int y = 0; y < tile_size; y++)
         {
-            if (x ==0 || x == tile_size-1) m_img.setPixel((start_x + x), start_y + y, transform(float3(0.0,0.6,1.0)));
-            if (y ==0 || y == tile_size-1) m_img.setPixel((start_x + x), start_y + y,transform(float3(0.0, 0.6,1.0)));
+            if (x ==0 || x == tile_size-1) m_img.setPixel((start_x + x), start_y + y, transform(v3f(0.0,0.6,1.0)));
+            if (y ==0 || y == tile_size-1) m_img.setPixel((start_x + x), start_y + y,transform(v3f(0.0, 0.6,1.0)));
         }
         
         
     }
 }
 
-sf::Color Screen::transform(float3 pixel)
+sf::Color Screen::transform(v3f pixel)
 {
     sf::Color colour = sf::Color(powf(std::min(pixel.x, 1.0f), 1./2.2)*255.0,
                                  powf(std::min(pixel.y, 1.0f), 1./2.2)*255.0,
@@ -85,9 +85,9 @@ sf::Color Screen::transform(float3 pixel)
     return colour;
 }
 
-void Screen::setPixel(int x, int y, float3 colour)
+void Screen::setPixel(int x, int y, v3f colour)
 {
     m_pixelBuffer[y + height * x] = avg(m_pixelBuffer[y + height * x], colour);
-    float3 avg_col = m_pixelBuffer[y + height * x];
+    v3f avg_col = m_pixelBuffer[y + height * x];
     m_img.setPixel(x, y, transform(avg_col));
 }

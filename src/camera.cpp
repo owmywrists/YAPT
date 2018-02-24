@@ -1,9 +1,9 @@
 #include "camera.h"
 
-float3 random_in_unit_disk() {
-    float3 p;
+v3f random_in_unit_disk() {
+    v3f p;
     do {
-        p = float3(drand48(), drand48(), 0)*2.0 - float3(1, 1, 0);
+        p = v3f(drand48(), drand48(), 0)*2.0 - v3f(1, 1, 0);
     } while (p.dot(p) >= 1.0);
     return p;
 }
@@ -11,7 +11,7 @@ float3 random_in_unit_disk() {
 Ray Camera::primary_ray(float x, float y)
 {
     
-    float3 rd = random_in_unit_disk()*m_aperture;
-    float3 offset = u * rd.x + v * rd.y;
+    v3f rd = random_in_unit_disk()*m_aperture;
+    v3f offset = u * rd.x + v * rd.y;
     return Ray(origin, bl + horizontal*x + vertical*y - origin);
 }

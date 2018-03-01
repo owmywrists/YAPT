@@ -1,7 +1,14 @@
 #include <smmintrin.h>
-class v2
+
+
+inline float
+asm_sqrt(float val)
 {
-    public:
+    return _mm_cvtss_f32(_mm_sqrt_ss(_mm_set_ss(val)));
+}
+
+struct v2
+{
     v2()
     {
         x = 0.0;
@@ -15,7 +22,7 @@ class v2
     }
     inline float length()
     {
-        return sqrt(dot(*this));
+        return asm_sqrt(dot(*this));
     }
     inline float sqrd_length()
     {
@@ -80,7 +87,6 @@ inline std::ostream &operator<<(std::ostream &os, v2 rhs)
     return os;
 }
 
-
 inline std::istream &operator>>(std::istream &is, v2 &rhs)
 {
     is >> rhs.x >> rhs.y;
@@ -102,9 +108,8 @@ inline v2f minf2(v2f lhs, float min)
 }
 
 
-_MM_ALIGN16 class v3
+_MM_ALIGN16 struct v3
 {
-    public:
     v3()
     {
         value= _mm_setzero_ps();
@@ -117,9 +122,6 @@ _MM_ALIGN16 class v3
         value = _mm_set_ps( 0,(*arr)[2], (*arr)[1], (*arr)[0]);
     }
     
-    bool HasNans() const {
-    }
-    
     inline float dot(v3 rhs)
     {
         return _mm_cvtss_f32(_mm_dp_ps(value, rhs.value, 0x71));
@@ -127,80 +129,75 @@ _MM_ALIGN16 class v3
     inline v3 cross(v3 rhs)
     {
         return v3(_mm_sub_ps(
-            _mm_mul_ps(_mm_shuffle_ps(value, value, _MM_SHUFFLE(3, 0, 2, 1)), _mm_shuffle_ps(rhs.value, rhs.value, _MM_SHUFFLE(3, 1, 0, 2))), 
+            _mm_mul_ps(_mm_shuffle_ps(value, value, _MM_SHUFFLE(3, 0, 2, 1)), 
+                       _mm_shuffle_ps(rhs.value, rhs.value, _MM_SHUFFLE(3, 1, 0, 2))), 
             _mm_mul_ps(_mm_shuffle_ps(value, value, _MM_SHUFFLE(3, 1, 0, 2)), _mm_shuffle_ps(rhs.value, rhs.value, _MM_SHUFFLE(3, 0, 2, 1)))));
     }
     inline float length()
     {
-        return sqrt(dot(*this));
+        return asm_sqrt(dot(*this));
     }
     inline float sqrd_length()
     {
         return dot(*this);
     }
     
-    
     friend std::ostream &operator<<(std::ostream &os, v3 &rhs);
     friend std::istream &operator>>(std::istream &is, v3 &rhs);
-    union{
+    
+    union
+    {
         __m128 value;
         struct{float x, y, z;};
+        struct{float r, g, b;};
     };
 };
-
 
 inline v3 operator+(const v3 &lhs, const float &rhs)
 {
     return v3(_mm_add_ps(lhs.value, _mm_set1_ps(rhs)));
 }
 
-
 inline v3 operator-(const v3 &lhs, const float &rhs)
 {
     return v3(_mm_sub_ps(lhs.value, _mm_set1_ps(rhs)));
 }
+
 inline v3 operator/(const v3 &lhs, const float &rhs)
 {
     return v3(_mm_div_ps(lhs.value, _mm_set1_ps(rhs)));
 }
-
 
 inline v3 operator*(const v3 &lhs, const float &rhs)
 {
     return v3(_mm_mul_ps(lhs.value, _mm_set1_ps(rhs)));
 }
 
-
 inline v3 operator+(const v3 &lhs, const v3 &rhs)
 {
     return v3(_mm_add_ps(lhs.value, rhs.value));
 }
-
 
 inline v3 operator-(const v3 &lhs, const v3 &rhs)
 {
     return v3(_mm_sub_ps(lhs.value, rhs.value));
 }
 
-
 inline v3 operator*(const v3 &lhs, const v3 &rhs)
 {
     return v3(_mm_mul_ps(lhs.value, rhs.value));
 }
 
-/*
 inline bool operator==(const v3 &lhs, const v3 &rhs)
 {
     return (lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
 }
-*/
 
 inline std::ostream &operator<<(std::ostream &os, v3 rhs)
 {
     os << rhs.x << " " << rhs.y << " " << rhs.z;
     return os;
 }
-
 
 inline std::istream &operator>>(std::istream &is, v3 &rhs)
 {
@@ -216,7 +213,6 @@ typedef v3 v3i;
 
 inline v3f maxf3(v3f lhs, float max)
 {
-    
     return v3f(fmax(lhs.x, max), fmax(lhs.y,max), fmax(lhs.z,max));
 }
 inline v3f minf3(v3f lhs, float min)
